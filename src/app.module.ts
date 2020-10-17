@@ -3,10 +3,15 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import { AuthModule } from './auth/auth.module';
 import { databaseUriString } from './config/misc/env';
+import { SettingsModule } from './settings/settings.module';
 
 @Module({
-  imports: [AuthModule, MongooseModule.forRoot(databaseUriString)],
+  imports: [
+    AuthModule,
+    MongooseModule.forRoot(databaseUriString),
+    SettingsModule
+  ],
   controllers: [],
-  providers: [],
+  providers: []
 })
 export class AppModule {}

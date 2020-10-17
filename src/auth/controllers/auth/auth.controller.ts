@@ -6,10 +6,14 @@ import { LoginRequest } from 'src/auth/transfer-objects/login-request.dto';
 import { LoginResponse } from 'src/auth/transfer-objects/login-response.dto';
 import { HttpResponse } from 'src/common/interfaces/http-response.interface';
 import { jwtSecret } from 'src/config/misc/env';
+import { SettingsService } from 'src/settings/services/settings/settings.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly _authService: AuthService) {}
+  constructor(
+    private readonly _authService: AuthService,
+    private readonly _settingsService: SettingsService,
+  ) {}
 
   @Post('login')
   public async login(@Body() body: LoginRequest): HttpResponse<LoginResponse> {
@@ -44,6 +48,7 @@ export class AuthController {
     @Body() body: CreateUserRequest,
   ): HttpResponse<LoginResponse> {
     const user = await this._authService.createUser(body);
+    await this._settingsService.createSettings(user._id);
 
     const jwt: string = this._authService.generateJwt({
       payload: {
