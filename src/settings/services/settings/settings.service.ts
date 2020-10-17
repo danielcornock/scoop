@@ -24,7 +24,9 @@ export class SettingsService {
     user: string,
     data: UpdateSettings
   ): Promise<Settings> {
-    const settings = await this._settingsRepo.findOneAndUpdate({ user }, data);
+    const settings = await this._settingsRepo.findOneAndUpdate({ user }, data, {
+      new: true
+    });
 
     return settings;
   }
@@ -32,6 +34,6 @@ export class SettingsService {
   public async getSettings(user: string): Promise<Settings> {
     const settings = await this._settingsRepo.findOne({ user });
 
-    return (settings as unknown) as Settings;
+    return settings;
   }
 }
