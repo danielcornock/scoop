@@ -58,7 +58,7 @@ export class NetWorthService {
     user: string,
     date: string
   ): Promise<void> {
-    const foundUser = await this._netWorthRepo.find({
+    const foundUser = await this._netWorthRepo.findOne({
       user,
       date
     });
