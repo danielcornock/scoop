@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { reduce } from 'lodash';
 import { Model } from 'mongoose';
@@ -20,6 +20,8 @@ export class NetWorthService {
     entry: INetWorthCreate,
     user: string
   ): Promise<NetWorth> {
+    await this._checkForExistingEntriesForChosenMonth(user, entry.date);
+
     const settings = await this._settingsService.getSettings(user);
     const customValues = this._processCustomValues(
       entry,
@@ -52,6 +54,22 @@ export class NetWorthService {
     );
   }
 
+  private async _checkForExistingEntriesForChosenMonth(
+    user: string,
+    date: string
+  ): Promise<void> {
+    const foundUser = await this._netWorthRepo.find({
+      user,
+      date
+    });
+
+    if (foundUser) {
+      throw new BadRequestException(
+        'An entry already exists for that month. Please remove your original entry if you wish to overwite it.'
+      );
+    }
+  }
+
   private _getCustomValuesSum(values: INetWorthCustomValues): number {
     return reduce(
       values,
@@ -69,7 +87,13 @@ export class NetWorthService {
     const values = {};
 
     fields.forEach((val) => {
-      values[val] = parseInt(entry[val]);
+      const numberField = parseInt(entry[val]);
+
+      if (isNaN(numberField)) {
+        values[val] = 0;
+      } else {
+        values[val] = numberField;
+      }
     });
 
     return values;
