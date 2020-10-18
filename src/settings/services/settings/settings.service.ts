@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Settings } from 'src/settings/schemas/settings.schema';
 import { UpdateSettings } from 'src/settings/transfer-objects/update-settings.dto';
 
@@ -11,7 +11,9 @@ export class SettingsService {
     private readonly _settingsRepo: Model<Settings>
   ) {}
 
-  public async createSettings(userId: string): Promise<Settings> {
+  public async createSettings(rawUserId: Types.ObjectId): Promise<Settings> {
+    const userId = rawUserId.toHexString();
+
     const settings = await this._settingsRepo.create({
       user: userId,
       netWorthFields: ['savings', 'investments']

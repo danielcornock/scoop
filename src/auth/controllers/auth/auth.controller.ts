@@ -12,7 +12,7 @@ import { SettingsService } from 'src/settings/services/settings/settings.service
 export class AuthController {
   constructor(
     private readonly _authService: AuthService,
-    private readonly _settingsService: SettingsService,
+    private readonly _settingsService: SettingsService
   ) {}
 
   @Post('login')
@@ -28,24 +28,24 @@ export class AuthController {
     const jwt: string = this._authService.generateJwt({
       payload: {
         id: user._id,
-        email: user.email,
+        email: user.email
       },
       secret: jwtSecret,
-      expiresIn: '90d',
+      expiresIn: '90d'
     });
 
     return {
       data: {
         email: user.email,
         name: user.name,
-        jwt,
-      },
+        jwt
+      }
     };
   }
 
   @Post('register')
   public async register(
-    @Body() body: CreateUserRequest,
+    @Body() body: CreateUserRequest
   ): HttpResponse<LoginResponse> {
     const user = await this._authService.createUser(body);
     await this._settingsService.createSettings(user._id);
@@ -53,18 +53,18 @@ export class AuthController {
     const jwt: string = this._authService.generateJwt({
       payload: {
         id: user._id,
-        email: user.email,
+        email: user.email
       },
       secret: jwtSecret,
-      expiresIn: '90d',
+      expiresIn: '90d'
     });
 
     return {
       data: {
         email: user.email,
         name: user.name,
-        jwt,
-      },
+        jwt
+      }
     };
   }
 }
