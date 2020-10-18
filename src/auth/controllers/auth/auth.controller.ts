@@ -28,7 +28,8 @@ export class AuthController {
     const jwt: string = this._authService.generateJwt({
       payload: {
         id: user._id,
-        email: user.email
+        email: user.email,
+        name: user.name
       },
       secret: jwtSecret,
       expiresIn: '90d'
@@ -53,7 +54,8 @@ export class AuthController {
     const jwt: string = this._authService.generateJwt({
       payload: {
         id: user._id,
-        email: user.email
+        email: user.email,
+        name: user.name
       },
       secret: jwtSecret,
       expiresIn: '90d'
