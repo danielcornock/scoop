@@ -46,9 +46,10 @@ export class NetWorthService {
 
     return allEntries.map(
       (entry: NetWorth, index: number, array: NetWorth[]) => {
+        const lastMonthTotal = array[index + 1]?.total;
         return {
           ...entry.toObject(),
-          change: entry.total - (array[index + 1]?.total ?? 0)
+          change: lastMonthTotal ? entry.total - lastMonthTotal : 0
         };
       }
     );
@@ -87,7 +88,7 @@ export class NetWorthService {
     const values = {};
 
     fields.forEach((val) => {
-      const numberField = parseInt(entry[val]);
+      const numberField = parseFloat(entry[val]);
 
       if (isNaN(numberField)) {
         values[val] = 0;
