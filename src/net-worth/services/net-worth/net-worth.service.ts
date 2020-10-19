@@ -56,6 +56,10 @@ export class NetWorthService {
     });
   }
 
+  public async deleteOne(user: string, _id: string): Promise<void> {
+    await this._netWorthRepo.deleteOne({ user, _id });
+  }
+
   public async getAll(user: string): Promise<NetWorthResponse[]> {
     const allEntries = await this._netWorthRepo
       .find({ user })

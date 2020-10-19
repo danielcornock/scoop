@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/guards/auth/auth.guard';
 import { UserId } from 'src/common/decorators/user-id.decorator';
 import { HttpResponse } from 'src/common/interfaces/http-response.interface';
@@ -25,6 +25,14 @@ export class NetWorthController {
     const data = await this._netWorthService.createEntry(body, user);
 
     return { data };
+  }
+
+  @Delete('/:netWorthId')
+  public async deleteOne(
+    @UserId() user: string,
+    @Param('netWorthId') id: string
+  ): Promise<void> {
+    return this._netWorthService.deleteOne(user, id);
   }
 
   @Get()

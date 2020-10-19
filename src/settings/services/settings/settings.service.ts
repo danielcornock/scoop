@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Settings } from 'src/settings/schemas/settings.schema';
@@ -26,6 +26,8 @@ export class SettingsService {
     user: string,
     data: UpdateSettings
   ): Promise<Settings> {
+    this._checkValidityOfSettings(data);
+
     const settings = await this._settingsRepo.findOneAndUpdate({ user }, data, {
       new: true
     });
@@ -37,6 +39,14 @@ export class SettingsService {
     const settings = await this._settingsRepo.findOne({ user });
 
     return settings;
+  }
+
+  private _checkValidityOfSettings(settings: UpdateSettings): void {
+    if (settings.netWorthSummaryItems.length !== 4) {
+      throw new BadRequestException(
+        'You must have exactly 4 summary options selected for net worth.'
+      );
+    }
   }
 }
 
