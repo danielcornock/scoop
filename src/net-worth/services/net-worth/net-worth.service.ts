@@ -6,6 +6,7 @@ import { INetWorthCustomValues } from 'src/net-worth/interfaces/net-worth-log.in
 import { NetWorth } from 'src/net-worth/schemas/net-worth.schema';
 import { INetWorthCreate } from 'src/net-worth/transfer-objects/net-worth-create.dto';
 import { NetWorthResponse } from 'src/net-worth/transfer-objects/net-worth-response.dto';
+import { INetWorthSummaryItem } from 'src/settings/interfaces/net-worth-summary-items.interface';
 import { SettingsService } from 'src/settings/services/settings/settings.service';
 
 @Injectable()
@@ -39,6 +40,22 @@ export class NetWorthService {
     return data;
   }
 
+  public getSummaryItemsMeta(
+    entry: NetWorthResponse,
+    summaryItems: INetWorthSummaryItem[]
+  ): { label: string; value: number }[] {
+    return summaryItems.map((item) => {
+      let accumValue = 0;
+
+      item.sumOf.forEach((field) => {
+        const fieldValue = entry[field] || entry.customValues[field] || 0;
+        accumValue += fieldValue;
+      });
+
+      return { label: item.label, value: accumValue };
+    });
+  }
+
   public async getAll(user: string): Promise<NetWorthResponse[]> {
     const allEntries = await this._netWorthRepo
       .find({ user })
@@ -47,6 +64,7 @@ export class NetWorthService {
     return allEntries.map(
       (entry: NetWorth, index: number, array: NetWorth[]) => {
         const lastMonthTotal = array[index + 1]?.total;
+
         return {
           ...entry.toObject(),
           change: lastMonthTotal ? entry.total - lastMonthTotal : 0

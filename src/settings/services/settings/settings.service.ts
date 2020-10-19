@@ -16,7 +16,7 @@ export class SettingsService {
 
     const settings = await this._settingsRepo.create({
       user: userId,
-      netWorthFields: ['savings', 'investments']
+      ...defaultSettingsConfig
     });
 
     return settings;
@@ -39,3 +39,14 @@ export class SettingsService {
     return settings;
   }
 }
+
+export const defaultSettingsConfig = {
+  netWorthFields: ['savings', 'investments'],
+  netWorthSummaryItems: [
+    { label: 'Savings', sumOf: ['savings'] },
+    { label: 'Investments', sumOf: ['investments'] },
+    { label: 'Change this month', sumOf: ['change'] },
+    { label: 'Net Worth', sumOf: ['total'] }
+  ],
+  netWorthSummaryOptions: []
+};

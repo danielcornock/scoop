@@ -6,11 +6,15 @@ import { NetWorth } from 'src/net-worth/schemas/net-worth.schema';
 import { NetWorthService } from 'src/net-worth/services/net-worth/net-worth.service';
 import { INetWorthCreate } from 'src/net-worth/transfer-objects/net-worth-create.dto';
 import { NetWorthResponse } from 'src/net-worth/transfer-objects/net-worth-response.dto';
+import { SettingsService } from 'src/settings/services/settings/settings.service';
 
 @Controller('net-worth')
 @UseGuards(AuthGuard)
 export class NetWorthController {
-  constructor(private readonly _netWorthService: NetWorthService) {}
+  constructor(
+    private readonly _netWorthService: NetWorthService,
+    private readonly _settingsService: SettingsService
+  ) {}
 
   @Post()
   public async create(
@@ -26,8 +30,19 @@ export class NetWorthController {
   public async getAll(
     @UserId() user: string
   ): HttpResponse<NetWorthResponse[]> {
-    const data = await this._netWorthService.getAll(user);
+    const [data, settings] = await Promise.all([
+      this._netWorthService.getAll(user),
+      this._settingsService.getSettings(user)
+    ]);
 
-    return { data };
+    const meta = {
+      fields: ['date', ...settings.netWorthFields, 'total', 'change'],
+      summaryItems: this._netWorthService.getSummaryItemsMeta(
+        data[0],
+        settings.netWorthSummaryItems
+      )
+    };
+
+    return { data, meta };
   }
 }
