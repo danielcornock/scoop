@@ -27,12 +27,12 @@ export class NetWorthController {
     return { data };
   }
 
-  @Delete('/:netWorthId')
+  @Delete('/:netWorthDate')
   public async deleteOne(
     @UserId() user: string,
-    @Param('netWorthId') id: string
+    @Param('netWorthDate') date: string
   ): Promise<void> {
-    return this._netWorthService.deleteOne(user, id);
+    return this._netWorthService.deleteOne(user, date);
   }
 
   @Get()

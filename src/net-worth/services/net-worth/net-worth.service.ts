@@ -44,6 +44,10 @@ export class NetWorthService {
     entry: NetWorthResponse,
     summaryItems: INetWorthSummaryItemConfig[]
   ): { label: string; value: number }[] {
+    if (!entry) {
+      return null;
+    }
+
     return summaryItems.map((item) => {
       let accumValue = 0;
 
@@ -56,8 +60,8 @@ export class NetWorthService {
     });
   }
 
-  public async deleteOne(user: string, _id: string): Promise<void> {
-    await this._netWorthRepo.deleteOne({ user, _id });
+  public async deleteOne(user: string, date: string): Promise<void> {
+    await this._netWorthRepo.deleteOne({ user, date });
   }
 
   public async getAll(user: string): Promise<NetWorthResponse[]> {
