@@ -2,6 +2,7 @@ import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/guards/auth/auth.guard';
 import { UserId } from 'src/common/decorators/user-id.decorator';
 import { HttpResponse } from 'src/common/interfaces/http-response.interface';
+import { INetWorthMeta } from 'src/net-worth/interfaces/net-worth-meta.interface';
 import { NetWorth } from 'src/net-worth/schemas/net-worth.schema';
 import { NetWorthService } from 'src/net-worth/services/net-worth/net-worth.service';
 import { INetWorthCreate } from 'src/net-worth/transfer-objects/net-worth-create.dto';
@@ -29,7 +30,7 @@ export class NetWorthController {
   @Get()
   public async getAll(
     @UserId() user: string
-  ): HttpResponse<NetWorthResponse[]> {
+  ): HttpResponse<NetWorthResponse[], INetWorthMeta> {
     const [data, settings] = await Promise.all([
       this._netWorthService.getAll(user),
       this._settingsService.getSettings(user)

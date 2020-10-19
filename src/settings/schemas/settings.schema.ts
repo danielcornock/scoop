@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
-import { INetWorthSummaryItem } from '../interfaces/net-worth-summary-items.interface';
+import { INetWorthSummaryItemConfig } from '../interfaces/net-worth-summary-item-config.interface';
 
 @Schema()
 export class Settings extends Document {
@@ -12,10 +12,10 @@ export class Settings extends Document {
   netWorthFields: string[];
 
   @Prop({ required: true })
-  netWorthSummaryItems: INetWorthSummaryItem[];
+  netWorthSummaryItems: INetWorthSummaryItemConfig[];
 
   @Prop({ required: true })
-  netWorthSummaryOptions: INetWorthSummaryItem[];
+  netWorthSummaryOptions: INetWorthSummaryItemConfig[];
 }
 
 export const SettingsSchema = SchemaFactory.createForClass(Settings);

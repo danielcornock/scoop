@@ -1,4 +1,4 @@
 export interface INetWorthSummaryItem {
   label: string;
-  sumOf: string[];
+  value: number;
 }

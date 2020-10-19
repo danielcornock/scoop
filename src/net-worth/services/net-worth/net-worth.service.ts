@@ -6,7 +6,7 @@ import { INetWorthCustomValues } from 'src/net-worth/interfaces/net-worth-log.in
 import { NetWorth } from 'src/net-worth/schemas/net-worth.schema';
 import { INetWorthCreate } from 'src/net-worth/transfer-objects/net-worth-create.dto';
 import { NetWorthResponse } from 'src/net-worth/transfer-objects/net-worth-response.dto';
-import { INetWorthSummaryItem } from 'src/settings/interfaces/net-worth-summary-items.interface';
+import { INetWorthSummaryItemConfig } from 'src/settings/interfaces/net-worth-summary-item-config.interface';
 import { SettingsService } from 'src/settings/services/settings/settings.service';
 
 @Injectable()
@@ -42,7 +42,7 @@ export class NetWorthService {
 
   public getSummaryItemsMeta(
     entry: NetWorthResponse,
-    summaryItems: INetWorthSummaryItem[]
+    summaryItems: INetWorthSummaryItemConfig[]
   ): { label: string; value: number }[] {
     return summaryItems.map((item) => {
       let accumValue = 0;
