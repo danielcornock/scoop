@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 import { AuthModule } from './auth/auth.module';
 import { databaseUriString } from './config/misc/env';
@@ -11,7 +13,10 @@ import { SettingsModule } from './settings/settings.module';
     AuthModule,
     MongooseModule.forRoot(databaseUriString),
     SettingsModule,
-    NetWorthModule
+    NetWorthModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'client')
+    })
   ],
   controllers: [],
   providers: []
