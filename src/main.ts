@@ -9,6 +9,7 @@ import { environment, port } from './config/misc/env';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(helmet());
+  app.enableCors({ origin: 'http://localhost:4200' });
   app.setGlobalPrefix('/api/v1');
   app.useGlobalPipes(new ValidationPipe());
 
