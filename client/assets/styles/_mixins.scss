@@ -1,22 +1,19 @@
 @mixin page-container {
-  padding: var(--spacing-page-top);
-}
-
-@mixin page-heading-single {
-  font-size: 28px;
-  font-weight: bold;
-  color: $color-heading;
-  margin-bottom: $spacing-40;
-
-  @include media-phone {
-    font-size: 26px;
-  }
+  padding: var(--spacing-page-top) var(--spacing-page-side);
+  height: 100%;
 }
 
 @mixin center-contents {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+@mixin center-self {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 @mixin shadow-light {
@@ -35,6 +32,12 @@
   @include table-row;
   color: $color-table-content;
   border-top: 1px solid $color-table-divider;
+  white-space: nowrap;
+  padding-right: $spacing-10;
+
+  @include media-tablet {
+    padding-right: $spacing-15;
+  }
 }
 
 @mixin button-reset {
@@ -91,7 +94,7 @@
 
 @mixin form-input {
   display: block;
-  background-color: $color-white;
+  background-color: $color-form-input-background;
   padding: 12px;
   border: 1px solid $color-primary-gradient;
   border-radius: $br-sm;
@@ -142,13 +145,37 @@
 }
 
 @mixin media-phone {
-  @media only screen and (max-width: 480px) {
+  @media only screen and (max-width: 540px) {
     @content;
   }
 }
 
 @mixin media-tablet {
-  @media only screen and (max-width: 900px) {
+  @media only screen and (max-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin media($max-width) {
+  @media (max-width: $max-width) {
+    @content;
+  }
+}
+
+@mixin media-ld {
+  @media only screen and (max-width: 1250px) {
+    @content;
+  }
+}
+
+@mixin media-sd {
+  @media only screen and (max-width: 1450px) {
+    @content;
+  }
+}
+
+@mixin media-phone-sm {
+  @media only screen and(max-width: 450px) {
     @content;
   }
 }
