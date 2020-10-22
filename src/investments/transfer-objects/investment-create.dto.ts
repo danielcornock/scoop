@@ -1,7 +1,7 @@
-import { IsDate, IsNumberString } from 'class-validator';
+import { IsNumberString, IsString } from 'class-validator';
 
 export class InvestmentCreate {
-  @IsDate()
+  @IsString()
   date: string;
 
   @IsNumberString()
