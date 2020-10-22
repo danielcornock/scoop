@@ -85,12 +85,12 @@ export class NetWorthService {
     user: string,
     date: string
   ): Promise<void> {
-    const foundUser = await this._netWorthRepo.findOne({
+    const foundEntry = await this._netWorthRepo.findOne({
       user,
       date
     });
 
-    if (foundUser) {
+    if (foundEntry) {
       throw new BadRequestException(
         'An entry already exists for that month. Please remove your original entry if you wish to overwite it.'
       );

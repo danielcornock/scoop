@@ -5,8 +5,8 @@ export class InvestmentCreate {
   date: string;
 
   @IsNumberString()
-  totalInvested: number;
+  addedSinceLast: string;
 
   @IsNumberString()
-  totalValue: number;
+  totalValue: string;
 }

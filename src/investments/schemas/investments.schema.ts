@@ -20,6 +20,9 @@ export class Investment extends Document {
 
   @Prop({ required: true })
   profitPercentage: number;
+
+  @Prop({ required: true })
+  addedSinceLast: number;
 }
 
 export const InvestmentsSchema = SchemaFactory.createForClass(Investment);

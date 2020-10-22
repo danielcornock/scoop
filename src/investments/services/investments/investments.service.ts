@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Investment } from 'src/investments/schemas/investments.schema';
@@ -13,12 +13,26 @@ export class InvestmentsService {
     private readonly _investmentsRepo: Model<Investment>
   ) {}
 
-  public createLog(data: InvestmentCreate, user: string): Promise<Investment> {
+  public async createLog(
+    data: InvestmentCreate,
+    user: string
+  ): Promise<Investment> {
+    await this._checkForexistingEntriesForChosenMonth(user, data.date);
+    const [lastEntry] = await this.getAll(user);
+    const addedSinceLast = parseFloat(data.addedSinceLast);
+    const totalValue = parseFloat(data.totalValue);
+    const totalInvested = lastEntry
+      ? lastEntry.totalInvested + addedSinceLast
+      : addedSinceLast;
+
     return this._investmentsRepo.create({
-      ...data,
+      date: data.date,
+      addedSinceLast,
+      totalValue,
       user,
-      profit: data.totalValue - data.totalInvested,
-      profitPercentage: data.totalValue / data.totalInvested
+      profit: totalValue - totalInvested,
+      profitPercentage: totalValue / totalInvested,
+      totalInvested
     });
   }
 
@@ -36,9 +50,6 @@ export class InvestmentsService {
     arr: Investment[]
   ) {
     const previousItem = arr[index + 1];
-    const addedSinceLast = previousItem
-      ? item.totalInvested - previousItem.totalInvested
-      : 0;
     const profitChangeSinceLast = previousItem
       ? item.profit - previousItem.profit
       : 0;
@@ -48,9 +59,26 @@ export class InvestmentsService {
 
     return {
       ...item.toObject(),
-      addedSinceLast,
       profitChangeSinceLast,
       profitPercentageChangeSinceLast
     };
+  }
+
+  private async _checkForexistingEntriesForChosenMonth(
+    user: string,
+    date: string
+  ): Promise<void> {
+    const foundEntry = await this._investmentsRepo.findOne({
+      user,
+      date
+    });
+
+    console.log(foundEntry);
+
+    if (foundEntry) {
+      throw new BadRequestException(
+        'An entry already exists for that month. Please remove your original entry if you wish to overwite it.'
+      );
+    }
   }
 }
