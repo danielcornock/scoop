@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { databaseUriString } from './config/misc/env';
 import { NetWorthModule } from './net-worth/net-worth.module';
 import { SettingsModule } from './settings/settings.module';
+import { InvestmentsModule } from './investments/investments.module';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import { SettingsModule } from './settings/settings.module';
     NetWorthModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'client')
-    })
+    }),
+    InvestmentsModule
   ],
   controllers: [],
   providers: []
