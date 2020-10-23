@@ -37,6 +37,7 @@ export class AuthController {
 
     return {
       data: {
+        _id: user.id,
         email: user.email,
         name: user.name,
         jwt
@@ -63,6 +64,7 @@ export class AuthController {
 
     return {
       data: {
+        _id: user._id,
         email: user.email,
         name: user.name,
         jwt
