@@ -7,5 +7,4 @@ export class InvestmentResponse {
   profitPercentage: number;
   addedSinceLast: number;
   profitChangeSinceLast: number;
-  profitPercentageChangeSinceLast: number;
 }

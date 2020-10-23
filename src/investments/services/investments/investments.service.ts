@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { MathsService } from 'src/common/services/maths/maths.service';
 import { Investment } from 'src/investments/schemas/investments.schema';
 import { InvestmentResponse } from 'src/investments/transfer-objects/investment-response.dto';
 
@@ -31,7 +32,10 @@ export class InvestmentsService {
       totalValue,
       user,
       profit: totalValue - totalInvested,
-      profitPercentage: totalValue / totalInvested,
+      profitPercentage: MathsService.getPercentageDifference(
+        totalValue,
+        totalInvested
+      ),
       totalInvested
     });
   }
@@ -48,19 +52,15 @@ export class InvestmentsService {
     item: Investment,
     index: number,
     arr: Investment[]
-  ) {
+  ): InvestmentResponse {
     const previousItem = arr[index + 1];
     const profitChangeSinceLast = previousItem
       ? item.profit - previousItem.profit
       : 0;
-    const profitPercentageChangeSinceLast = previousItem
-      ? item.profit / previousItem.profit
-      : 0;
 
     return {
       ...item.toObject(),
-      profitChangeSinceLast,
-      profitPercentageChangeSinceLast
+      profitChangeSinceLast
     };
   }
 
