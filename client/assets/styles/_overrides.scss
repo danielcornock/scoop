@@ -18,10 +18,8 @@
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
-.mat-pseudo-checkbox-checked {
-  background-color: #3657dc !important;
-}
-
-.mat-select-panel {
-  border-radius: 10px !important;
+::ng-deep .mat-dialog-container {
+  overflow: initial;
+  border-radius: 10px;
+  padding: $spacing-30;
 }

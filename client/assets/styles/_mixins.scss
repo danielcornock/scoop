@@ -33,11 +33,7 @@
   color: $color-table-content;
   border-top: 1px solid $color-table-divider;
   white-space: nowrap;
-  padding-right: $spacing-10;
-
-  @include media-tablet {
-    padding-right: $spacing-15;
-  }
+  padding-right: $spacing-15;
 }
 
 @mixin button-reset {
@@ -61,6 +57,17 @@
       outline-color: $color-form-input-error-border;
     }
   }
+}
+
+@mixin button-tertiary {
+  @include button-reset;
+  border: 2px solid $color-primary-gradient;
+  color: $color-primary-gradient;
+  background-color: $color-white;
+  font-weight: 500;
+  font-size: 16px;
+  padding: $spacing-10 $spacing-15;
+  border-radius: $br-sm;
 }
 
 @mixin form-label-error-styles {
