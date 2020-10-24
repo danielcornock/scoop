@@ -29,13 +29,13 @@ export class NetWorthService {
       entry,
       settings.netWorthFields
     );
-    const sumOfCustomValues = this._getCustomValuesSum(customValues);
+    const sumOfAllFields = this._getCustomValuesSum(customValues);
 
     const data = this._netWorthRepo.create({
       date: entry.date,
       user,
       customValues,
-      total: sumOfCustomValues
+      total: sumOfAllFields
     });
 
     return data;

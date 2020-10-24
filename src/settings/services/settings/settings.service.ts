@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
+import { defaultSettingsConfig } from 'src/settings/constants/default-settings-config.constant';
 import { Settings } from 'src/settings/schemas/settings.schema';
 import { UpdateSettings } from 'src/settings/transfer-objects/update-settings.dto';
 
@@ -49,14 +50,3 @@ export class SettingsService {
     }
   }
 }
-
-export const defaultSettingsConfig = {
-  netWorthFields: ['savings', 'investments'],
-  netWorthSummaryItems: [
-    { label: 'Savings', sumOf: ['savings'] },
-    { label: 'Investments', sumOf: ['investments'] },
-    { label: 'Change this month', sumOf: ['change'] },
-    { label: 'Net Worth', sumOf: ['total'] }
-  ],
-  netWorthSummaryOptions: []
-};
