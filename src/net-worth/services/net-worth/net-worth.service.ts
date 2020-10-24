@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { reduce } from 'lodash';
 import { Model } from 'mongoose';
+import { defaultIcons } from 'src/common/constants/default-icons.constant';
 import { INetWorthCustomValues } from 'src/net-worth/interfaces/net-worth-log.interface';
 import { NetWorth } from 'src/net-worth/schemas/net-worth.schema';
 import { INetWorthCreate } from 'src/net-worth/transfer-objects/net-worth-create.dto';
@@ -43,12 +44,12 @@ export class NetWorthService {
   public getSummaryItemsMeta(
     entry: NetWorthResponse,
     summaryItems: INetWorthSummaryItemConfig[]
-  ): { label: string; value: number }[] {
+  ): { label: string; value: number; icon: string }[] {
     if (!entry) {
       return null;
     }
 
-    return summaryItems.map((item) => {
+    return summaryItems.map((item, index) => {
       let accumValue = 0;
 
       item.sumOf.forEach((field) => {
@@ -56,7 +57,11 @@ export class NetWorthService {
         accumValue += fieldValue;
       });
 
-      return { label: item.label, value: accumValue };
+      return {
+        label: item.label,
+        value: accumValue,
+        icon: item.icon || defaultIcons[index]
+      };
     });
   }
 
