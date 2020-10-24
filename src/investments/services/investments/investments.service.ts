@@ -40,6 +40,10 @@ export class InvestmentsService {
     });
   }
 
+  public async deleteOne(user: string, date: string): Promise<void> {
+    await this._investmentsRepo.deleteOne({ user, date });
+  }
+
   public async getAll(user: string): Promise<InvestmentResponse[]> {
     const investments = await this._investmentsRepo
       .find({ user })
@@ -72,8 +76,6 @@ export class InvestmentsService {
       user,
       date
     });
-
-    console.log(foundEntry);
 
     if (foundEntry) {
       throw new BadRequestException(

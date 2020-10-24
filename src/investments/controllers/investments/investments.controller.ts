@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UseGuards
+} from '@nestjs/common';
 import { AuthGuard } from 'src/auth/guards/auth/auth.guard';
 import { UserId } from 'src/common/decorators/user-id.decorator';
 import { HttpResponse } from 'src/common/interfaces/http-response.interface';
@@ -29,5 +37,13 @@ export class InvestmentsController {
     const data = await this._investmentsService.getAll(userId);
 
     return { data };
+  }
+
+  @Delete('/:logDate')
+  public deleteInvestmentLog(
+    @UserId() userId: string,
+    @Param('logDate') date: string
+  ): HttpResponse<void> {
+    return this._investmentsService.deleteOne(userId, date);
   }
 }
