@@ -18,7 +18,7 @@ export class InvestmentsService {
     data: InvestmentCreate,
     user: string
   ): Promise<Investment> {
-    await this._checkForexistingEntriesForChosenMonth(user, data.date);
+    await this._checkIfEntryForMonthExists(user, data.date);
     const [lastEntry] = await this.getAll(user);
     const addedSinceLast = parseFloat(data.addedSinceLast);
     const totalValue = parseFloat(data.totalValue);
@@ -68,7 +68,7 @@ export class InvestmentsService {
     };
   }
 
-  private async _checkForexistingEntriesForChosenMonth(
+  private async _checkIfEntryForMonthExists(
     user: string,
     date: string
   ): Promise<void> {

@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { Dictionary, reduce } from 'lodash';
 import { Model, Types } from 'mongoose';
 import { defaultSettingsConfig } from 'src/settings/constants/default-settings-config.constant';
 import { Settings } from 'src/settings/schemas/settings.schema';
@@ -39,7 +40,39 @@ export class SettingsService {
   public async getSettings(user: string): Promise<Settings> {
     const settings = await this._settingsRepo.findOne({ user });
 
-    return settings;
+    return {
+      ...defaultSettingsConfig,
+      ...settings.toObject()
+    };
+  }
+
+  public processCustomValues(
+    entry: any,
+    fields: Array<string>
+  ): Dictionary<number> {
+    const values = {};
+
+    fields.forEach((val) => {
+      const numberField = parseFloat(entry[val]);
+
+      if (isNaN(numberField)) {
+        values[val] = 0;
+      } else {
+        values[val] = numberField;
+      }
+    });
+
+    return values;
+  }
+
+  public getCustomValuesSum(values: Dictionary<number>): number {
+    return reduce(
+      values,
+      (accum: number, next: number) => {
+        return accum + next;
+      },
+      0
+    );
   }
 
   private _checkValidityOfSettings(settings: UpdateSettings): void {

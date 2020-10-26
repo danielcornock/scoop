@@ -16,6 +16,12 @@ export class Settings extends Document {
 
   @Prop({ required: true })
   netWorthSummaryOptions: INetWorthSummaryItemConfig[];
+
+  @Prop({ required: true })
+  monthlyDistributionIncomeFields: string[];
+
+  @Prop({ required: true })
+  monthlyDistributionOutgoingFields: string[];
 }
 
 export const SettingsSchema = SchemaFactory.createForClass(Settings);

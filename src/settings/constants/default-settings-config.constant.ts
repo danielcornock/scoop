@@ -6,5 +6,7 @@ export const defaultSettingsConfig = {
     { label: 'Change this month', sumOf: ['change'], icon: 'calendar' },
     { label: 'Net Worth', sumOf: ['total'], icon: 'user-plus' }
   ],
-  netWorthSummaryOptions: []
+  netWorthSummaryOptions: [],
+  monthlyDistributionIncomeFields: ['salary', 'balance carried'],
+  monthlyDistributionOutgoingFields: ['rent', 'bills', 'savings', 'investments']
 };

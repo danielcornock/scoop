@@ -1,9 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { reduce } from 'lodash';
 import { Model } from 'mongoose';
 import { defaultIcons } from 'src/common/constants/default-icons.constant';
-import { INetWorthCustomValues } from 'src/net-worth/interfaces/net-worth-log.interface';
 import { NetWorth } from 'src/net-worth/schemas/net-worth.schema';
 import { INetWorthCreate } from 'src/net-worth/transfer-objects/net-worth-create.dto';
 import { NetWorthResponse } from 'src/net-worth/transfer-objects/net-worth-response.dto';
@@ -22,14 +20,16 @@ export class NetWorthService {
     entry: INetWorthCreate,
     user: string
   ): Promise<NetWorth> {
-    await this._checkForExistingEntriesForChosenMonth(user, entry.date);
+    await this._checkIfEntryForMonthExists(user, entry.date);
 
     const settings = await this._settingsService.getSettings(user);
-    const customValues = this._processCustomValues(
+    const customValues = this._settingsService.processCustomValues(
       entry,
       settings.netWorthFields
     );
-    const sumOfAllFields = this._getCustomValuesSum(customValues);
+    const sumOfAllFields = this._settingsService.getCustomValuesSum(
+      customValues
+    );
 
     const data = this._netWorthRepo.create({
       date: entry.date,
@@ -86,7 +86,7 @@ export class NetWorthService {
     );
   }
 
-  private async _checkForExistingEntriesForChosenMonth(
+  private async _checkIfEntryForMonthExists(
     user: string,
     date: string
   ): Promise<void> {
@@ -100,34 +100,5 @@ export class NetWorthService {
         'An entry already exists for that month. Please remove your original entry if you wish to overwite it.'
       );
     }
-  }
-
-  private _getCustomValuesSum(values: INetWorthCustomValues): number {
-    return reduce(
-      values,
-      (accum: number, next: number) => {
-        return accum + next;
-      },
-      0
-    );
-  }
-
-  private _processCustomValues(
-    entry: INetWorthCreate,
-    fields: Array<string>
-  ): INetWorthCustomValues {
-    const values = {};
-
-    fields.forEach((val) => {
-      const numberField = parseFloat(entry[val]);
-
-      if (isNaN(numberField)) {
-        values[val] = 0;
-      } else {
-        values[val] = numberField;
-      }
-    });
-
-    return values;
   }
 }
