@@ -7,6 +7,7 @@ import {
   Post,
   UseGuards
 } from '@nestjs/common';
+import { Dictionary } from 'lodash';
 import { AuthGuard } from 'src/auth/guards/auth/auth.guard';
 import { UserId } from 'src/common/decorators/user-id.decorator';
 import { HttpResponse } from 'src/common/interfaces/http-response.interface';
@@ -38,7 +39,7 @@ export class MonthlyDistributionController {
   public async getAll(
     @UserId() user: string
   ): HttpResponse<MonthlyDistribution[], IMonthlyDistributionMeta> {
-    const [data, settings] = await Promise.all([
+    const [rawData, settings] = await Promise.all([
       this._monthlyDistributionService.getAll(user),
       this._settingsService.getSettings(user)
     ]);
@@ -50,6 +51,20 @@ export class MonthlyDistributionController {
       fields: ['date', ...incomeFields, ...outgoingFields, 'remaining']
     };
 
+    const data = rawData.map((item) => {
+      return {
+        ...item.toObject(),
+        income: this._getOrderedFields(
+          settings.monthlyDistributionIncomeFields,
+          item.income
+        ),
+        outgoing: this._getOrderedFields(
+          settings.monthlyDistributionOutgoingFields,
+          item.outgoing
+        )
+      };
+    });
+
     return { data, meta };
   }
 
@@ -59,5 +74,18 @@ export class MonthlyDistributionController {
     @Param('monthlyDistributionDate') date: string
   ): Promise<void> {
     return this._monthlyDistributionService.deleteOne(user, date);
+  }
+
+  private _getOrderedFields(
+    list: Array<string>,
+    object: Dictionary<number>
+  ): Dictionary<number> {
+    const orderedFields = {};
+
+    list.forEach((fieldName) => {
+      orderedFields[fieldName] = object[fieldName];
+    });
+
+    return orderedFields;
   }
 }
