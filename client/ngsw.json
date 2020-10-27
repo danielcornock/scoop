@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1603761272155,
+  "timestamp": 1603762840015,
   "index": "/index.html",
   "assetGroups": [
     {
@@ -13,11 +13,11 @@
       "urls": [
         "/favicon.ico",
         "/index.html",
-        "/main.4eb3c81a6bd0348f6b28.js",
+        "/main.a7551bef1ad68cfbae59.js",
         "/manifest.webmanifest",
         "/polyfills.35a5ca1855eb057f016a.js",
         "/runtime.acf0dec4155e77772545.js",
-        "/styles.c1f38a5ddd0d0ba3b7e5.css"
+        "/styles.4ea8ec02b2c4aad763ee.css"
       ],
       "patterns": []
     },
@@ -29,6 +29,15 @@
         "ignoreVary": true
       },
       "urls": [
+        "/Quicksand-Bold.76f20c55b4aa564ea883.ttf",
+        "/Quicksand-Medium.74eb5c183e5f25c68c2e.ttf",
+        "/Quicksand-Regular.cffc279022b0d87c571d.ttf",
+        "/Quicksand-SemiBold.d4f6bc51411626477b05.ttf",
+        "/assets/fonts/Quicksand-Bold.ttf",
+        "/assets/fonts/Quicksand-Light.ttf",
+        "/assets/fonts/Quicksand-Medium.ttf",
+        "/assets/fonts/Quicksand-Regular.ttf",
+        "/assets/fonts/Quicksand-SemiBold.ttf",
         "/assets/icons/apple-touch-icon.png",
         "/assets/icons/favicon.ico",
         "/assets/icons/icon-128x128.png",
@@ -55,6 +64,15 @@
   ],
   "dataGroups": [],
   "hashTable": {
+    "/Quicksand-Bold.76f20c55b4aa564ea883.ttf": "82241d42d4abc5eda794ca1af140b0e69543cffe",
+    "/Quicksand-Medium.74eb5c183e5f25c68c2e.ttf": "bb6fc51ffb9d7b5cf567407095f75ddb4b13ca80",
+    "/Quicksand-Regular.cffc279022b0d87c571d.ttf": "edfa7348d5686ab530f4e0a2feac6aa9bd02f09c",
+    "/Quicksand-SemiBold.d4f6bc51411626477b05.ttf": "4a0fed7f4392872594cdc50fead1510da1dcdac3",
+    "/assets/fonts/Quicksand-Bold.ttf": "82241d42d4abc5eda794ca1af140b0e69543cffe",
+    "/assets/fonts/Quicksand-Light.ttf": "b6d978adb86599ba35e5c97917b26f06e10c9361",
+    "/assets/fonts/Quicksand-Medium.ttf": "bb6fc51ffb9d7b5cf567407095f75ddb4b13ca80",
+    "/assets/fonts/Quicksand-Regular.ttf": "edfa7348d5686ab530f4e0a2feac6aa9bd02f09c",
+    "/assets/fonts/Quicksand-SemiBold.ttf": "4a0fed7f4392872594cdc50fead1510da1dcdac3",
     "/assets/icons/apple-touch-icon.png": "4b1158b4430131f70ebca10d2a2be625d32ef9a6",
     "/assets/icons/favicon.ico": "0742bd44c64ec70af17bb8a229e01723e9a84b40",
     "/assets/icons/icon-128x128.png": "be5aba6b920567282b7f2e92b0fe1ff1d6f48013",
@@ -76,12 +94,12 @@
     "/assets/styles/_variables.scss": "45eb2309eb3062cf6c3c47e96b453b88f11b1aa1",
     "/assets/styles/themes.scss": "09b674707fdd45475d39b8507e399bf24075f2c4",
     "/favicon.ico": "0742bd44c64ec70af17bb8a229e01723e9a84b40",
-    "/index.html": "6bdddcac404eb536162f51f08c578d968890fc0c",
-    "/main.4eb3c81a6bd0348f6b28.js": "3063bf3f04c9d458336307c92e67606abbf8d8a8",
+    "/index.html": "a933a15e33874e2d349eb86a0c3cea32501ffbbc",
+    "/main.a7551bef1ad68cfbae59.js": "80802100ec3a190cbd86b1b04263d3ec00a8084c",
     "/manifest.webmanifest": "a50e3416c30769b755f28f00d982fb35be4dd08f",
     "/polyfills.35a5ca1855eb057f016a.js": "578360d24ce37383f261c7ef63b1f822d28e8dde",
     "/runtime.acf0dec4155e77772545.js": "a9aafcf49f49145093fc831efd9b8e2f6c71bb9c",
-    "/styles.c1f38a5ddd0d0ba3b7e5.css": "822bc98e8175dc6425260943b53125e3e96329e3"
+    "/styles.4ea8ec02b2c4aad763ee.css": "12875a8c9941e4526796992d3895778d2b5f7489"
   },
   "navigationUrls": [
     {
