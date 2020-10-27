@@ -1,8 +1,3 @@
-@mixin page-container {
-  padding: var(--spacing-page-top) var(--spacing-page-side);
-  height: 100%;
-}
-
 @mixin center-contents {
   display: flex;
   align-items: center;
@@ -185,4 +180,64 @@
   @media only screen and(max-width: 450px) {
     @content;
   }
+}
+
+@mixin modal-title {
+  @include page-subheading;
+  margin-bottom: $spacing-20;
+
+  @include media-phone {
+    font-size: 20px;
+  }
+}
+
+@mixin form-subheading {
+  padding-top: $spacing-30;
+  margin-bottom: $spacing-20;
+  @include page-subheading;
+
+  @include media-phone {
+    padding-top: $spacing-10;
+  }
+}
+
+@mixin page-container {
+  padding: var(--spacing-page-top) var(--spacing-page-side);
+  height: 100%;
+
+  @include media-phone {
+    padding-top: $spacing-30;
+  }
+}
+
+@mixin status-indicator($color) {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    height: 8px;
+    width: 8px;
+    border-radius: $br-max;
+    left: -$spacing-15;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: $color;
+  }
+
+  @include media-tablet {
+    color: $color !important;
+
+    &::after {
+      content: initial;
+    }
+  }
+}
+
+@mixin subheading-sm {
+  font-size: 18px;
+  font-weight: 400;
+  color: $color-subheading;
+  margin-bottom: $spacing-10;
+  margin-top: $spacing-30;
 }

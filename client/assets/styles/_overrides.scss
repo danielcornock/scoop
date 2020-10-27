@@ -22,4 +22,24 @@
   overflow: initial;
   border-radius: 10px;
   padding: $spacing-30;
+
+  @include media-phone {
+    padding: $spacing-15;
+  }
+}
+
+.cdk-global-overlay-wrapper {
+  @include media-phone {
+    padding: $spacing-30;
+  }
+
+  @include media-phone-sm {
+    padding: $spacing-10;
+  }
+}
+.cdk-global-overlay-wrapper .cdk-overlay-pane {
+  @include media-phone {
+    max-width: 100% !important;
+    width: 100%;
+  }
 }
