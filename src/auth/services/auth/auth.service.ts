@@ -1,9 +1,17 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { compare, hash } from 'bcryptjs';
 import { sign, verify } from 'jsonwebtoken';
+import { toLower } from 'lodash';
 import { Model } from 'mongoose';
-import { IDecodedJwt, IJwtConfig } from 'src/auth/interfaces/jwt-config.interface';
+import {
+  IDecodedJwt,
+  IJwtConfig
+} from 'src/auth/interfaces/jwt-config.interface';
 import { User } from 'src/auth/schemas/user.schema';
 import { CreateUserRequest } from 'src/auth/transfer-objects/create-user.dto';
 import { DatabaseErrorsService } from 'src/common/services/database-errors/database-errors.service';
@@ -15,7 +23,8 @@ export class AuthService {
   @InjectModel(User.name)
   private readonly _userRepo: Model<User>;
 
-  public async getFullUserByEmail(email: string): Promise<User> {
+  public async getFullUserByEmail(rawEmail: string): Promise<User> {
+    const email = toLower(rawEmail);
     const user: Maybe<User> = await this._userRepo.findOne({ email });
 
     if (!user) {
@@ -40,11 +49,12 @@ export class AuthService {
   public async createUser(userObject: CreateUserRequest): Promise<User> {
     try {
       const encryptedPassword: string = await this._hashPassword(
-        userObject.password,
+        userObject.password
       );
       const updatedUserObject: CreateUserRequest = {
-        ...userObject,
-        password: encryptedPassword,
+        name: userObject.name,
+        email: toLower(userObject.email),
+        password: encryptedPassword
       };
 
       const createdUser: User = await this._userRepo.create(updatedUserObject);
@@ -57,14 +67,14 @@ export class AuthService {
 
   public isPasswordMatch(
     testPassword: string,
-    controlPassword: string,
+    controlPassword: string
   ): Promise<boolean> {
     return compare(testPassword, controlPassword);
   }
 
   public generateJwt(jwtConfig: IJwtConfig): string {
     return sign(jwtConfig.payload, jwtConfig.secret, {
-      expiresIn: jwtConfig.expiresIn,
+      expiresIn: jwtConfig.expiresIn
     });
   }
 
