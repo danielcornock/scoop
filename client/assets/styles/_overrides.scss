@@ -43,3 +43,11 @@
     width: 100%;
   }
 }
+
+/* For safari input bugs */
+input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  opacity: 1;
+}

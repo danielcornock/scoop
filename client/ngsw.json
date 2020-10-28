@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1603904824602,
+  "timestamp": 1603907303606,
   "index": "/index.html",
   "assetGroups": [
     {
@@ -13,11 +13,11 @@
       "urls": [
         "/favicon.ico",
         "/index.html",
-        "/main.af212174a5c3a93789c1.js",
+        "/main.227347c4061f40f94c5b.js",
         "/manifest.webmanifest",
         "/polyfills.35a5ca1855eb057f016a.js",
         "/runtime.acf0dec4155e77772545.js",
-        "/styles.4ea8ec02b2c4aad763ee.css"
+        "/styles.0085f68d32a69e0063f1.css"
       ],
       "patterns": []
     },
@@ -93,17 +93,17 @@
     "/assets/styles/_animations.scss": "3e974d8f76f902f01cc64e9ddd6c649b1188d271",
     "/assets/styles/_globals.scss": "4514b4e7ca7d31c9a407e4f08a003d61dac22859",
     "/assets/styles/_mixins.scss": "3104e4d85aa6c668e9e3bcb673a0b1f924bc12e3",
-    "/assets/styles/_overrides.scss": "839bfeaf664a3120817ca3f3022d2ee1050e6491",
+    "/assets/styles/_overrides.scss": "7b9d83dc24f3a0a9d10b9c4464b1d49c0d4c3149",
     "/assets/styles/_palette.scss": "962af4270f23be0f88ffc2a71d6c76924ff3eadf",
     "/assets/styles/_variables.scss": "45eb2309eb3062cf6c3c47e96b453b88f11b1aa1",
     "/assets/styles/themes.scss": "09b674707fdd45475d39b8507e399bf24075f2c4",
     "/favicon.ico": "0742bd44c64ec70af17bb8a229e01723e9a84b40",
-    "/index.html": "5d5778606985aa5c2f956a2f5fbac522a7533d45",
-    "/main.af212174a5c3a93789c1.js": "92c0fa28d2f9de33c94251ccbb950e819b1a7408",
+    "/index.html": "b55bd218c2aa2a82e356ff004bfa4ee461c912f9",
+    "/main.227347c4061f40f94c5b.js": "210a1114fb2884a6cc1adcb5b84b8284efb0abb8",
     "/manifest.webmanifest": "a50e3416c30769b755f28f00d982fb35be4dd08f",
     "/polyfills.35a5ca1855eb057f016a.js": "578360d24ce37383f261c7ef63b1f822d28e8dde",
     "/runtime.acf0dec4155e77772545.js": "a9aafcf49f49145093fc831efd9b8e2f6c71bb9c",
-    "/styles.4ea8ec02b2c4aad763ee.css": "12875a8c9941e4526796992d3895778d2b5f7489"
+    "/styles.0085f68d32a69e0063f1.css": "0e3797af521b219ac37e1129b2818db8824be356"
   },
   "navigationUrls": [
     {
