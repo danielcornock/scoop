@@ -1,4 +1,4 @@
-import { Body, Controller, NotFoundException, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { User } from 'src/auth/schemas/user.schema';
 import { AuthService } from 'src/auth/services/auth/auth.service';
 import { CreateUserRequest } from 'src/auth/transfer-objects/create-user.dto';
@@ -21,13 +21,8 @@ export class AuthController {
   public async login(@Body() body: LoginRequest): HttpResponse<LoginResponse> {
     const user: User = await this._authService.getFullUserByEmail(body.email);
 
-    if (
-      !(await this._authService.isPasswordMatch(body.password, user.password))
-    ) {
-      throw new NotFoundException(
-        'No user found with matching email and password.'
-      );
-    }
+    await this._authService.checkPasswordMatch(body.password, user.password);
+
     const jwt: string = this._authService.createJwt(user);
 
     return {

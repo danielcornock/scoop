@@ -63,11 +63,17 @@ export class AuthService {
     }
   }
 
-  public isPasswordMatch(
+  public async checkPasswordMatch(
     testPassword: string,
     controlPassword: string
-  ): Promise<boolean> {
-    return compare(testPassword, controlPassword);
+  ): Promise<void> {
+    const isMatch: boolean = await compare(testPassword, controlPassword);
+
+    if (!isMatch) {
+      throw new NotFoundException(
+        'No user found with matching email and password.'
+      );
+    }
   }
 
   public createJwt(user: User): string {
