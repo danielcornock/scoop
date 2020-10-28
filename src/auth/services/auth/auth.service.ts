@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException
-} from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { compare, hash } from 'bcryptjs';
 import { sign, verify } from 'jsonwebtoken';
@@ -28,7 +24,9 @@ export class AuthService {
     const user: Maybe<User> = await this._userRepo.findOne({ email });
 
     if (!user) {
-      throw new NotFoundException('No user found with this email address.');
+      throw new NotFoundException(
+        'No user found with matching email and password.'
+      );
     }
 
     return user;
