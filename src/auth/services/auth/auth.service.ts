@@ -8,20 +8,20 @@ import { compare, hash } from 'bcryptjs';
 import { sign, verify } from 'jsonwebtoken';
 import { toLower } from 'lodash';
 import { Model } from 'mongoose';
-import {
-  IDecodedJwt,
-  IJwtConfig
-} from 'src/auth/interfaces/jwt-config.interface';
+import { IDecodedJwt } from 'src/auth/interfaces/jwt-config.interface';
 import { User } from 'src/auth/schemas/user.schema';
 import { CreateUserRequest } from 'src/auth/transfer-objects/create-user.dto';
 import { DatabaseErrorsService } from 'src/common/services/database-errors/database-errors.service';
 import { Maybe } from 'src/common/types/maybe';
+import { jwtSecret } from 'src/config/misc/env';
 import { promisify } from 'util';
 
 @Injectable()
 export class AuthService {
-  @InjectModel(User.name)
-  private readonly _userRepo: Model<User>;
+  constructor(
+    @InjectModel(User.name)
+    private readonly _userRepo: Model<User>
+  ) {}
 
   public async getFullUserByEmail(rawEmail: string): Promise<User> {
     const email = toLower(rawEmail);
@@ -72,10 +72,18 @@ export class AuthService {
     return compare(testPassword, controlPassword);
   }
 
-  public generateJwt(jwtConfig: IJwtConfig): string {
-    return sign(jwtConfig.payload, jwtConfig.secret, {
-      expiresIn: jwtConfig.expiresIn
-    });
+  public createJwt(user: User): string {
+    return sign(
+      {
+        id: user._id,
+        email: user.email,
+        name: user.name
+      },
+      jwtSecret,
+      {
+        expiresIn: '90d'
+      }
+    );
   }
 
   public generateSecret(id: string, secret: string): string {

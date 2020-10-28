@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UseGuards
+} from '@nestjs/common';
 import { AuthGuard } from 'src/auth/guards/auth/auth.guard';
 import { UserId } from 'src/common/decorators/user-id.decorator';
 import { HttpResponse } from 'src/common/interfaces/http-response.interface';
@@ -28,7 +36,7 @@ export class NetWorthController {
   }
 
   @Delete('/:netWorthDate')
-  public async deleteOne(
+  public deleteOne(
     @UserId() user: string,
     @Param('netWorthDate') date: string
   ): Promise<void> {

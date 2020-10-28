@@ -5,14 +5,16 @@ import { CreateUserRequest } from 'src/auth/transfer-objects/create-user.dto';
 import { LoginRequest } from 'src/auth/transfer-objects/login-request.dto';
 import { LoginResponse } from 'src/auth/transfer-objects/login-response.dto';
 import { HttpResponse } from 'src/common/interfaces/http-response.interface';
-import { jwtSecret } from 'src/config/misc/env';
+import { STATIC_NOTIFICATION } from 'src/notifications/constants/static-notifications.enum';
+import { NotificationsService } from 'src/notifications/services/notifications/notifications.service';
 import { SettingsService } from 'src/settings/services/settings/settings.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly _authService: AuthService,
-    private readonly _settingsService: SettingsService
+    private readonly _settingsService: SettingsService,
+    private readonly _notificationsService: NotificationsService
   ) {}
 
   @Post('login')
@@ -25,15 +27,7 @@ export class AuthController {
       throw new UnauthorizedException('The password provided does not match.');
     }
 
-    const jwt: string = this._authService.generateJwt({
-      payload: {
-        id: user._id,
-        email: user.email,
-        name: user.name
-      },
-      secret: jwtSecret,
-      expiresIn: '90d'
-    });
+    const jwt: string = this._authService.createJwt(user);
 
     return {
       data: {
@@ -50,17 +44,14 @@ export class AuthController {
     @Body() body: CreateUserRequest
   ): HttpResponse<LoginResponse> {
     const user = await this._authService.createUser(body);
-    await this._settingsService.createSettings(user._id);
 
-    const jwt: string = this._authService.generateJwt({
-      payload: {
-        id: user._id,
-        email: user.email,
-        name: user.name
-      },
-      secret: jwtSecret,
-      expiresIn: '90d'
-    });
+    await this._settingsService.createSettings(user._id);
+    await this._notificationsService.createStaticNotification(
+      STATIC_NOTIFICATION.Welcome,
+      user._id
+    );
+
+    const jwt: string = this._authService.createJwt(user);
 
     return {
       data: {
