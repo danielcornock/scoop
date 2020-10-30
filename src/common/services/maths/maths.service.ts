@@ -8,4 +8,13 @@ export class MathsService {
 
     return Math.round(percentageDifference * 1000) / 1000;
   }
+
+  public static daysToMilliseconds(days: number): number {
+    const hours = days * 24;
+    const minutes = hours * 60;
+    const seconds = minutes * 60;
+    const milliseconds = seconds * 1000;
+
+    return milliseconds;
+  }
 }

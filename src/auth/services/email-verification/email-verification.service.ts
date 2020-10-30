@@ -6,6 +6,7 @@ import { Token } from 'src/auth/schemas/token.schema';
 import { User } from 'src/auth/schemas/user.schema';
 import { getActivationTemplate } from 'src/auth/templates/activation.template';
 import { EmailService } from 'src/common/services/email/email.service';
+import { MathsService } from 'src/common/services/maths/maths.service';
 
 @Injectable()
 export class EmailVerificationService {
@@ -56,19 +57,10 @@ export class EmailVerificationService {
 
   private _createConfirmationToken(user: Types.ObjectId): Promise<Token> {
     return this._tokenRepo.create({
-      user: (user as Types.ObjectId).toHexString(),
+      user: user.toHexString(),
       token: crypto.randomBytes(16).toString('hex'),
-      expiresAt: Date.now() + this._daysToMilliseconds(0.5)
+      expiresAt: Date.now() + MathsService.daysToMilliseconds(0.5)
     });
-  }
-
-  private _daysToMilliseconds(days: number): number {
-    const hours = days * 24;
-    const minutes = hours * 60;
-    const seconds = minutes * 60;
-    const milliseconds = seconds * 1000;
-
-    return milliseconds;
   }
 
   public async checkIfVerified(user: User): Promise<void> {
