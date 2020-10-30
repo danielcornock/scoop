@@ -35,6 +35,7 @@
   border: 0;
   background-color: transparent;
   cursor: pointer;
+  font-size: inherit;
 }
 
 @mixin form-error-text {
