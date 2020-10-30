@@ -1,6 +1,7 @@
 import { Body, Controller, Param, Post } from '@nestjs/common';
 import { User } from 'src/auth/schemas/user.schema';
 import { AuthService } from 'src/auth/services/auth/auth.service';
+import { EmailVerificationService } from 'src/auth/services/email-verification/email-verification.service';
 import { CreateUserRequest } from 'src/auth/transfer-objects/create-user.dto';
 import { LoginRequest } from 'src/auth/transfer-objects/login-request.dto';
 import { LoginResponse } from 'src/auth/transfer-objects/login-response.dto';
@@ -14,7 +15,8 @@ export class AuthController {
   constructor(
     private readonly _authService: AuthService,
     private readonly _settingsService: SettingsService,
-    private readonly _notificationsService: NotificationsService
+    private readonly _notificationsService: NotificationsService,
+    private readonly _emailVerificationService: EmailVerificationService
   ) {}
 
   @Post('login')
@@ -22,7 +24,7 @@ export class AuthController {
     const user: User = await this._authService.getFullUserByEmail(body.email);
 
     await this._authService.checkPasswordMatch(body.password, user.password);
-    await this._authService.checkIfVerified(user);
+    await this._emailVerificationService.checkIfVerified(user);
 
     const jwt: string = this._authService.createJwt(user);
 
@@ -41,7 +43,7 @@ export class AuthController {
     const user = await this._authService.createUser(body);
 
     await this._settingsService.createSettings(user._id);
-    await this._authService.sendActivationEmail(user);
+    await this._emailVerificationService.sendActivationEmail(user);
     await this._notificationsService.createStaticNotification(
       STATIC_NOTIFICATION.Welcome,
       user._id
@@ -50,13 +52,15 @@ export class AuthController {
 
   @Post('confirmation/:token')
   public async confirmAccount(@Param('token') token: string): Promise<void> {
-    const tokenModel = await this._authService.isConfirmationTokenValid(token);
+    const tokenModel = await this._emailVerificationService.isConfirmationTokenValid(
+      token
+    );
 
-    await this._authService.verifyUser(tokenModel.user);
+    await this._emailVerificationService.verifyUser(tokenModel.user);
   }
 
   @Post('resend/:token')
   public async resendToken(@Param('token') token: string): Promise<void> {
-    await this._authService.resendConfirmationEmail(token);
+    await this._emailVerificationService.resendConfirmationEmail(token);
   }
 }

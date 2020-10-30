@@ -12,6 +12,7 @@ export const port = process.env.PORT;
 
 export const isDevelopment = environment === 'dev';
 export const isProduction = environment === 'production';
+export const isLocal = environment === 'local';
 
 export const emailUsername = process.env.EMAIL_USERNAME;
 export const emailPassword = process.env.EMAIL_PASSWORD;
