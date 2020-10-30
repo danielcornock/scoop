@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Param, Post } from '@nestjs/common';
 import { User } from 'src/auth/schemas/user.schema';
 import { AuthService } from 'src/auth/services/auth/auth.service';
 import { CreateUserRequest } from 'src/auth/transfer-objects/create-user.dto';
@@ -22,6 +22,7 @@ export class AuthController {
     const user: User = await this._authService.getFullUserByEmail(body.email);
 
     await this._authService.checkPasswordMatch(body.password, user.password);
+    await this._authService.checkIfVerified(user);
 
     const jwt: string = this._authService.createJwt(user);
 
@@ -36,26 +37,26 @@ export class AuthController {
   }
 
   @Post('register')
-  public async register(
-    @Body() body: CreateUserRequest
-  ): HttpResponse<LoginResponse> {
+  public async register(@Body() body: CreateUserRequest): Promise<void> {
     const user = await this._authService.createUser(body);
 
     await this._settingsService.createSettings(user._id);
+    await this._authService.sendActivationEmail(user);
     await this._notificationsService.createStaticNotification(
       STATIC_NOTIFICATION.Welcome,
       user._id
     );
+  }
 
-    const jwt: string = this._authService.createJwt(user);
+  @Post('confirmation/:token')
+  public async confirmAccount(@Param('token') token: string): Promise<void> {
+    const tokenModel = await this._authService.isConfirmationTokenValid(token);
 
-    return {
-      data: {
-        _id: user._id,
-        email: user.email,
-        name: user.name,
-        jwt
-      }
-    };
+    await this._authService.verifyUser(tokenModel.user);
+  }
+
+  @Post('resend/:token')
+  public async resendToken(@Param('token') token: string): Promise<void> {
+    await this._authService.resendConfirmationEmail(token);
   }
 }

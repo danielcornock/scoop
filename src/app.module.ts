@@ -10,6 +10,7 @@ import { MonthlyDistributionModule } from './monthly-distribution/monthly-distri
 import { NetWorthModule } from './net-worth/net-worth.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { SettingsModule } from './settings/settings.module';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -36,7 +37,8 @@ import { SettingsModule } from './settings/settings.module';
     }),
     InvestmentsModule,
     MonthlyDistributionModule,
-    NotificationsModule
+    NotificationsModule,
+    CommonModule
   ],
   controllers: [],
   providers: []
