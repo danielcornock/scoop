@@ -1,9 +1,4 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  Injectable,
-  UnauthorizedException
-} from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { IncomingMessage } from 'http';
 import { IDecodedJwt } from 'src/auth/interfaces/jwt-config.interface';
 import { User } from 'src/auth/schemas/user.schema';
@@ -20,9 +15,11 @@ export class AuthGuard implements CanActivate {
     const decodedJwt: IDecodedJwt = await this._getDecodedJwt(
       request.headers.authorization
     );
+
     request.user = await this._authService.getUserById(decodedJwt.id);
     return true;
   }
+
   private async _getDecodedJwt(token: string): Promise<IDecodedJwt> {
     try {
       const decodedJwt: IDecodedJwt = await this._authService.decodeJwt(
