@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
+import Mail from 'nodemailer/lib/mailer';
 import { html } from 'src/auth/templates/lib/html';
 import {
   emailHost,
@@ -39,13 +40,17 @@ export class EmailService {
   }
 
   public async sendEmail(options: IEmailOptions): Promise<void> {
-    const mailOptions = {
+    const mailOptions: Mail.Options = {
       from: 'Scoop <hello@scoopfinance.co.uk>',
       to: options.to,
       subject: options.subject,
       html: html(options.message)
     };
 
-    await this._transporter.sendMail(mailOptions);
+    const email: nodemailer.SentMessageInfo = await this._transporter.sendMail(
+      mailOptions
+    );
+
+    Logger.log(`Email successfully sent to ${email.accepted[0]}`, 'Operation');
   }
 }
