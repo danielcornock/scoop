@@ -17,6 +17,9 @@ export class AuthGuard implements CanActivate {
     );
 
     request.user = await this._authService.getUserById(decodedJwt.id);
+
+    this._checkPasswordNotChanged(request.user, decodedJwt);
+
     return true;
   }
 
@@ -28,6 +31,17 @@ export class AuthGuard implements CanActivate {
       );
       return decodedJwt;
     } catch (e) {
+      throw new UnauthorizedException(
+        'Unfortunately your session has expired. Please log in again.'
+      );
+    }
+  }
+
+  private _checkPasswordNotChanged(user: User, jwt: IDecodedJwt): void {
+    /* Jwt time is stored in seconds */
+    const jwtCreation = jwt.iat * 1000;
+
+    if (user.passwordChangedAt && user.passwordChangedAt > jwtCreation) {
       throw new UnauthorizedException(
         'Unfortunately your session has expired. Please log in again.'
       );

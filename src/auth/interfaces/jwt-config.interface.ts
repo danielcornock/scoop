@@ -5,8 +5,8 @@ export interface IJwtConfig {
 }
 
 export interface IDecodedJwt {
-  exp: string;
-  iat: string;
+  exp: number;
+  iat: number;
   id: string;
   [key: string]: unknown;
 }

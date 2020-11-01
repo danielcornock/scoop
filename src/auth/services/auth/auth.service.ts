@@ -30,10 +30,18 @@ export class AuthService {
     return user;
   }
 
+  public async updateUserPassword(
+    user: User,
+    newPassword: string
+  ): Promise<void> {
+    user.password = await this._hashPassword(newPassword);
+    user.passwordChangedAt = Date.now();
+
+    await user.save();
+  }
+
   public async getUserById(id: string): Promise<User> {
-    const user: Maybe<User> = await this._userRepo
-      .findById(id)
-      .select('-password');
+    const user: Maybe<User> = await this._userRepo.findById(id);
 
     if (!user) {
       throw new NotFoundException('This user no longer exists.');

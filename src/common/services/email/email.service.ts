@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
+import { html } from 'src/auth/templates/lib/html';
 import {
   emailHost,
   emailPassword,
@@ -39,10 +40,10 @@ export class EmailService {
 
   public async sendEmail(options: IEmailOptions): Promise<void> {
     const mailOptions = {
-      from: 'Scoop <scoopfinanceuk@gmail.com>',
+      from: 'Scoop <hello@scoopfinance.co.uk>',
       to: options.to,
       subject: options.subject,
-      html: options.message
+      html: html(options.message)
     };
 
     await this._transporter.sendMail(mailOptions);

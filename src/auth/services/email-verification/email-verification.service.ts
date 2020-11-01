@@ -5,6 +5,7 @@ import { Model, Types } from 'mongoose';
 import { Token } from 'src/auth/schemas/token.schema';
 import { User } from 'src/auth/schemas/user.schema';
 import { getActivationTemplate } from 'src/auth/templates/activation.template';
+import { getForgotPasswordTemplate } from 'src/auth/templates/forgot-password.template';
 import { EmailService } from 'src/common/services/email/email.service';
 import { MathsService } from 'src/common/services/maths/maths.service';
 
@@ -48,19 +49,21 @@ export class EmailVerificationService {
     });
   }
 
+  public async sendForgotPasswordEmail(user: User): Promise<void> {
+    const resetToken = await this._createConfirmationToken(user._id);
+
+    await this._emailService.sendEmail({
+      to: user.email,
+      subject: 'Password reset request',
+      message: getForgotPasswordTemplate(resetToken.token, user.name)
+    });
+  }
+
   public async resendConfirmationEmail(tokenString: string): Promise<void> {
     const token = await this._tokenRepo.findOne({ token: tokenString });
     const user = await this._userRepo.findById(token.user);
 
     this.sendActivationEmail(user);
-  }
-
-  private _createConfirmationToken(user: Types.ObjectId): Promise<Token> {
-    return this._tokenRepo.create({
-      user: user.toHexString(),
-      token: crypto.randomBytes(16).toString('hex'),
-      expiresAt: Date.now() + MathsService.daysToMilliseconds(0.5)
-    });
   }
 
   public async checkIfVerified(user: User): Promise<void> {
@@ -69,5 +72,17 @@ export class EmailVerificationService {
         'This user account has not been activated yet.'
       );
     }
+  }
+
+  public async removeToken(tokenId: string): Promise<void> {
+    await this._tokenRepo.findByIdAndRemove(tokenId);
+  }
+
+  private _createConfirmationToken(user: Types.ObjectId): Promise<Token> {
+    return this._tokenRepo.create({
+      user: user.toHexString(),
+      token: crypto.randomBytes(16).toString('hex'),
+      expiresAt: Date.now() + MathsService.daysToMilliseconds(0.5)
+    });
   }
 }
