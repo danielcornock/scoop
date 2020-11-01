@@ -97,13 +97,10 @@ export class AuthController {
   public async forgotPassword(
     @Body() body: ForgotPasswordRequest
   ): Promise<void> {
-    try {
-      const user = await this._authService.getFullUserByEmail(body.email);
+    const user = await this._getUser(body.email);
 
+    if (user) {
       await this._emailVerificationService.sendForgotPasswordEmail(user);
-    } catch {
-      /* Absorbs the exception so that it's not given away to the user whenever the account actually exists  */
-      return;
     }
   }
 
@@ -133,5 +130,15 @@ export class AuthController {
         jwt
       }
     };
+  }
+
+  private async _getUser(email: string): Promise<User> {
+    try {
+      const user = await this._authService.getFullUserByEmail(email);
+
+      return user;
+    } catch {
+      return null;
+    }
   }
 }
