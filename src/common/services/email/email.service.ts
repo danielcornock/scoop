@@ -8,8 +8,8 @@ import {
   emailPort,
   emailUsername,
   isProduction,
-  sendgridPassword,
-  sendgridUsername,
+  prodEmailPassword,
+  prodEmailUsername,
 } from 'src/config/misc/env';
 
 import { IEmailOptions } from './interfaces/email-options.interface';
@@ -21,10 +21,10 @@ export class EmailService {
   constructor() {
     if (isProduction) {
       this._transporter = nodemailer.createTransport({
-        service: 'SendGrid',
+        service: 'Sendgrid',
         auth: {
-          user: sendgridUsername,
-          pass: sendgridPassword
+          user: prodEmailUsername,
+          pass: prodEmailPassword
         }
       });
     } else {
