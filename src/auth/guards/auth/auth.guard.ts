@@ -39,7 +39,7 @@ export class AuthGuard implements CanActivate {
 
   private _checkPasswordNotChanged(user: User, jwt: IDecodedJwt): void {
     /* Jwt time is stored in seconds */
-    const jwtCreation = jwt.iat * 1000;
+    const jwtCreation = (jwt.iat + 1) * 1000;
 
     if (user.passwordChangedAt && user.passwordChangedAt > jwtCreation) {
       throw new UnauthorizedException(
