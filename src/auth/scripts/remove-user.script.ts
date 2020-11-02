@@ -8,5 +8,8 @@ runDatabaseScript(async (db: Db) => {
 
   await db.collection('users').deleteOne({ email });
 
-  Logger.log(`User with email address ${email} has been deleted.`);
+  Logger.log(
+    `User with email address ${email} has been deleted.`,
+    'AppOperation'
+  );
 });

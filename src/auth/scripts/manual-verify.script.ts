@@ -10,5 +10,8 @@ runDatabaseScript(async (db: Db) => {
     .collection('users')
     .updateOne({ email }, { $set: { isVerified: true } });
 
-  Logger.log(`User with email address ${email} has been verified.`);
+  Logger.log(
+    `User with email address ${email} has been verified.`,
+    'AppOperation'
+  );
 });
