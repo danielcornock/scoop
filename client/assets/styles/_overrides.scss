@@ -1,8 +1,10 @@
+/* Context menu overrides */
 .mat-menu-panel {
   min-height: initial !important;
   border-radius: 10px !important;
 }
 
+/* Drag drop overrides */
 .cdk-drag-preview {
   box-sizing: border-box;
   border-radius: 4px;
@@ -18,10 +20,12 @@
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
+/* Modal overrides */
 ::ng-deep .mat-dialog-container {
   overflow: initial;
   border-radius: 10px;
   padding: $spacing-30;
+  position: relative;
 
   @include media-phone {
     padding: $spacing-15;
