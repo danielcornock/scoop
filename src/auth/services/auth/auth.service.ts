@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { compare, hash } from 'bcryptjs';
 import { sign, verify } from 'jsonwebtoken';

@@ -19,6 +19,6 @@ export const emailPassword = process.env.EMAIL_PASSWORD;
 export const emailPort = process.env.EMAIL_PORT;
 export const emailHost = process.env.EMAIL_HOST;
 
-export const prodEmailUsername = process.env.SENDGRID_USERNAME;
-export const prodEmailPassword = process.env.SENDGRID_PASSWORD;
+export const prodEmailUsername = process.env.PROD_EMAIL_USERNAME;
+export const prodEmailPassword = process.env.PROD_EMAIL_PASSWORD;
 export const prodEmailService = process.env.PROD_EMAIL_SERVICE;

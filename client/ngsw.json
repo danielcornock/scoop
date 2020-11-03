@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1604411183258,
+  "timestamp": 1604443956300,
   "index": "/index.html",
   "assetGroups": [
     {
@@ -13,7 +13,7 @@
       "urls": [
         "/favicon.ico",
         "/index.html",
-        "/main.c53a01fb881f6057ea7e.js",
+        "/main.88c75b651cb9ff6ee6a4.js",
         "/manifest.webmanifest",
         "/polyfills.35a5ca1855eb057f016a.js",
         "/runtime.acf0dec4155e77772545.js",
@@ -53,6 +53,7 @@
         "/assets/images/Gem.svg",
         "/assets/images/User.svg",
         "/assets/images/favicon.png",
+        "/assets/images/scoop-email.png",
         "/assets/styles/_animations.scss",
         "/assets/styles/_globals.scss",
         "/assets/styles/_mixins.scss",
@@ -90,6 +91,7 @@
     "/assets/images/Gem.svg": "a11932b661b8d8ae198654bc56d2a44aabcd085a",
     "/assets/images/User.svg": "2b02ce416f324eb87efccef1415aa2d082b704ca",
     "/assets/images/favicon.png": "be5aba6b920567282b7f2e92b0fe1ff1d6f48013",
+    "/assets/images/scoop-email.png": "bb0ae82b0cf1eb5ea58fc1c906042d937bfcb884",
     "/assets/styles/_animations.scss": "3e974d8f76f902f01cc64e9ddd6c649b1188d271",
     "/assets/styles/_globals.scss": "4514b4e7ca7d31c9a407e4f08a003d61dac22859",
     "/assets/styles/_mixins.scss": "d7f7f590ea4a202ad1e68608c147f15663f62ffa",
@@ -98,8 +100,8 @@
     "/assets/styles/_variables.scss": "7588c9e16fac8f0078b6aa0a35b87b769e3fd008",
     "/assets/styles/themes.scss": "09b674707fdd45475d39b8507e399bf24075f2c4",
     "/favicon.ico": "0742bd44c64ec70af17bb8a229e01723e9a84b40",
-    "/index.html": "623e1abf594813f7da915c721a465d88eef9c817",
-    "/main.c53a01fb881f6057ea7e.js": "5d4de49340b964cc3235aa8b802a782f3e5a041d",
+    "/index.html": "ede262598aff425263218582c8a45605182d432b",
+    "/main.88c75b651cb9ff6ee6a4.js": "ba4f5785e6dd48532d8b21ce4f86071e35a03461",
     "/manifest.webmanifest": "a50e3416c30769b755f28f00d982fb35be4dd08f",
     "/polyfills.35a5ca1855eb057f016a.js": "578360d24ce37383f261c7ef63b1f822d28e8dde",
     "/runtime.acf0dec4155e77772545.js": "a9aafcf49f49145093fc831efd9b8e2f6c71bb9c",

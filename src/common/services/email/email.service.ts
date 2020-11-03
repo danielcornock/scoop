@@ -9,7 +9,8 @@ import {
   emailUsername,
   isProduction,
   prodEmailPassword,
-  prodEmailUsername,
+  prodEmailService,
+  prodEmailUsername
 } from 'src/config/misc/env';
 
 import { IEmailOptions } from './interfaces/email-options.interface';
@@ -21,7 +22,7 @@ export class EmailService {
   constructor() {
     if (isProduction) {
       this._transporter = nodemailer.createTransport({
-        service: 'Sendgrid',
+        service: prodEmailService,
         auth: {
           user: prodEmailUsername,
           pass: prodEmailPassword
@@ -41,7 +42,7 @@ export class EmailService {
 
   public async sendEmail(options: IEmailOptions): Promise<void> {
     const mailOptions: Mail.Options = {
-      from: 'Scoop <hello@scoopfinance.co.uk>',
+      from: 'Scoop <scoopfinanceuk@gmail.com>',
       to: options.to,
       subject: options.subject,
       html: html(options.message)
@@ -51,6 +52,9 @@ export class EmailService {
       mailOptions
     );
 
-    Logger.log(`Email successfully sent to ${email.accepted[0]}`, 'Operation');
+    Logger.log(
+      `Email successfully sent to ${email.accepted[0]}`,
+      'AppOperation'
+    );
   }
 }

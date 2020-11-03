@@ -1,7 +1,7 @@
 import { appUrl } from './lib/app-url';
 
 export function getForgotPasswordTemplate(token: string, name: string): string {
-  return `<p>Hi ${name},</p>
+  return `<p>Hi ${name.split(' ')[0]},</p>
 <p>You recently requested to reset your password for your Scoop account.</p>
 
 <p><a href="${appUrl(
