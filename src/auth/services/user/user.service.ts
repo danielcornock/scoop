@@ -13,4 +13,8 @@ export class UserService {
 
     return data;
   }
+
+  public async deleteOne(id: string): Promise<void> {
+    await this._userRepo.findByIdAndDelete(id);
+  }
 }

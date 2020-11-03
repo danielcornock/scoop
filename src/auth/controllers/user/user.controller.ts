@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Delete, Get, Param, UseGuards } from '@nestjs/common';
 import { AdminGuard } from 'src/auth/guards/admin/admin.guard';
 import { AuthGuard } from 'src/auth/guards/auth/auth.guard';
 import { User } from 'src/auth/schemas/user.schema';
@@ -15,5 +15,10 @@ export class UserController {
     const data = await this._userService.getAll();
 
     return { data };
+  }
+
+  @Delete('/:userId')
+  public async deleteOne(@Param('userId') userId: string): Promise<void> {
+    await this._userService.deleteOne(userId);
   }
 }
