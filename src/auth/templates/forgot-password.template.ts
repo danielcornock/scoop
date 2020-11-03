@@ -1,4 +1,5 @@
 import { appUrl } from './lib/app-url';
+import { buttonStyles } from './lib/button-styles';
 
 export function getForgotPasswordTemplate(token: string, name: string): string {
   return `<p>Hi ${name.split(' ')[0]},</p>
@@ -6,7 +7,7 @@ export function getForgotPasswordTemplate(token: string, name: string): string {
 
 <p><a href="${appUrl(
     `resetPassword/${token}`
-  )}" style="padding: 15px 20px; background-color: #3657dc; border-radius: 10px; color: white; margin: 10px 0; text-decoration: none; display: inline-block;">Reset password here</a></p>
+  )}" ${buttonStyles()}>Reset password here</a></p>
 
 <p>If this wasn't you, feel free to ignore this email, or respond to it if you have any concerns.</p>
 
