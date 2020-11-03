@@ -1,5 +1,5 @@
 export interface IJwtConfig {
-  payload: { id: string; email: string; name: string };
+  payload: { id: string; email: string; name: string; isAdmin?: boolean };
   secret: string;
   expiresIn?: number | string;
 }

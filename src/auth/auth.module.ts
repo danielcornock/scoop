@@ -9,6 +9,8 @@ import { Token, TokenSchema } from './schemas/token.schema';
 import { User, UserSchema } from './schemas/user.schema';
 import { AuthService } from './services/auth/auth.service';
 import { EmailVerificationService } from './services/email-verification/email-verification.service';
+import { UserController } from './controllers/user/user.controller';
+import { UserService } from './services/user/user.service';
 
 @Module({
   imports: [
@@ -20,8 +22,8 @@ import { EmailVerificationService } from './services/email-verification/email-ve
       { name: Token.name, schema: TokenSchema }
     ])
   ],
-  controllers: [AuthController],
-  providers: [AuthService, EmailVerificationService],
+  controllers: [AuthController, UserController],
+  providers: [AuthService, EmailVerificationService, UserService],
   exports: [AuthService]
 })
 export class AuthModule {}

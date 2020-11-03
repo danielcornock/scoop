@@ -12,6 +12,6 @@ runDatabaseScript(async (db: Db) => {
 
   Logger.log(
     `User with email address ${email} has been verified.`,
-    'AppOperation'
+    'DatabaseOperation'
   );
 });

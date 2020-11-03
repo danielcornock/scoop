@@ -87,17 +87,14 @@ export class AuthService {
       {
         id: user._id,
         email: user.email,
-        name: user.name
+        name: user.name,
+        isAdmin: !!user.isAdmin
       },
       jwtSecret,
       {
         expiresIn: '90d'
       }
     );
-  }
-
-  public generateSecret(id: string, secret: string): string {
-    return sign({ id }, secret);
   }
 
   public decodeJwt(rawToken: string, secret: string): Promise<IDecodedJwt> {
