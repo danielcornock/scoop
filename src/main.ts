@@ -1,5 +1,6 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import * as rateLimit from 'express-rate-limit';
 import * as helmet from 'helmet';
 import * as morgan from 'morgan';
 
@@ -9,6 +10,12 @@ import { environment, port } from './config/misc/env';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(helmet());
+  app.use(
+    rateLimit({
+      windowMs: 15 * 60 * 1000,
+      max: 100
+    })
+  );
   app.enableCors({ origin: 'http://localhost:4200' });
   app.setGlobalPrefix('/api/v1');
   app.useGlobalPipes(new ValidationPipe());

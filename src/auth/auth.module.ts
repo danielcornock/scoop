@@ -1,5 +1,6 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import * as rateLimit from 'express-rate-limit';
 import { CommonModule } from 'src/common/common.module';
 import { NotificationsModule } from 'src/notifications/notifications.module';
 import { SettingsModule } from 'src/settings/settings.module';
@@ -38,4 +39,16 @@ import { UserService } from './services/user/user.service';
   ],
   exports: [AuthService, UserService]
 })
-export class AuthModule {}
+export class AuthModule {
+  public configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(
+        rateLimit({
+          windowMs: 15 * 60 * 1000,
+          max: 5,
+          message: 'Too many unsuccessful login attempts'
+        })
+      )
+      .forRoutes({ path: 'auth/login', method: RequestMethod.POST });
+  }
+}
