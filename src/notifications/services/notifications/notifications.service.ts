@@ -25,6 +25,23 @@ export class NotificationsService {
     return notification;
   }
 
+  public async createCustomMultiNotification(
+    notification: IStaticNotification,
+    users: Array<string>
+  ): Promise<Notification[]> {
+    const notificationsToCreate = users.map((user: string) => {
+      return {
+        user,
+        ...notification
+      };
+    });
+    const notifications = await this._notificationRepo.insertMany(
+      notificationsToCreate
+    );
+
+    return notifications;
+  }
+
   public async getAllNotifications(user: string): Promise<Notification[]> {
     const data = await this._notificationRepo
       .find({ user })
