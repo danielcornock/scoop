@@ -3,6 +3,7 @@ import { AuthGuard } from 'src/auth/guards/auth/auth.guard';
 import { User } from 'src/auth/schemas/user.schema';
 import { AuthService } from 'src/auth/services/auth/auth.service';
 import { EmailVerificationService } from 'src/auth/services/email-verification/email-verification.service';
+import { UserSettingsService } from 'src/auth/services/user-settings/user-settings.service';
 import { ChangePasswordRequest } from 'src/auth/transfer-objects/change-password.dto';
 import { CreateUserRequest } from 'src/auth/transfer-objects/create-user.dto';
 import { ForgotPasswordRequest } from 'src/auth/transfer-objects/forgot-password.dto';
@@ -21,7 +22,8 @@ export class AuthController {
     private readonly _authService: AuthService,
     private readonly _settingsService: SettingsService,
     private readonly _notificationsService: NotificationsService,
-    private readonly _emailVerificationService: EmailVerificationService
+    private readonly _emailVerificationService: EmailVerificationService,
+    private readonly _userSettingsService: UserSettingsService
   ) {}
 
   @Post('login')
@@ -47,12 +49,15 @@ export class AuthController {
   public async register(@Body() body: CreateUserRequest): Promise<void> {
     const user = await this._authService.createUser(body);
 
-    await this._settingsService.createSettings(user._id);
-    await this._emailVerificationService.sendActivationEmail(user);
-    await this._notificationsService.createStaticNotification(
-      STATIC_NOTIFICATION.Welcome,
-      user._id
-    );
+    await Promise.all([
+      this._settingsService.createSettings(user._id),
+      this._userSettingsService.createSettings(user._id.toHexString()),
+      this._emailVerificationService.sendActivationEmail(user),
+      this._notificationsService.createStaticNotification(
+        STATIC_NOTIFICATION.Welcome,
+        user._id
+      )
+    ]);
   }
 
   @Post('confirmation/:token')
