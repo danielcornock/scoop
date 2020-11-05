@@ -1,13 +1,6 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  UseGuards
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/guards/auth/auth.guard';
+import { UserSettingsService } from 'src/auth/services/user-settings/user-settings.service';
 import { UserId } from 'src/common/decorators/user-id.decorator';
 import { HttpResponse } from 'src/common/interfaces/http-response.interface';
 import { INetWorthMeta } from 'src/net-worth/interfaces/net-worth-meta.interface';
@@ -22,7 +15,8 @@ import { SettingsService } from 'src/settings/services/settings/settings.service
 export class NetWorthController {
   constructor(
     private readonly _netWorthService: NetWorthService,
-    private readonly _settingsService: SettingsService
+    private readonly _settingsService: SettingsService,
+    private readonly _userSettingsService: UserSettingsService
   ) {}
 
   @Post()
@@ -47,13 +41,15 @@ export class NetWorthController {
   public async getAll(
     @UserId() user: string
   ): HttpResponse<NetWorthResponse[], INetWorthMeta> {
-    const [data, settings] = await Promise.all([
+    const [data, settings, preferredCurrency] = await Promise.all([
       this._netWorthService.getAll(user),
-      this._settingsService.getSettings(user)
+      this._settingsService.getSettings(user),
+      this._userSettingsService.getPreferredCurrency(user)
     ]);
 
     const meta = {
       fields: ['date', ...settings.netWorthFields, 'total', 'change'],
+      preferredCurrency,
       summaryItems: this._netWorthService.getSummaryItemsMeta(
         data[0],
         settings.netWorthSummaryItems

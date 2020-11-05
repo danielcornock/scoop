@@ -9,10 +9,7 @@ import { AuthController } from './controllers/auth/auth.controller';
 import { UserSettingsController } from './controllers/user-settings/user-settings.controller';
 import { UserController } from './controllers/user/user.controller';
 import { Token, TokenSchema } from './schemas/token.schema';
-import {
-  UserSettings,
-  UserSettingsSchema
-} from './schemas/user-settings.schema';
+import { UserSettings, UserSettingsSchema } from './schemas/user-settings.schema';
 import { User, UserSchema } from './schemas/user.schema';
 import { AuthService } from './services/auth/auth.service';
 import { EmailVerificationService } from './services/email-verification/email-verification.service';
@@ -37,7 +34,7 @@ import { UserService } from './services/user/user.service';
     UserService,
     UserSettingsService
   ],
-  exports: [AuthService, UserService]
+  exports: [AuthService, UserService, UserSettingsService]
 })
 export class AuthModule {
   public configure(consumer: MiddlewareConsumer) {

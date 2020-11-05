@@ -1,19 +1,14 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  UseGuards
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { Dictionary } from 'lodash';
 import { AuthGuard } from 'src/auth/guards/auth/auth.guard';
+import { UserSettingsService } from 'src/auth/services/user-settings/user-settings.service';
 import { UserId } from 'src/common/decorators/user-id.decorator';
 import { HttpResponse } from 'src/common/interfaces/http-response.interface';
 import { IMonthlyDistributionMeta } from 'src/monthly-distribution/interfaces/monthly-distribution-meta.interface';
 import { MonthlyDistribution } from 'src/monthly-distribution/schemas/monthly-distribution.schema';
-import { MonthlyDistributionService } from 'src/monthly-distribution/services/monthly-distribution/monthly-distribution.service';
+import {
+  MonthlyDistributionService,
+} from 'src/monthly-distribution/services/monthly-distribution/monthly-distribution.service';
 import { MonthlyDistributionCreate } from 'src/monthly-distribution/transfer-objects/monthly-distribution-create.dto';
 import { SettingsService } from 'src/settings/services/settings/settings.service';
 
@@ -22,7 +17,8 @@ import { SettingsService } from 'src/settings/services/settings/settings.service
 export class MonthlyDistributionController {
   constructor(
     private readonly _monthlyDistributionService: MonthlyDistributionService,
-    private readonly _settingsService: SettingsService
+    private readonly _settingsService: SettingsService,
+    private readonly _userSettingsService: UserSettingsService
   ) {}
 
   @Post()
@@ -39,29 +35,25 @@ export class MonthlyDistributionController {
   public async getAll(
     @UserId() user: string
   ): HttpResponse<MonthlyDistribution[], IMonthlyDistributionMeta> {
-    const [rawData, settings] = await Promise.all([
+    const [rawData, settings, preferredCurrency] = await Promise.all([
       this._monthlyDistributionService.getAll(user),
-      this._settingsService.getSettings(user)
+      this._settingsService.getSettings(user),
+      this._userSettingsService.getPreferredCurrency(user)
     ]);
 
     const incomeFields = settings.monthlyDistributionIncomeFields;
     const outgoingFields = settings.monthlyDistributionOutgoingFields;
 
-    const meta = {
-      fields: ['date', ...incomeFields, ...outgoingFields, 'remaining']
+    const meta: IMonthlyDistributionMeta = {
+      fields: ['date', ...incomeFields, ...outgoingFields, 'remaining'],
+      preferredCurrency
     };
 
     const data = rawData.map((item) => {
       return {
         ...item.toObject(),
-        income: this._getOrderedFields(
-          settings.monthlyDistributionIncomeFields,
-          item.income
-        ),
-        outgoing: this._getOrderedFields(
-          settings.monthlyDistributionOutgoingFields,
-          item.outgoing
-        )
+        income: this._getOrderedFields(incomeFields, item.income),
+        outgoing: this._getOrderedFields(outgoingFields, item.outgoing)
       };
     });
 

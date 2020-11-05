@@ -27,6 +27,12 @@ export class UserSettingsService {
     }
   }
 
+  public async getPreferredCurrency(user: string): Promise<string> {
+    const settings = await this.getSettings(user);
+
+    return settings.preferredCurrency;
+  }
+
   public async updateSettings(
     values: UpdateUserSettingsRequest,
     user: string
