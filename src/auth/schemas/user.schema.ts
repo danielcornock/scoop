@@ -20,6 +20,9 @@ export class User extends Document {
 
   @Prop({ type: Boolean, default: false })
   isAdmin?: boolean;
+
+  @Prop({ type: Number, default: Date.now() })
+  lastOnline?: number;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

@@ -45,7 +45,7 @@ export class AdminController {
   }
 
   @Get('users')
-  public async getAll(): HttpResponse<User[]> {
+  public async getAll(): HttpResponse<Partial<User>[]> {
     const data = await this._userService.getAll();
 
     return { data };

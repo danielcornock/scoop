@@ -4,12 +4,14 @@ import { User } from 'src/auth/schemas/user.schema';
 import { AuthService } from 'src/auth/services/auth/auth.service';
 import { EmailVerificationService } from 'src/auth/services/email-verification/email-verification.service';
 import { UserSettingsService } from 'src/auth/services/user-settings/user-settings.service';
+import { UserService } from 'src/auth/services/user/user.service';
 import { ChangePasswordRequest } from 'src/auth/transfer-objects/change-password.dto';
 import { CreateUserRequest } from 'src/auth/transfer-objects/create-user.dto';
 import { ForgotPasswordRequest } from 'src/auth/transfer-objects/forgot-password.dto';
 import { LoginRequest } from 'src/auth/transfer-objects/login-request.dto';
 import { LoginResponse } from 'src/auth/transfer-objects/login-response.dto';
 import { ResetForgottenPasswordRequest } from 'src/auth/transfer-objects/reset-forgotten-password.dto';
+import { UserId } from 'src/common/decorators/user-id.decorator';
 import { UserObj } from 'src/common/decorators/user-obj.decorator';
 import { HttpResponse } from 'src/common/interfaces/http-response.interface';
 import { STATIC_NOTIFICATION } from 'src/notifications/constants/static-notifications.enum';
@@ -23,7 +25,8 @@ export class AuthController {
     private readonly _settingsService: SettingsService,
     private readonly _notificationsService: NotificationsService,
     private readonly _emailVerificationService: EmailVerificationService,
-    private readonly _userSettingsService: UserSettingsService
+    private readonly _userSettingsService: UserSettingsService,
+    private readonly _userService: UserService
   ) {}
 
   @Post('login')
@@ -135,6 +138,12 @@ export class AuthController {
         jwt
       }
     };
+  }
+
+  @Post('ping')
+  @UseGuards(AuthGuard)
+  public async logLastOnline(@UserId() userId: string): Promise<void> {
+    await this._userService.markLastOnline(userId);
   }
 
   private async _getUser(email: string): Promise<User> {
