@@ -4,10 +4,7 @@ import { AuthModule } from 'src/auth/auth.module';
 import { SettingsModule } from 'src/settings/settings.module';
 
 import { MonthlyDistributionController } from './controllers/monthly-distribution/monthly-distribution.controller';
-import {
-  MonthlyDistribution,
-  MonthlyDistributionSchema
-} from './schemas/monthly-distribution.schema';
+import { MonthlyDistribution, MonthlyDistributionSchema } from './schemas/monthly-distribution.schema';
 import { MonthlyDistributionService } from './services/monthly-distribution/monthly-distribution.service';
 
 @Module({
@@ -19,6 +16,7 @@ import { MonthlyDistributionService } from './services/monthly-distribution/mont
     ])
   ],
   controllers: [MonthlyDistributionController],
-  providers: [MonthlyDistributionService]
+  providers: [MonthlyDistributionService],
+  exports: [MonthlyDistributionService]
 })
 export class MonthlyDistributionModule {}

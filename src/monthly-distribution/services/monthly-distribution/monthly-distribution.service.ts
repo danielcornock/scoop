@@ -48,6 +48,10 @@ export class MonthlyDistributionService {
     return data;
   }
 
+  public async removeAllAssociatedEntries(user: string): Promise<void> {
+    await this._monthlyDistributionRepo.deleteMany({ user });
+  }
+
   private async _processIncomeAndOutGoing(
     entry: MonthlyDistributionCreate,
     user: string

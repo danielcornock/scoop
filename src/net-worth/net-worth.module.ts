@@ -16,6 +16,7 @@ import { NetWorthService } from './services/net-worth/net-worth.service';
     AuthModule
   ],
   controllers: [NetWorthController],
-  providers: [NetWorthService]
+  providers: [NetWorthService],
+  exports: [NetWorthService]
 })
 export class NetWorthModule {}

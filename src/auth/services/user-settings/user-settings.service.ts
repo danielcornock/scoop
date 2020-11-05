@@ -27,6 +27,10 @@ export class UserSettingsService {
     }
   }
 
+  public async deleteSettings(user: string): Promise<void> {
+    await this._userSettingsRepo.deleteOne({ user });
+  }
+
   public async getPreferredCurrency(user: string): Promise<string> {
     const settings = await this.getSettings(user);
 

@@ -74,6 +74,10 @@ export class EmailVerificationService {
     }
   }
 
+  public async removeAllAssociatedTokens(user: string): Promise<void> {
+    await this._tokenRepo.deleteMany({ user });
+  }
+
   public async removeToken(tokenId: string): Promise<void> {
     await this._tokenRepo.findByIdAndRemove(tokenId);
   }

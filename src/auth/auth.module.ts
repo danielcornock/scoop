@@ -7,7 +7,6 @@ import { SettingsModule } from 'src/settings/settings.module';
 
 import { AuthController } from './controllers/auth/auth.controller';
 import { UserSettingsController } from './controllers/user-settings/user-settings.controller';
-import { UserController } from './controllers/user/user.controller';
 import { Token, TokenSchema } from './schemas/token.schema';
 import { UserSettings, UserSettingsSchema } from './schemas/user-settings.schema';
 import { User, UserSchema } from './schemas/user.schema';
@@ -27,14 +26,19 @@ import { UserService } from './services/user/user.service';
       { name: UserSettings.name, schema: UserSettingsSchema }
     ])
   ],
-  controllers: [AuthController, UserController, UserSettingsController],
+  controllers: [AuthController, UserSettingsController],
   providers: [
     AuthService,
     EmailVerificationService,
     UserService,
     UserSettingsService
   ],
-  exports: [AuthService, UserService, UserSettingsService]
+  exports: [
+    AuthService,
+    UserService,
+    UserSettingsService,
+    EmailVerificationService
+  ]
 })
 export class AuthModule {
   public configure(consumer: MiddlewareConsumer) {

@@ -17,6 +17,7 @@ import { InvestmentsService } from './services/investments/investments.service';
     ])
   ],
   controllers: [InvestmentsController],
-  providers: [InvestmentsService]
+  providers: [InvestmentsService],
+  exports: [InvestmentsService]
 })
 export class InvestmentsModule {}

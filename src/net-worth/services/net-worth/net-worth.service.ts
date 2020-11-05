@@ -86,6 +86,10 @@ export class NetWorthService {
     );
   }
 
+  public async removeAllAssociatedEntries(user: string): Promise<void> {
+    await this._netWorthRepo.deleteMany({ user });
+  }
+
   private async _checkIfEntryForMonthExists(
     user: string,
     date: string

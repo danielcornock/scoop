@@ -44,6 +44,10 @@ export class InvestmentsService {
     await this._investmentsRepo.deleteOne({ user, date });
   }
 
+  public async removeAllAssociatedEntries(user: string): Promise<void> {
+    await this._investmentsRepo.deleteMany({ user });
+  }
+
   public async getAll(user: string): Promise<InvestmentResponse[]> {
     const investments = await this._investmentsRepo
       .find({ user })

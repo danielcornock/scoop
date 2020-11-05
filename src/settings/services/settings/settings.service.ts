@@ -46,6 +46,10 @@ export class SettingsService {
     };
   }
 
+  public async deleteSettings(user: string): Promise<void> {
+    await this._settingsRepo.deleteOne({ user });
+  }
+
   public processCustomValues(
     entry: any,
     fields: Array<string>
