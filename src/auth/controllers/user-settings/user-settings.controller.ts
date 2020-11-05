@@ -1,4 +1,4 @@
-import { Controller, Get, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Put, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/guards/auth/auth.guard';
 import { UserSettings } from 'src/auth/schemas/user-settings.schema';
 import { UserSettingsService } from 'src/auth/services/user-settings/user-settings.service';
@@ -23,7 +23,7 @@ export class UserSettingsController {
   @Put()
   public async updateSettings(
     @UserId() userId: string,
-    settings: UpdateUserSettingsRequest
+    @Body() settings: UpdateUserSettingsRequest
   ): HttpResponse<UserSettings> {
     const data = await this._userSettingsService.updateSettings(
       settings,

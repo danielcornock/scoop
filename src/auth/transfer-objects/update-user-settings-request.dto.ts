@@ -2,13 +2,13 @@ import { IsBoolean, IsString } from 'class-validator';
 
 export class UpdateUserSettingsRequest {
   @IsBoolean()
-  enableInvestments: string;
+  enableInvestments: boolean;
 
   @IsBoolean()
-  enableNetWorth: string;
+  enableNetWorth: boolean;
 
   @IsBoolean()
-  enableMonthlyDistribution: string;
+  enableMonthlyDistribution: boolean;
 
   @IsString()
   preferredCurrency: string;

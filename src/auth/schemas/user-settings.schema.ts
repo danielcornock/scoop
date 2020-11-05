@@ -7,13 +7,13 @@ export class UserSettings extends Document {
   user: string;
 
   @Prop({ type: Boolean, default: true })
-  enableInvestments?: string;
+  enableInvestments?: boolean;
 
   @Prop({ type: Boolean, default: true })
-  enableNetWorth?: string;
+  enableNetWorth?: boolean;
 
   @Prop({ type: Boolean, default: true })
-  enableMonthlyDistribution?: string;
+  enableMonthlyDistribution?: boolean;
 
   @Prop({ type: String, default: '£' })
   preferredCurrency?: string;
