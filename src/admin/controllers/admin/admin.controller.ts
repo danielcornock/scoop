@@ -63,7 +63,8 @@ export class AdminController {
       this._userSettingsService.deleteSettings(userId),
       this._netWorthService.removeAllAssociatedEntries(userId),
       this._investmentsService.removeAllAssociatedEntries(userId),
-      this._monthlyDistributionService.removeAllAssociatedEntries(userId)
+      this._monthlyDistributionService.removeAllAssociatedEntries(userId),
+      this._notificationsService.removeAllAssociatedEntries(userId)
     ]);
   }
 }

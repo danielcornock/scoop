@@ -54,6 +54,10 @@ export class NotificationsService {
     await this._notificationRepo.deleteOne({ _id, user });
   }
 
+  public async removeAllAssociatedEntries(user: string): Promise<void> {
+    await this._notificationRepo.deleteMany({ user });
+  }
+
   private _getNotification(type: STATIC_NOTIFICATION): IStaticNotification {
     return staticNotificationsDictionary[type];
   }
