@@ -25,6 +25,24 @@ export class NotificationsService {
     return notification;
   }
 
+  public async createStaticMultiNotification(
+    notificationType: STATIC_NOTIFICATION,
+    users: Array<string>
+  ): Promise<Notification[]> {
+    const notificationsToCreate = users.map((user: string) => {
+      return {
+        user,
+        ...this._getNotification(notificationType)
+      };
+    });
+
+    const notifications = await this._notificationRepo.insertMany(
+      notificationsToCreate
+    );
+
+    return notifications;
+  }
+
   public async createCustomMultiNotification(
     notification: IStaticNotification,
     users: Array<string>
@@ -44,10 +62,10 @@ export class NotificationsService {
 
   public async getAllNotifications(user: string): Promise<Notification[]> {
     const data = await this._notificationRepo
-      .find({ user })
+      .find()
       .sort({ createdOn: 'desc' });
 
-    return data;
+    return data.filter((notification) => notification.user === user);
   }
 
   public async deleteNotification(_id: string, user: string): Promise<void> {

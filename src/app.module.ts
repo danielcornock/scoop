@@ -12,6 +12,7 @@ import { NetWorthModule } from './net-worth/net-worth.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { SettingsModule } from './settings/settings.module';
 import { AdminModule } from './admin/admin.module';
+import { TasksModule } from './tasks/tasks.module';
 
 @Module({
   imports: [
@@ -28,7 +29,8 @@ import { AdminModule } from './admin/admin.module';
     MonthlyDistributionModule,
     NotificationsModule,
     CommonModule,
-    AdminModule
+    AdminModule,
+    TasksModule
   ],
   controllers: [],
   providers: []

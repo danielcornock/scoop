@@ -1,10 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
+import { User } from './user.schema';
+
 @Schema()
 export class UserSettings extends Document {
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
-  user: string;
+  user: string | User;
 
   @Prop({ type: Boolean, default: true })
   enableInvestments?: boolean;

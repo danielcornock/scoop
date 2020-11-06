@@ -1,3 +1,4 @@
 export enum STATIC_NOTIFICATION {
-  Welcome
+  Welcome,
+  MonthlyReminder
 }
