@@ -13,4 +13,6 @@ export class Token extends Document {
   expiresAt: number;
 }
 
-export const TokenSchema = SchemaFactory.createForClass(Token);
+export const TokenSchema = SchemaFactory.createForClass(Token).index({
+  user: 1
+});

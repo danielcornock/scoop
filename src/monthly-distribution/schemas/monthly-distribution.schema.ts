@@ -22,4 +22,6 @@ export class MonthlyDistribution extends Document {
 
 export const MonthlyDistributionSchema = SchemaFactory.createForClass(
   MonthlyDistribution
-);
+).index({
+  user: 1
+});

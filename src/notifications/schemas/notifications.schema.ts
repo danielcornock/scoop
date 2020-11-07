@@ -16,4 +16,8 @@ export class Notification extends Document {
   name: string;
 }
 
-export const NotificationsSchema = SchemaFactory.createForClass(Notification);
+export const NotificationsSchema = SchemaFactory.createForClass(
+  Notification
+).index({
+  user: 1
+});

@@ -18,4 +18,6 @@ export class NetWorth extends Document {
   total: number;
 }
 
-export const NetWorthSchema = SchemaFactory.createForClass(NetWorth);
+export const NetWorthSchema = SchemaFactory.createForClass(NetWorth).index({
+  user: 1
+});

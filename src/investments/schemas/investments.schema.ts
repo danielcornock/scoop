@@ -25,4 +25,8 @@ export class Investment extends Document {
   addedSinceLast: number;
 }
 
-export const InvestmentsSchema = SchemaFactory.createForClass(Investment);
+export const InvestmentsSchema = SchemaFactory.createForClass(Investment).index(
+  {
+    user: 1
+  }
+);

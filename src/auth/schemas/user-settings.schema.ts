@@ -27,4 +27,8 @@ export class UserSettings extends Document {
   reminderDate?: string;
 }
 
-export const UserSettingsSchema = SchemaFactory.createForClass(UserSettings);
+export const UserSettingsSchema = SchemaFactory.createForClass(
+  UserSettings
+).index({
+  user: 1
+});

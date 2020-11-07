@@ -24,4 +24,6 @@ export class Settings extends Document {
   monthlyDistributionOutgoingFields: string[];
 }
 
-export const SettingsSchema = SchemaFactory.createForClass(Settings);
+export const SettingsSchema = SchemaFactory.createForClass(Settings).index({
+  user: 1
+});
