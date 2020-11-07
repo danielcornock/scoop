@@ -136,10 +136,6 @@
   &:hover {
     background-color: $color-settings-item-hover;
   }
-
-  @include media-phone {
-    font-size: 14px;
-  }
 }
 
 @mixin link {
