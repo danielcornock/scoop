@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Dictionary, reduce } from 'lodash';
+import { Dictionary, isString, reduce } from 'lodash';
 import { Model, Types } from 'mongoose';
 import { defaultSettingsConfig } from 'src/settings/constants/default-settings-config.constant';
 import { Settings } from 'src/settings/schemas/settings.schema';
@@ -61,6 +61,8 @@ export class SettingsService {
 
       if (isNaN(numberField)) {
         values[val] = 0;
+      } else if (isString(numberField)) {
+        values[val] = parseFloat(entry[val]);
       } else {
         values[val] = numberField;
       }

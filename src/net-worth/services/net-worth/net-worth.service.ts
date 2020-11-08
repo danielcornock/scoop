@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { defaultIcons } from 'src/common/constants/default-icons.constant';
+import { INetWorthCustomValues } from 'src/net-worth/interfaces/net-worth-log.interface';
 import { NetWorth } from 'src/net-worth/schemas/net-worth.schema';
 import { INetWorthCreate } from 'src/net-worth/transfer-objects/net-worth-create.dto';
 import { NetWorthResponse } from 'src/net-worth/transfer-objects/net-worth-response.dto';
@@ -39,6 +40,43 @@ export class NetWorthService {
     });
 
     return data;
+  }
+
+  public async updateLogByDate(
+    date: string,
+    data: INetWorthCustomValues,
+    user: string
+  ): Promise<NetWorth> {
+    const customValues = this._settingsService.processCustomValues(
+      data,
+      Object.keys(data)
+    );
+    const sumOfAllFields = this._settingsService.getCustomValuesSum(
+      customValues
+    );
+    const newNetWorthLog = {
+      customValues,
+      total: sumOfAllFields
+    };
+
+    const newData = await this._netWorthRepo.findOneAndUpdate(
+      { date, user },
+      newNetWorthLog,
+      {
+        new: true
+      }
+    );
+
+    return newData;
+  }
+
+  public async getNetWorthLogEntry(
+    date: string,
+    user: string
+  ): Promise<NetWorth> {
+    const entry = await this._netWorthRepo.findOne({ date, user });
+
+    return entry;
   }
 
   public getSummaryItemsMeta(

@@ -11,7 +11,7 @@ export class NetWorth extends Document {
   @Prop()
   customValues: INetWorthCustomValues;
 
-  @Prop({ required: true })
+  @Prop({ required: true, immutable: true })
   date: string;
 
   @Prop({ required: true })
@@ -19,5 +19,6 @@ export class NetWorth extends Document {
 }
 
 export const NetWorthSchema = SchemaFactory.createForClass(NetWorth).index({
+  date: 1,
   user: 1
 });
