@@ -46,8 +46,6 @@ export class NetWorthController {
   ): HttpResponse<NetWorth> {
     const data = await this._netWorthService.getNetWorthLogEntry(date, userId);
 
-    console.log(data);
-
     return { data };
   }
 
