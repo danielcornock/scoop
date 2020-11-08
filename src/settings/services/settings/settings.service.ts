@@ -56,9 +56,9 @@ export class SettingsService {
     const values = {};
 
     fields.forEach((val) => {
-      const numberField = parseFloat(entry[val]);
+      const numberField = entry[val];
 
-      if (isNaN(numberField)) {
+      if (!numberField) {
         values[val] = 0;
       } else if (isString(numberField)) {
         values[val] = parseFloat(entry[val]);
