@@ -53,7 +53,7 @@ export class AuthController {
     const user = await this._authService.createUser(body);
 
     await Promise.all([
-      this._settingsService.createSettings(user._id),
+      this._settingsService.createSettings(user._id.toHexString()),
       this._userSettingsService.createSettings(user._id.toHexString()),
       this._emailVerificationService.sendActivationEmail(user),
       this._notificationsService.createStaticNotification(

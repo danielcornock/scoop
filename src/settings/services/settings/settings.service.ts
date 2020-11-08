@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Dictionary, isString, reduce } from 'lodash';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { defaultSettingsConfig } from 'src/settings/constants/default-settings-config.constant';
 import { Settings } from 'src/settings/schemas/settings.schema';
 import { UpdateSettings } from 'src/settings/transfer-objects/update-settings.dto';
@@ -13,11 +13,9 @@ export class SettingsService {
     private readonly _settingsRepo: Model<Settings>
   ) {}
 
-  public async createSettings(rawUserId: Types.ObjectId): Promise<Settings> {
-    const userId = rawUserId.toHexString();
-
+  public async createSettings(user: string): Promise<Settings> {
     const settings = await this._settingsRepo.create({
-      user: userId,
+      user,
       ...defaultSettingsConfig
     });
 
@@ -40,10 +38,11 @@ export class SettingsService {
   public async getSettings(user: string): Promise<Settings> {
     const settings = await this._settingsRepo.findOne({ user });
 
-    return {
-      ...defaultSettingsConfig,
-      ...settings.toObject()
-    };
+    if (settings) {
+      return settings;
+    } else {
+      return this.createSettings(user);
+    }
   }
 
   public async deleteSettings(user: string): Promise<void> {
