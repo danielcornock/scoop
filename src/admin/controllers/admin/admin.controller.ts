@@ -1,15 +1,23 @@
-import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  ForbiddenException,
+  Get,
+  Param,
+  Post,
+  UseGuards
+} from '@nestjs/common';
 import { AdminGuard } from 'src/auth/guards/admin/admin.guard';
 import { AuthGuard } from 'src/auth/guards/auth/auth.guard';
 import { User } from 'src/auth/schemas/user.schema';
 import { EmailVerificationService } from 'src/auth/services/email-verification/email-verification.service';
 import { UserSettingsService } from 'src/auth/services/user-settings/user-settings.service';
 import { UserService } from 'src/auth/services/user/user.service';
+import { UserId } from 'src/common/decorators/user-id.decorator';
 import { HttpResponse } from 'src/common/interfaces/http-response.interface';
 import { InvestmentsService } from 'src/investments/services/investments/investments.service';
-import {
-  MonthlyDistributionService,
-} from 'src/monthly-distribution/services/monthly-distribution/monthly-distribution.service';
+import { MonthlyDistributionService } from 'src/monthly-distribution/services/monthly-distribution/monthly-distribution.service';
 import { NetWorthService } from 'src/net-worth/services/net-worth/net-worth.service';
 import { Notification } from 'src/notifications/schemas/notifications.schema';
 import { NotificationsService } from 'src/notifications/services/notifications/notifications.service';
@@ -53,8 +61,13 @@ export class AdminController {
 
   @Delete('users/:userId')
   public async deleteUserAndAllDocuments(
-    @Param('userId') userId: string
+    @Param('userId') userId: string,
+    @UserId() self: string
   ): Promise<void> {
+    if (userId === self) {
+      throw new ForbiddenException('You cannot remove yourself as a user.');
+    }
+
     await this._userService.deleteOne(userId);
 
     await Promise.all([
