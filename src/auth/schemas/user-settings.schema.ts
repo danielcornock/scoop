@@ -17,6 +17,9 @@ export class UserSettings extends Document {
   @Prop({ type: Boolean, default: true })
   enableMonthlyDistribution?: boolean;
 
+  @Prop({ type: Boolean, default: true })
+  enableSalary?: boolean;
+
   @Prop({ type: String, default: '£' })
   preferredCurrency?: string;
 

@@ -1,5 +1,8 @@
-import { BadRequestException, InternalServerErrorException } from '@nestjs/common';
-import { Dictionary, filter } from 'lodash';
+import {
+  BadRequestException,
+  InternalServerErrorException
+} from '@nestjs/common';
+import { Dictionary, filter, startCase } from 'lodash';
 
 import { Logging } from '../logging/logging.service';
 
@@ -18,12 +21,14 @@ export class DatabaseErrorsService {
   private static _handleMongoose(mongooseError: IMongooseErrorContainer): void {
     const requiredErrors = filter(
       mongooseError.errors,
-      (error: IMongooseError) => error.kind === 'required',
+      (error: IMongooseError) => error.kind === 'required'
     ).map((error: IMongooseError) => error.path);
 
     if (requiredErrors.length) {
       throw new BadRequestException(
-        `The following fields are required: ${requiredErrors.join(', ')}.`,
+        `The following fields are required: ${startCase(
+          requiredErrors.join(', ')
+        )}.`
       );
     }
   }
@@ -31,7 +36,7 @@ export class DatabaseErrorsService {
   private static _handleMongo(mongoError: IMongoError): void {
     if (mongoError.code === 11000) {
       throw new BadRequestException(
-        'An account with that email address already exists!',
+        'An account with that email address already exists!'
       );
     }
   }

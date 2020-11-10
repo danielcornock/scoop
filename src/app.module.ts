@@ -13,6 +13,7 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { SettingsModule } from './settings/settings.module';
 import { AdminModule } from './admin/admin.module';
 import { TasksModule } from './tasks/tasks.module';
+import { SalaryModule } from './salary/salary.module';
 
 @Module({
   imports: [
@@ -30,7 +31,8 @@ import { TasksModule } from './tasks/tasks.module';
     NotificationsModule,
     CommonModule,
     AdminModule,
-    TasksModule
+    TasksModule,
+    SalaryModule
   ],
   controllers: [],
   providers: []
