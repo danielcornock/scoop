@@ -11,6 +11,7 @@ import { AuthGuard } from 'src/auth/guards/auth/auth.guard';
 import { UserSettingsService } from 'src/auth/services/user-settings/user-settings.service';
 import { UserId } from 'src/common/decorators/user-id.decorator';
 import { HttpResponse } from 'src/common/interfaces/http-response.interface';
+import { salaryFields } from 'src/salary/constants/salary-fields.constant';
 import { ISalaryMeta } from 'src/salary/interfaces/salary-meta.interface';
 import { Salary } from 'src/salary/schemas/salary.schema';
 import { SalaryPredictionService } from 'src/salary/services/salary-prediction/salary-prediction.service';
@@ -50,7 +51,8 @@ export class SalaryController {
     ]);
 
     const meta = {
-      preferredCurrency
+      preferredCurrency,
+      fields: salaryFields
     };
 
     return { data, meta };

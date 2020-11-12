@@ -18,11 +18,14 @@ export class Salary extends Document {
   @Prop({ required: true, type: Number })
   nationalInsurance: number;
 
-  @Prop({ required: true, type: Number })
+  @Prop({ required: true, type: Number, default: 0 })
   studentLoanPayments: number;
 
   @Prop({ required: true, type: Number })
   pensionContributions: number;
+
+  @Prop({ required: true, type: Number, default: 0 })
+  otherDeductions: number;
 
   @Prop({ required: true, type: Number })
   netSalary: number;
