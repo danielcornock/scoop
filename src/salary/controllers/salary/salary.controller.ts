@@ -1,7 +1,17 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UseGuards
+} from '@nestjs/common';
 import { AuthGuard } from 'src/auth/guards/auth/auth.guard';
+import { UserSettingsService } from 'src/auth/services/user-settings/user-settings.service';
 import { UserId } from 'src/common/decorators/user-id.decorator';
 import { HttpResponse } from 'src/common/interfaces/http-response.interface';
+import { ISalaryMeta } from 'src/salary/interfaces/salary-meta.interface';
 import { Salary } from 'src/salary/schemas/salary.schema';
 import { SalaryPredictionService } from 'src/salary/services/salary-prediction/salary-prediction.service';
 import { SalaryService } from 'src/salary/services/salary/salary.service';
@@ -13,7 +23,8 @@ import { SalaryCreateRequest } from 'src/salary/transfer-objects/salary-create-r
 export class SalaryController {
   constructor(
     private readonly _salaryPredictionService: SalaryPredictionService,
-    private readonly _salaryService: SalaryService
+    private readonly _salaryService: SalaryService,
+    private readonly _userSettingsService: UserSettingsService
   ) {}
 
   @Post('gross')
@@ -27,6 +38,30 @@ export class SalaryController {
     );
 
     return { data };
+  }
+
+  @Get()
+  public async getAll(
+    @UserId() userId: string
+  ): HttpResponse<Salary[], ISalaryMeta> {
+    const [data, preferredCurrency] = await Promise.all([
+      this._salaryService.getAll(userId),
+      this._userSettingsService.getPreferredCurrency(userId)
+    ]);
+
+    const meta = {
+      preferredCurrency
+    };
+
+    return { data, meta };
+  }
+
+  @Delete('/:salaryDate')
+  public deleteOne(
+    @UserId() user: string,
+    @Param('salaryDate') date: string
+  ): Promise<void> {
+    return this._salaryService.deleteOne(user, date);
   }
 
   @Post()

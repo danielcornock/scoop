@@ -46,6 +46,16 @@ export class SalaryService {
     }
   }
 
+  public async getAll(user: string): Promise<Salary[]> {
+    const data = await this._salaryRepo.find({ user }).sort({ date: 'desc' });
+
+    return data;
+  }
+
+  public async deleteOne(user: string, date: string): Promise<void> {
+    await this._salaryRepo.deleteOne({ user, date });
+  }
+
   private _processAllValuesToNumber(data: SalaryCreateRequest): Salary {
     const newObj = {} as Salary;
 
