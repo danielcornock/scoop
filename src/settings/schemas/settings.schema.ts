@@ -24,13 +24,16 @@ export class Settings extends Document {
   @Prop({ required: true })
   monthlyDistributionOutgoingFields: string[];
 
-  @Prop()
+  @Prop({ type: Number })
   salaryYearlySalary?: number;
 
-  @Prop({ enum: [STUDENT_LOAN.Pre2012, STUDENT_LOAN.Post2012] })
+  @Prop({
+    enum: [STUDENT_LOAN.Pre2012, STUDENT_LOAN.Post2012, null],
+    default: null
+  })
   salaryStudentFinance?: STUDENT_LOAN | undefined;
 
-  @Prop({ default: 0 })
+  @Prop({ default: 0, type: Number })
   salaryPensionContribution?: number;
 }
 
