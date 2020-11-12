@@ -5,7 +5,7 @@ export function html(content: string): string {
       <div style="background-color: #3657dc; padding: 50px;">
         <img src="https://app.scoopfinance.co.uk/assets/images/scoop-email.png" style="width: 200px; margin: 0 auto; display: block;"/>
       </div>
-      <div style="padding: 12px 20px; height: 100%; line-height: 170%;">
+      <div style="padding: 12px 20px; min-height: 100%; line-height: 170%;">
         ${content}
       </div>
     </div>

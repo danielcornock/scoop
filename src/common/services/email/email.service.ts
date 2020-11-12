@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 import { html } from 'src/auth/templates/lib/html';
+import { newsletter } from 'src/auth/templates/lib/newsletter';
 import {
   emailHost,
   emailPassword,
@@ -13,7 +14,10 @@ import {
   prodEmailUsername
 } from 'src/config/misc/env';
 
-import { IEmailOptions } from './interfaces/email-options.interface';
+import {
+  IEmailMultiOptions,
+  IEmailSingleOptions
+} from './interfaces/email-options.interface';
 
 @Injectable()
 export class EmailService {
@@ -40,7 +44,7 @@ export class EmailService {
     }
   }
 
-  public async sendEmail(options: IEmailOptions): Promise<void> {
+  public async sendEmail(options: IEmailSingleOptions): Promise<void> {
     const mailOptions: Mail.Options = {
       from: 'Scoop <scoopfinanceuk@gmail.com>',
       to: options.to,
@@ -56,5 +60,17 @@ export class EmailService {
       `Email successfully sent to ${email.accepted[0]}`,
       'AppOperation'
     );
+  }
+
+  public async sendBatchEmail(options: IEmailMultiOptions): Promise<void> {
+    const promises = options.to.map((email) =>
+      this.sendEmail({
+        to: email,
+        subject: options.subject,
+        message: newsletter(options.message)
+      })
+    );
+
+    await Promise.all(promises);
   }
 }

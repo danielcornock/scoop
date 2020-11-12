@@ -59,6 +59,16 @@ export class UserSettingsService {
     };
   }
 
+  public async getUsersWithEmailNotificationsActive(): Promise<Array<string>> {
+    const users = await this._userSettingsRepo
+      .find({ enableEmailNotifications: true })
+      .populate('user');
+
+    return users
+      .filter((settings) => (settings.user as User).isVerified)
+      .map((settings) => (settings.user as User).email);
+  }
+
   public async deleteSettings(user: string): Promise<void> {
     await this._userSettingsRepo.deleteOne({ user });
   }

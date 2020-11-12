@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AuthModule } from 'src/auth/auth.module';
+import { CommonModule } from 'src/common/common.module';
 import { InvestmentsModule } from 'src/investments/investments.module';
 import { MonthlyDistributionModule } from 'src/monthly-distribution/monthly-distribution.module';
 import { NetWorthModule } from 'src/net-worth/net-worth.module';
@@ -15,7 +16,8 @@ import { AdminController } from './controllers/admin/admin.controller';
     NetWorthModule,
     InvestmentsModule,
     MonthlyDistributionModule,
-    SettingsModule
+    SettingsModule,
+    CommonModule
   ],
   controllers: [AdminController]
 })

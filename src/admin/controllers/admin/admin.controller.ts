@@ -8,6 +8,7 @@ import {
   Post,
   UseGuards
 } from '@nestjs/common';
+import { SendNewsletterRequest } from 'src/admin/transfer-objects/send-newsletter-request.dto';
 import { AdminGuard } from 'src/auth/guards/admin/admin.guard';
 import { AuthGuard } from 'src/auth/guards/auth/auth.guard';
 import { User } from 'src/auth/schemas/user.schema';
@@ -16,6 +17,7 @@ import { UserSettingsService } from 'src/auth/services/user-settings/user-settin
 import { UserService } from 'src/auth/services/user/user.service';
 import { UserId } from 'src/common/decorators/user-id.decorator';
 import { HttpResponse } from 'src/common/interfaces/http-response.interface';
+import { EmailService } from 'src/common/services/email/email.service';
 import { InvestmentsService } from 'src/investments/services/investments/investments.service';
 import { MonthlyDistributionService } from 'src/monthly-distribution/services/monthly-distribution/monthly-distribution.service';
 import { NetWorthService } from 'src/net-worth/services/net-worth/net-worth.service';
@@ -35,7 +37,8 @@ export class AdminController {
     private readonly _investmentsService: InvestmentsService,
     private readonly _monthlyDistributionService: MonthlyDistributionService,
     private readonly _userSettingsService: UserSettingsService,
-    private readonly _settingsService: SettingsService
+    private readonly _settingsService: SettingsService,
+    private readonly _emailService: EmailService
   ) {}
 
   @Post('notifications/global')
@@ -50,6 +53,19 @@ export class AdminController {
     );
 
     return { data };
+  }
+
+  @Post('send-newsletter')
+  public async sendNewsletter(
+    @Body() body: SendNewsletterRequest
+  ): Promise<void> {
+    const userEmails = await this._userSettingsService.getUsersWithEmailNotificationsActive();
+
+    await this._emailService.sendBatchEmail({
+      to: userEmails,
+      subject: body.subject,
+      message: body.content
+    });
   }
 
   @Get('users')
