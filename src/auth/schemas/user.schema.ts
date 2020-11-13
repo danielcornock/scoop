@@ -21,7 +21,7 @@ export class User extends Document {
   @Prop({ type: Boolean, default: false })
   isAdmin?: boolean;
 
-  @Prop({ type: Number, default: Date.now() })
+  @Prop({ type: Number })
   lastOnline?: number;
 }
 
