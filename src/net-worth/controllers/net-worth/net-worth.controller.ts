@@ -13,6 +13,7 @@ import { UserSettingsService } from 'src/auth/services/user-settings/user-settin
 import { UserId } from 'src/common/decorators/user-id.decorator';
 import { HttpResponse } from 'src/common/interfaces/http-response.interface';
 import { INetWorthMeta } from 'src/net-worth/interfaces/net-worth-meta.interface';
+import { INetWorthSingleMeta } from 'src/net-worth/interfaces/net-worth-single-meta.interface';
 import { INetWorthUpdate } from 'src/net-worth/interfaces/net-worth-update.interface';
 import { NetWorth } from 'src/net-worth/schemas/net-worth.schema';
 import { NetWorthService } from 'src/net-worth/services/net-worth/net-worth.service';
@@ -43,10 +44,18 @@ export class NetWorthController {
   public async getNetWorthEntry(
     @UserId() userId: string,
     @Param('netWorthDate') date: string
-  ): HttpResponse<NetWorth> {
+  ): HttpResponse<NetWorth, INetWorthSingleMeta> {
     const data = await this._netWorthService.getNetWorthLogEntry(date, userId);
+    const fields = await this._netWorthService.getAllFieldsFromCurrentResourceAndActiveFields(
+      userId,
+      data
+    );
 
-    return { data };
+    const meta = {
+      fields
+    };
+
+    return { data, meta };
   }
 
   @Put('/:netWorthDate')
@@ -82,13 +91,19 @@ export class NetWorthController {
       this._userSettingsService.getPreferredCurrency(user)
     ]);
 
+    const barChartData = this._netWorthService.getSortedAndGroupedValues(
+      data[0].customValues,
+      settings.netWorthFields
+    );
+
     const meta = {
       fields: ['date', ...settings.netWorthFields, 'total', 'change'],
       preferredCurrency,
       summaryItems: this._netWorthService.getSummaryItemsMeta(
         data[0],
         settings.netWorthSummaryItems
-      )
+      ),
+      barChartData
     };
 
     return { data, meta };

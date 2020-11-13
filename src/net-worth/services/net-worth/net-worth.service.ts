@@ -124,6 +124,46 @@ export class NetWorthService {
     );
   }
 
+  public getSortedAndGroupedValues(
+    item: INetWorthCustomValues,
+    fields: Array<string>
+  ): Array<{ value: number; label: string }> {
+    const arrayOfFields = fields
+      .map((fieldName) => {
+        return { label: fieldName, value: item[fieldName] };
+      })
+      .sort((a, b) => b.value - a.value);
+
+    if (arrayOfFields.length <= 6) {
+      return arrayOfFields;
+    } else {
+      /* Take the top 5 values */
+      const topValues = arrayOfFields.splice(0, 5);
+
+      /* Reduce the remaining values down to a single value */
+      const reducedValues = arrayOfFields.reduce((accum, next) => {
+        return (accum += next.value);
+      }, 0);
+
+      /* Return the top 5 values alongside 'other' */
+      return [...topValues, { label: 'Other', value: reducedValues }];
+    }
+  }
+
+  public async getAllFieldsFromCurrentResourceAndActiveFields(
+    userId: string,
+    resourceToEdit: NetWorth
+  ): Promise<Array<string>> {
+    const settings = await this._settingsService.getSettings(userId);
+
+    return [
+      ...new Set([
+        ...settings.netWorthFields,
+        ...Object.keys(resourceToEdit.customValues)
+      ])
+    ];
+  }
+
   public async removeAllAssociatedEntries(user: string): Promise<void> {
     await this._netWorthRepo.deleteMany({ user });
   }
