@@ -55,3 +55,27 @@ input {
   appearance: none;
   opacity: 1;
 }
+
+/* ngxToastr */
+.toast-container {
+  top: $spacing-20 !important;
+  right: $spacing-20 !important;
+}
+.ngx-toastr {
+  width: 400px !important;
+  max-width: calc(100vw - 40px) !important;
+  padding-left: 80px !important;
+  background-position: 30px center !important;
+  border-radius: $br-med !important;
+
+  @include media-phone {
+    padding-left: 50px !important;
+    background-position: 15px center !important;
+  }
+}
+.toast-success {
+  background-color: $color-primary-gradient-solid !important;
+}
+.toast-error {
+  background-color: $color-negative !important;
+}

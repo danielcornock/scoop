@@ -129,12 +129,12 @@
   cursor: pointer;
   border: 0;
   font-weight: 400;
-  color: $color-subheading;
-  background-color: $color-settings-item;
+  color: $color-form-label;
+  background-color: $color-primary-light;
   border-radius: $br-med;
 
   &:hover {
-    background-color: $color-settings-item-hover;
+    background-color: darken($color-primary-light-solid, 10%);
   }
 }
 
