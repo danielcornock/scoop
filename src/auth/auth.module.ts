@@ -8,7 +8,10 @@ import { SettingsModule } from 'src/settings/settings.module';
 import { AuthController } from './controllers/auth/auth.controller';
 import { UserSettingsController } from './controllers/user-settings/user-settings.controller';
 import { Token, TokenSchema } from './schemas/token.schema';
-import { UserSettings, UserSettingsSchema } from './schemas/user-settings.schema';
+import {
+  UserSettings,
+  UserSettingsSchema
+} from './schemas/user-settings.schema';
 import { User, UserSchema } from './schemas/user.schema';
 import { AuthService } from './services/auth/auth.service';
 import { EmailVerificationService } from './services/email-verification/email-verification.service';

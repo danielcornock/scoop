@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { compare, hash } from 'bcryptjs';
 import { sign, verify } from 'jsonwebtoken';
@@ -55,7 +59,7 @@ export class AuthService {
       const encryptedPassword: string = await this._hashPassword(
         userObject.password
       );
-      const updatedUserObject: CreateUserRequest = {
+      const updatedUserObject = {
         name: userObject.name,
         email: toLower(userObject.email),
         password: encryptedPassword

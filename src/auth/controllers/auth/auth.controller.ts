@@ -1,4 +1,11 @@
-import { Body, Controller, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Param,
+  Post,
+  UseGuards
+} from '@nestjs/common';
 import { AuthGuard } from 'src/auth/guards/auth/auth.guard';
 import { User } from 'src/auth/schemas/user.schema';
 import { AuthService } from 'src/auth/services/auth/auth.service';
@@ -50,6 +57,11 @@ export class AuthController {
 
   @Post('register')
   public async register(@Body() body: CreateUserRequest): Promise<void> {
+    if (!body.acceptPrivacyPolicy) {
+      throw new BadRequestException(
+        'You must agree to the privacy policy before creating an account with us.'
+      );
+    }
     const user = await this._authService.createUser(body);
 
     await Promise.all([

@@ -1,4 +1,4 @@
-import { IsNotEmpty, MaxLength, MinLength } from 'class-validator';
+import { IsBoolean, IsNotEmpty, MaxLength, MinLength } from 'class-validator';
 
 export class CreateUserRequest {
   @IsNotEmpty()
@@ -11,4 +11,7 @@ export class CreateUserRequest {
   @MaxLength(64)
   @MinLength(8)
   password: string;
+
+  @IsBoolean()
+  acceptPrivacyPolicy: boolean;
 }
