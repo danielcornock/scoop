@@ -91,10 +91,12 @@ export class NetWorthController {
       this._userSettingsService.getPreferredCurrency(user)
     ]);
 
-    const barChartData = this._netWorthService.getSortedAndGroupedValues(
-      data[0].customValues,
-      settings.netWorthFields
-    );
+    const barChartData =
+      data.length &&
+      this._netWorthService.getSortedAndGroupedValues(
+        data[0].customValues,
+        settings.netWorthFields
+      );
 
     const meta = {
       fields: ['date', ...settings.netWorthFields, 'total', 'change'],
