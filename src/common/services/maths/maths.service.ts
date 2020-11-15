@@ -18,7 +18,15 @@ export class MathsService {
     return milliseconds;
   }
 
-  public static round(val: number): number {
+  public static round2(val: number): number {
     return Math.round(val * 100) / 100;
+  }
+
+  public static round1(val: number): number {
+    return Math.round(val * 10) / 10;
+  }
+
+  public static round0(val: number): number {
+    return Math.round(val);
   }
 }
