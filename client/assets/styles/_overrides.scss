@@ -74,8 +74,12 @@ input {
   }
 }
 .toast-success {
-  background-color: $color-primary-gradient-solid !important;
+  background-color: $color-positive !important;
 }
 .toast-error {
   background-color: $color-negative !important;
+}
+
+.toast-info {
+  background-color: $color-primary-gradient-solid !important;
 }
