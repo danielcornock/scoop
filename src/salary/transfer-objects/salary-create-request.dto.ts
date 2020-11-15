@@ -9,8 +9,16 @@ export class SalaryCreateRequest {
 
   @IsNotEmpty()
   incomeTax: number | string;
+
+  @IsNotEmpty()
   nationalInsurance: number | string;
-  studentLoans: number | string;
-  pensionContribution: number | string;
-  netSalary: number | string;
+
+  @IsNotEmpty()
+  studentFinance: number | string;
+
+  @IsNotEmpty()
+  pensionContributions: number | string;
+
+  @IsNotEmpty()
+  otherDeductions: number | string;
 }

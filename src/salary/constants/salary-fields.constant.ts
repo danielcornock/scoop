@@ -5,7 +5,7 @@ export const salaryFields: Dictionary<string> = {
   grossSalary: 'Gross salary',
   incomeTax: 'Income tax',
   nationalInsurance: 'National insurance',
-  studentLoanPayments: 'Student finance',
+  studentFinance: 'Student finance',
   pensionContributions: 'Pension',
   otherDeductions: 'Other',
   netSalary: 'Net salary'

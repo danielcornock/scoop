@@ -26,9 +26,9 @@ export class DatabaseErrorsService {
 
     if (requiredErrors.length) {
       throw new BadRequestException(
-        `The following fields are required: ${startCase(
-          requiredErrors.join(', ')
-        )}.`
+        `The following fields are required: ${requiredErrors
+          .map(startCase)
+          .join(', ')}.`
       );
     }
   }

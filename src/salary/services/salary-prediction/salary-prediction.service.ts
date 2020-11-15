@@ -29,12 +29,12 @@ export class SalaryPredictionService {
       yearlySalary,
       data.date
     );
-    const studentLoanPayments = this._getStudentLoanPayments(
+    const studentFinance = this._getstudentFinance(
       yearlySalary,
       settings.salaryStudentFinance,
       data.date
     );
-    const pensionContributions = this._getPensionContributions(
+    const pensionContributions = this._getpensionContributions(
       yearlySalary,
       settings.salaryPensionContribution
     );
@@ -47,7 +47,7 @@ export class SalaryPredictionService {
     const netSalary = this.calculateNetSalary(grossSalary, [
       incomeTax,
       nationalInsurance,
-      studentLoanPayments,
+      studentFinance,
       pensionContributions
     ]);
 
@@ -55,7 +55,7 @@ export class SalaryPredictionService {
       grossSalary,
       incomeTax,
       nationalInsurance,
-      studentLoanPayments,
+      studentFinance,
       pensionContributions,
       netSalary
     };
@@ -77,7 +77,7 @@ export class SalaryPredictionService {
     return MathsService.floor0(yearlyNationalInsurance / 12);
   }
 
-  private _getStudentLoanPayments(
+  private _getstudentFinance(
     yearlySalary: number,
     loanType: STUDENT_LOAN,
     date: string
@@ -90,12 +90,12 @@ export class SalaryPredictionService {
     return MathsService.floor0(yearlyStudentFinance / 12);
   }
 
-  private _getPensionContributions(
+  private _getpensionContributions(
     remainingSalary: number,
-    rawPensionContribution: number
+    rawpensionContributions: number
   ): number {
-    const pensionContribution = rawPensionContribution / 100;
+    const pensionContributions = rawpensionContributions / 100;
 
-    return MathsService.round2((remainingSalary * pensionContribution) / 12);
+    return MathsService.round2((remainingSalary * pensionContributions) / 12);
   }
 }

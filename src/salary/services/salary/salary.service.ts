@@ -33,8 +33,9 @@ export class SalaryService {
       [
         processedRequest.incomeTax,
         processedRequest.nationalInsurance,
-        processedRequest.studentLoanPayments,
-        processedRequest.pensionContributions
+        processedRequest.studentFinance,
+        processedRequest.pensionContributions,
+        processedRequest.otherDeductions
       ]
     );
 
@@ -88,6 +89,12 @@ export class SalaryService {
       projectedTaxReturn: MathsService.round0(projectedTaxReturn),
       netSalary: MathsService.round2(netSalaryThisYear)
     };
+  }
+
+  public async getLatestEntry(user: string): Promise<Salary> {
+    const salary = await this._salaryRepo.find({ user }).sort({ date: 'desc' });
+
+    return salary[0];
   }
 
   public async deleteOne(user: string, date: string): Promise<void> {

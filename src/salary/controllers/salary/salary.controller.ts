@@ -16,6 +16,7 @@ import { ISalaryMeta } from 'src/salary/interfaces/salary-meta.interface';
 import { Salary } from 'src/salary/schemas/salary.schema';
 import { SalaryPredictionService } from 'src/salary/services/salary-prediction/salary-prediction.service';
 import { SalaryService } from 'src/salary/services/salary/salary.service';
+import { DuplicateSalaryRequest } from 'src/salary/transfer-objects/duplicate-salary-request.dto';
 import { GrossSalaryPrediction } from 'src/salary/transfer-objects/gross-salary-prediction.dto';
 import { SalaryCreateRequest } from 'src/salary/transfer-objects/salary-create-request.dto';
 
@@ -35,6 +36,28 @@ export class SalaryController {
   ): HttpResponse<Partial<Salary>> {
     const data = await this._salaryPredictionService.getSalaryReductionPredictions(
       body,
+      user
+    );
+
+    return { data };
+  }
+
+  @Post('duplicate')
+  public async createSameSalaryAsLastMonth(
+    @Body() body: DuplicateSalaryRequest,
+    @UserId() user: string
+  ): HttpResponse<Salary> {
+    const latestEntry = (
+      await this._salaryService.getLatestEntry(user)
+    ).toObject();
+
+    delete latestEntry._id;
+
+    const data = await this._salaryService.createLogEntry(
+      {
+        ...latestEntry,
+        date: body.date
+      },
       user
     );
 
