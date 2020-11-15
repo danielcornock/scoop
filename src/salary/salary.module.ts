@@ -5,10 +5,11 @@ import { SettingsModule } from 'src/settings/settings.module';
 
 import { SalaryController } from './controllers/salary/salary.controller';
 import { Salary, SalarySchema } from './schemas/salary.schema';
-import { SalaryService } from './services/salary/salary.service';
-import { SalaryPredictionService } from './services/salary-prediction/salary-prediction.service';
 import { IncomeTaxService } from './services/income-tax/income-tax.service';
+import { SalaryPredictionService } from './services/salary-prediction/salary-prediction.service';
+import { SalaryService } from './services/salary/salary.service';
 import { TaxBandService } from './services/tax-band/tax-band.service';
+import { TaxReturnProjectionService } from './services/tax-return-projection/tax-return-projection.service';
 
 @Module({
   imports: [
@@ -17,6 +18,12 @@ import { TaxBandService } from './services/tax-band/tax-band.service';
     MongooseModule.forFeature([{ name: Salary.name, schema: SalarySchema }])
   ],
   controllers: [SalaryController],
-  providers: [SalaryService, SalaryPredictionService, IncomeTaxService, TaxBandService]
+  providers: [
+    SalaryService,
+    SalaryPredictionService,
+    IncomeTaxService,
+    TaxBandService,
+    TaxReturnProjectionService
+  ]
 })
 export class SalaryModule {}

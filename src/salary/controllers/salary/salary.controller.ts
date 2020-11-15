@@ -45,14 +45,16 @@ export class SalaryController {
   public async getAll(
     @UserId() userId: string
   ): HttpResponse<Salary[], ISalaryMeta> {
-    const [data, preferredCurrency] = await Promise.all([
+    const [data, preferredCurrency, summaryItems] = await Promise.all([
       this._salaryService.getAll(userId),
-      this._userSettingsService.getPreferredCurrency(userId)
+      this._userSettingsService.getPreferredCurrency(userId),
+      this._salaryService.getSalaryMeta(userId)
     ]);
 
     const meta = {
       preferredCurrency,
-      fields: salaryFields
+      fields: salaryFields,
+      summaryItems
     };
 
     return { data, meta };

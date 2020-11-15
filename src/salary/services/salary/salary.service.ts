@@ -3,17 +3,22 @@ import { InjectModel } from '@nestjs/mongoose';
 import { forEach, isString } from 'lodash';
 import { Model } from 'mongoose';
 import { DatabaseErrorsService } from 'src/common/services/database-errors/database-errors.service';
+import { MathsService } from 'src/common/services/maths/maths.service';
 import { Salary } from 'src/salary/schemas/salary.schema';
 import { SalaryCreateRequest } from 'src/salary/transfer-objects/salary-create-request.dto';
 
+import { IncomeTaxService } from '../income-tax/income-tax.service';
 import { SalaryPredictionService } from '../salary-prediction/salary-prediction.service';
+import { TaxReturnProjectionService } from '../tax-return-projection/tax-return-projection.service';
 
 @Injectable()
 export class SalaryService {
   constructor(
     @InjectModel(Salary.name)
     private readonly _salaryRepo: Model<Salary>,
-    private readonly _salaryPredictionService: SalaryPredictionService
+    private readonly _salaryPredictionService: SalaryPredictionService,
+    private readonly _incomeTaxService: IncomeTaxService,
+    private readonly _taxReturnProjectionService: TaxReturnProjectionService
   ) {}
 
   public async createLogEntry(
@@ -48,12 +53,65 @@ export class SalaryService {
 
   public async getAll(user: string): Promise<Salary[]> {
     const data = await this._salaryRepo.find({ user }).sort({ date: 'desc' });
-
     return data;
+  }
+
+  public async getSalaryMeta(user: string): Promise<any> {
+    const currentYearEntries = await this._getItemsFromCurrentTaxYear(user);
+
+    if (!currentYearEntries.length) {
+      return null;
+    }
+
+    const taxAlreadyPaid = this._incomeTaxService.getTotalTaxPaidInCollection(
+      currentYearEntries
+    );
+    const grossSalaryThisYear = this._getTotalGrossSalaryFromCollection(
+      currentYearEntries
+    );
+
+    const projectedTaxReturn = this._taxReturnProjectionService.getProjectedTaxReturn(
+      {
+        latestSalary: currentYearEntries[0].grossSalary,
+        latestSalaryDate: currentYearEntries[0].date,
+        taxAlreadyPaid,
+        totalEarnedSoFar: grossSalaryThisYear
+      }
+    );
+
+    return {
+      taxPaid: MathsService.round2(taxAlreadyPaid),
+      totalEarned: MathsService.round2(grossSalaryThisYear),
+      projectedTaxReturn: MathsService.round0(projectedTaxReturn)
+    };
   }
 
   public async deleteOne(user: string, date: string): Promise<void> {
     await this._salaryRepo.deleteOne({ user, date });
+  }
+
+  private _getTotalGrossSalaryFromCollection(collection: Salary[]): number {
+    return collection.reduce(
+      (accum: number, entry: Salary) => accum + entry.grossSalary,
+      0
+    );
+  }
+
+  private async _getItemsFromCurrentTaxYear(user: string): Promise<Salary[]> {
+    const currentDate = new Date(Date.now());
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1;
+
+    const taxYear = currentMonth >= 4 ? currentYear : currentYear - 1;
+
+    const data = await this._salaryRepo
+      .find({
+        user,
+        date: { $gte: `${taxYear}-04`, $lte: `${taxYear + 1}-03` }
+      })
+      .sort({ date: 'desc' });
+
+    return data;
   }
 
   private _processAllValuesToNumber(data: SalaryCreateRequest): Salary {

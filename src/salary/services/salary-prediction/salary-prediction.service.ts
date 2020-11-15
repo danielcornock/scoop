@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Dictionary } from 'lodash';
+import { MathsService } from 'src/common/services/maths/maths.service';
 import { nationalInsuranceFreeAllowances } from 'src/salary/constants/national-insurance-free-allowances.constant';
 import { studentLoanPost2012Allowances } from 'src/salary/constants/student-loan-post-2012-allowances.constant';
 import { studentLoanPre2012Allowances } from 'src/salary/constants/student-loan-pre-2012-allowances.constant';
@@ -7,11 +8,14 @@ import { STUDENT_LOAN } from 'src/salary/constants/student-loan.enum';
 import { GrossSalaryPrediction } from 'src/salary/transfer-objects/gross-salary-prediction.dto';
 import { SettingsService } from 'src/settings/services/settings/settings.service';
 
-import { taxFreeAllowances } from '../../constants/tax-free-allowances.constant';
+import { IncomeTaxService } from '../income-tax/income-tax.service';
 
 @Injectable()
 export class SalaryPredictionService {
-  constructor(private readonly _settingsService: SettingsService) {}
+  constructor(
+    private readonly _settingsService: SettingsService,
+    private readonly _incomeTaxService: IncomeTaxService
+  ) {}
 
   public async getSalaryReductionPredictions(
     data: GrossSalaryPrediction,
@@ -21,7 +25,7 @@ export class SalaryPredictionService {
 
     const grossSalary = parseFloat(data.grossSalary);
 
-    const yearlySalary = Math.round((grossSalary * 12) / 100) * 100;
+    const yearlySalary = MathsService.round0(grossSalary * 12);
 
     const nationalInsurance = this._getNationalInsurance(
       yearlySalary,
@@ -37,8 +41,10 @@ export class SalaryPredictionService {
       settings.salaryPensionContribution
     );
 
-    const salaryLessPension = yearlySalary - pensionContributions * 12;
-    const incomeTax = this._getIncomeTax(salaryLessPension, data.date);
+    const incomeTax = this._incomeTaxService.getMonthlyIncomeTaxFromAnnualSalary(
+      yearlySalary,
+      data.date
+    );
 
     const netSalary = this.calculateNetSalary(grossSalary, [
       incomeTax,
@@ -64,27 +70,10 @@ export class SalaryPredictionService {
     return grossSalary - deductions.reduce((a, b) => a + b, 0);
   }
 
-  private _getIncomeTax(yearlySalary: number, date: string): number {
-    const taxFreeAllowance = this._getAllowanceForYear(date, taxFreeAllowances);
-
-    let yearlyIncomeTax = 0;
-
-    if (yearlySalary > 50000) {
-      yearlyIncomeTax += (yearlySalary - 50000) * 0.4;
-      yearlyIncomeTax += (50000 - taxFreeAllowance) * 0.2;
-
-      return this._twoDecimalPlaces(yearlyIncomeTax / 12);
-    } else {
-      yearlyIncomeTax = (yearlySalary - taxFreeAllowance) * 0.2;
-
-      return this._twoDecimalPlaces(yearlyIncomeTax / 12);
-    }
-  }
-
   private _getTaxYear(date: string): number {
     const dateObj = new Date(date);
     let currentYear = dateObj.getFullYear();
-    const currentMonth = dateObj.getMonth();
+    const currentMonth = dateObj.getMonth() + 1;
 
     if (currentMonth < 4) {
       currentYear--;

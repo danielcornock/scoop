@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { MathsService } from 'src/common/services/maths/maths.service';
 import { TaxBand, TaxBands } from 'src/salary/interfaces/tax-band.interface';
+import { Salary } from 'src/salary/schemas/salary.schema';
 
 import { TaxBandService } from '../tax-band/tax-band.service';
 
@@ -12,17 +13,43 @@ export class IncomeTaxService {
     annualSalary: number,
     date: string
   ) {
-    const taxBands: TaxBands = this._taxBandService.getTaxBands(date);
-    const yearlyTax = this._getYearlyTax(annualSalary, taxBands);
+    const yearlyTax = this._getRawYearlyTax(annualSalary, date);
 
     const monthlyTax = yearlyTax / 12;
 
-    return MathsService.round(monthlyTax);
+    return monthlyTax;
   }
 
-  private _getYearlyTax(annualSalary, bands: TaxBands): number {
-    return bands.reduce((accum: number, band: TaxBand) => {
-      if (annualSalary < band.min) {
+  public getMonthlyIncomeTaxFromMonthlySalary(
+    monthlySalary: number,
+    date: string
+  ): number {
+    const annualSalary = MathsService.round1(monthlySalary * 12);
+
+    return this.getMonthlyIncomeTaxFromAnnualSalary(annualSalary, date);
+  }
+
+  public getYearlyIncomeTaxFromYearlySalary(
+    annualSalary: number,
+    date: string
+  ): number {
+    const rawYearlyTax = this._getRawYearlyTax(annualSalary, date);
+
+    return rawYearlyTax;
+  }
+
+  public getTotalTaxPaidInCollection(collection: Salary[]): number {
+    return collection.reduce(
+      (accum: number, entry: Salary) => accum + entry.incomeTax,
+      0
+    );
+  }
+
+  private _getRawYearlyTax(annualSalary: number, date: string): number {
+    const taxBands: TaxBands = this._taxBandService.getTaxBands(date);
+
+    return taxBands.reduce((accum: number, band: TaxBand) => {
+      if (annualSalary <= band.min) {
         return accum + 0;
       }
 
