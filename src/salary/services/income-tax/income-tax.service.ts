@@ -1,13 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { MathsService } from 'src/common/services/maths/maths.service';
-import { TaxBand, TaxBands } from 'src/salary/interfaces/tax-band.interface';
 import { Salary } from 'src/salary/schemas/salary.schema';
 
-import { TaxBandService } from '../tax-band/tax-band.service';
+import { BandService } from '../band/band.service';
 
 @Injectable()
 export class IncomeTaxService {
-  constructor(private readonly _taxBandService: TaxBandService) {}
+  constructor(private readonly _bandService: BandService) {}
 
   public getMonthlyIncomeTaxFromAnnualSalary(
     annualSalary: number,
@@ -26,7 +25,12 @@ export class IncomeTaxService {
   ): number {
     const annualSalary = MathsService.round1(monthlySalary * 12);
 
-    return this.getMonthlyIncomeTaxFromAnnualSalary(annualSalary, date);
+    const updatedMonthlySalary = this.getMonthlyIncomeTaxFromAnnualSalary(
+      annualSalary,
+      date
+    );
+
+    return MathsService.round2(updatedMonthlySalary);
   }
 
   public getYearlyIncomeTaxFromYearlySalary(
@@ -46,18 +50,9 @@ export class IncomeTaxService {
   }
 
   private _getRawYearlyTax(annualSalary: number, date: string): number {
-    const taxBands: TaxBands = this._taxBandService.getTaxBands(date);
-
-    return taxBands.reduce((accum: number, band: TaxBand) => {
-      if (annualSalary <= band.min) {
-        return accum + 0;
-      }
-
-      const taxableSalaryInBand = Math.min(band.max, annualSalary) - band.min;
-
-      const taxPaidInBand = taxableSalaryInBand * band.percentage;
-
-      return accum + taxPaidInBand;
-    }, 0);
+    return this._bandService.getYearlyPayment(
+      annualSalary,
+      this._bandService.getTaxBands(date)
+    );
   }
 }

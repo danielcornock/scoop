@@ -29,4 +29,8 @@ export class MathsService {
   public static round0(val: number): number {
     return Math.round(val);
   }
+
+  public static floor0(val: number): number {
+    return Math.floor(val);
+  }
 }

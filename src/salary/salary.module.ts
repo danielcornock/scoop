@@ -8,7 +8,7 @@ import { Salary, SalarySchema } from './schemas/salary.schema';
 import { IncomeTaxService } from './services/income-tax/income-tax.service';
 import { SalaryPredictionService } from './services/salary-prediction/salary-prediction.service';
 import { SalaryService } from './services/salary/salary.service';
-import { TaxBandService } from './services/tax-band/tax-band.service';
+import { BandService } from './services/band/band.service';
 import { TaxReturnProjectionService } from './services/tax-return-projection/tax-return-projection.service';
 
 @Module({
@@ -22,7 +22,7 @@ import { TaxReturnProjectionService } from './services/tax-return-projection/tax
     SalaryService,
     SalaryPredictionService,
     IncomeTaxService,
-    TaxBandService,
+    BandService,
     TaxReturnProjectionService
   ]
 })
