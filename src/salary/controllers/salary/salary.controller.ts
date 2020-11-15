@@ -48,7 +48,7 @@ export class SalaryController {
     const [data, preferredCurrency, summaryItems] = await Promise.all([
       this._salaryService.getAll(userId),
       this._userSettingsService.getPreferredCurrency(userId),
-      this._salaryService.getSalaryMeta(userId)
+      this._salaryService.getSalarySummaryItems(userId)
     ]);
 
     const meta = {

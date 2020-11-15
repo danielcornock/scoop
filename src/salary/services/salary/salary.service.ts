@@ -56,7 +56,7 @@ export class SalaryService {
     return data;
   }
 
-  public async getSalaryMeta(user: string): Promise<any> {
+  public async getSalarySummaryItems(user: string): Promise<any> {
     const currentYearEntries = await this._getItemsFromCurrentTaxYear(user);
 
     if (!currentYearEntries.length) {
@@ -67,6 +67,9 @@ export class SalaryService {
       currentYearEntries
     );
     const grossSalaryThisYear = this._getTotalGrossSalaryFromCollection(
+      currentYearEntries
+    );
+    const netSalaryThisYear = this._getTotalNetSalaryFromCollection(
       currentYearEntries
     );
 
@@ -81,8 +84,9 @@ export class SalaryService {
 
     return {
       taxPaid: MathsService.round2(taxAlreadyPaid),
-      totalEarned: MathsService.round2(grossSalaryThisYear),
-      projectedTaxReturn: MathsService.round0(projectedTaxReturn)
+      grossSalary: MathsService.round2(grossSalaryThisYear),
+      projectedTaxReturn: MathsService.round0(projectedTaxReturn),
+      netSalary: MathsService.round2(netSalaryThisYear)
     };
   }
 
@@ -93,6 +97,13 @@ export class SalaryService {
   private _getTotalGrossSalaryFromCollection(collection: Salary[]): number {
     return collection.reduce(
       (accum: number, entry: Salary) => accum + entry.grossSalary,
+      0
+    );
+  }
+
+  private _getTotalNetSalaryFromCollection(collection: Salary[]): number {
+    return collection.reduce(
+      (accum: number, entry: Salary) => accum + entry.netSalary,
       0
     );
   }
