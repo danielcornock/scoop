@@ -17,4 +17,8 @@ export class MathsService {
 
     return milliseconds;
   }
+
+  public static round(val: number): number {
+    return Math.round(val * 100) / 100;
+  }
 }
