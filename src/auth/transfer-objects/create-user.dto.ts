@@ -1,13 +1,14 @@
 import { IsBoolean, IsNotEmpty, MaxLength, MinLength } from 'class-validator';
+import { emptyValidatorConfig } from 'src/common/constants/empty-validator-config.constant';
 
 export class CreateUserRequest {
-  @IsNotEmpty()
+  @IsNotEmpty(emptyValidatorConfig)
   name: string;
 
-  @IsNotEmpty()
+  @IsNotEmpty(emptyValidatorConfig)
   email: string;
 
-  @IsNotEmpty()
+  @IsNotEmpty(emptyValidatorConfig)
   @MaxLength(64)
   @MinLength(8)
   password: string;

@@ -1,9 +1,10 @@
 import { IsNotEmpty } from 'class-validator';
+import { emptyValidatorConfig } from 'src/common/constants/empty-validator-config.constant';
 
 export class LoginRequest {
-  @IsNotEmpty()
+  @IsNotEmpty(emptyValidatorConfig)
   email: string;
 
-  @IsNotEmpty()
+  @IsNotEmpty(emptyValidatorConfig)
   password: string;
 }

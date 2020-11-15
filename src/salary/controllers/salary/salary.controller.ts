@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -47,15 +48,23 @@ export class SalaryController {
     @Body() body: DuplicateSalaryRequest,
     @UserId() user: string
   ): HttpResponse<Salary> {
-    const latestEntry = (
-      await this._salaryService.getLatestEntry(user)
-    ).toObject();
+    const latestEntry:
+      | Salary
+      | undefined = await this._salaryService.getLatestEntry(user);
 
-    delete latestEntry._id;
+    const formattedLatestEntry = latestEntry?.toObject();
+
+    if (!formattedLatestEntry) {
+      throw new BadRequestException(
+        'You do not have any existing entries that you can duplicate!'
+      );
+    }
+
+    delete formattedLatestEntry._id;
 
     const data = await this._salaryService.createLogEntry(
       {
-        ...latestEntry,
+        ...formattedLatestEntry,
         date: body.date
       },
       user
