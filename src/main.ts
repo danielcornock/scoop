@@ -12,7 +12,11 @@ async function bootstrap() {
   app.use(helmet());
 
   app.enableCors({
-    origin: ['http://localhost:4200', /http*:\/\/.*\.scoopfinance.co.uk/]
+    origin: [
+      'http://localhost:4200',
+      'https://staging.scoopfinance.co.uk',
+      'https://app.scoopfinance.co.uk'
+    ]
   });
   app.setGlobalPrefix('/api/v1');
   app.useGlobalPipes(new ValidationPipe());
