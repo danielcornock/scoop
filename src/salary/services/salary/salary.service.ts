@@ -86,7 +86,7 @@ export class SalaryService {
     return {
       taxPaid: MathsService.round2(taxAlreadyPaid),
       grossSalary: MathsService.round2(grossSalaryThisYear),
-      projectedTaxReturn: MathsService.round0(projectedTaxReturn),
+      projectedTaxReturn: MathsService.round10(projectedTaxReturn),
       netSalary: MathsService.round2(netSalaryThisYear)
     };
   }

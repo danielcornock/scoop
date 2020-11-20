@@ -33,4 +33,8 @@ export class MathsService {
   public static floor0(val: number): number {
     return Math.floor(val);
   }
+
+  public static round10(val: number): number {
+    return Math.round(val / 10) * 100;
+  }
 }
