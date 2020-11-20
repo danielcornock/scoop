@@ -91,6 +91,10 @@
   color: $color-subheading;
   font-size: 22px;
   margin-bottom: $spacing-20;
+
+  @include media-phone {
+    font-size: 20px;
+  }
 }
 
 @mixin settings-description {
@@ -184,13 +188,15 @@
   }
 }
 
+@mixin media-min-hd {
+  @media only screen and (min-width: 1750px) {
+    @content;
+  }
+}
+
 @mixin modal-title {
   @include page-subheading;
   margin-bottom: $spacing-20;
-
-  @include media-phone {
-    font-size: 20px;
-  }
 }
 
 @mixin form-subheading {
@@ -203,12 +209,28 @@
   }
 }
 
+@mixin settings-heading {
+  @include page-subheading;
+  margin-bottom: $spacing-10;
+  padding-bottom: $spacing-10;
+  border-bottom: 1px solid $color-table-divider;
+
+  @include media-phone {
+    display: flex;
+    justify-content: space-between;
+    font-size: 18px;
+    padding: $spacing-20 $spacing-5;
+    border-bottom: 0;
+    margin-bottom: 0;
+  }
+}
+
 @mixin page-container {
   padding: var(--spacing-page-top) var(--spacing-page-side);
   height: 100%;
 
   @include media-phone {
-    padding-top: $spacing-30;
+    padding-top: calc(58px + var(--spacing-page-top));
   }
 }
 
