@@ -1,0 +1,29 @@
+.animate-list-item {
+  animation: enter-list 500ms forwards;
+  opacity: 0;
+  transform-origin: middle;
+}
+
+@keyframes enter-list {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-page-in {
+  animation: enter-page 500ms forwards;
+  opacity: 0;
+  transform-origin: top;
+}
+
+@keyframes enter-page {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 import { AdminModule } from './admin/admin.module';
 import { AuthModule } from './auth/auth.module';
@@ -18,6 +20,9 @@ import { TasksModule } from './tasks/tasks.module';
     AuthModule,
     MongooseModule.forRootAsync({
       useFactory: databaseUriFactory
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'client')
     }),
     SettingsModule,
     NetWorthModule,
