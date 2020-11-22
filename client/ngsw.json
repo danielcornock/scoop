@@ -72,7 +72,7 @@
     {
       "name": "api",
       "patterns": [
-        "https:\\/\\/api\\.scoopfinance\\.co\\.uk\\/api\\/v1\\/(?:.+\\/)?[^/]*"
+        "https:\\/\\/app\\.scoopfinance\\.co\\.uk\\/api\\/v1\\/(?:.+\\/)?[^/]*"
       ],
       "strategy": "freshness",
       "maxSize": 100,
