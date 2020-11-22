@@ -1,7 +1,0 @@
-.is-negative {
-  @include status-indicator($color-negative);
-}
-
-.is-positive {
-  @include status-indicator($color-positive);
-}
