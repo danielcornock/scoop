@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Dictionary } from 'lodash';
+import { Dictionary, forEach } from 'lodash';
 import { Model } from 'mongoose';
 import { MonthlyDistribution } from 'src/monthly-distribution/schemas/monthly-distribution.schema';
 import { MonthlyDistributionCreate } from 'src/monthly-distribution/transfer-objects/monthly-distribution-create.dto';
@@ -50,6 +50,22 @@ export class MonthlyDistributionService {
 
   public async removeAllAssociatedEntries(user: string): Promise<void> {
     await this._monthlyDistributionRepo.deleteMany({ user });
+  }
+
+  public getAllTimeDistribution(
+    items: MonthlyDistribution[]
+  ): Dictionary<number> {
+    return items
+      .map((item) => ({ ...item.outgoing }))
+      .reduce((prev, current) => {
+        forEach(current, (value, key) => {
+          prev[key] = value + (prev[key] || 0);
+        });
+
+        prev.remaining = current.remaining = prev.remaining || 0;
+
+        return prev;
+      }, {});
   }
 
   private async _processIncomeAndOutGoing(

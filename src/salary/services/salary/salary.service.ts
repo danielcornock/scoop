@@ -97,6 +97,16 @@ export class SalaryService {
     return salary[0];
   }
 
+  public extractLatestDeductions(data: Salary): Partial<Salary> {
+    return {
+      incomeTax: data.incomeTax,
+      nationalInsurance: data.nationalInsurance,
+      studentFinance: data.studentFinance,
+      pensionContributions: data.pensionContributions,
+      otherDeductions: data.otherDeductions
+    };
+  }
+
   public async deleteOne(user: string, date: string): Promise<void> {
     await this._salaryRepo.deleteOne({ user, date });
   }

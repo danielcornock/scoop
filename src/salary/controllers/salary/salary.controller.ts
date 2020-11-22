@@ -1,13 +1,4 @@
-import {
-  BadRequestException,
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  UseGuards
-} from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/guards/auth/auth.guard';
 import { UserSettingsService } from 'src/auth/services/user-settings/user-settings.service';
 import { UserId } from 'src/common/decorators/user-id.decorator';
@@ -86,7 +77,8 @@ export class SalaryController {
     const meta = {
       preferredCurrency,
       fields: salaryFields,
-      summaryItems
+      summaryItems,
+      latestDeductions: this._salaryService.extractLatestDeductions(data[0])
     };
 
     return { data, meta };

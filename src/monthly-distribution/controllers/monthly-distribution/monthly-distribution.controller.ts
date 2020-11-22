@@ -44,11 +44,6 @@ export class MonthlyDistributionController {
     const incomeFields = settings.monthlyDistributionIncomeFields;
     const outgoingFields = settings.monthlyDistributionOutgoingFields;
 
-    const meta: IMonthlyDistributionMeta = {
-      fields: ['date', ...incomeFields, ...outgoingFields, 'remaining'],
-      preferredCurrency
-    };
-
     const data = rawData.map((item) => {
       return {
         ...item.toObject(),
@@ -56,6 +51,16 @@ export class MonthlyDistributionController {
         outgoing: this._getOrderedFields(outgoingFields, item.outgoing)
       };
     });
+
+    const allTimeDistribution = this._monthlyDistributionService.getAllTimeDistribution(
+      data
+    );
+
+    const meta: IMonthlyDistributionMeta = {
+      fields: ['date', ...incomeFields, ...outgoingFields, 'remaining'],
+      preferredCurrency,
+      allTimeDistribution
+    };
 
     return { data, meta };
   }
