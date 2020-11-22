@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1605903208856,
+  "timestamp": 1606078341485,
   "index": "/index.html",
   "assetGroups": [
     {
@@ -14,7 +14,7 @@
         "/4.b5f5ca3040a87f90367d.js",
         "/favicon.ico",
         "/index.html",
-        "/main.a291f7acb1e43606308a.js",
+        "/main.cda8a17d53dcfc25b475.js",
         "/manifest.webmanifest",
         "/polyfills.35a5ca1855eb057f016a.js",
         "/runtime.afc0a856b79608dab1af.js",
@@ -72,7 +72,7 @@
     {
       "name": "api",
       "patterns": [
-        "\\/api\\/v1\\/(?:.+\\/)?[^/]*"
+        "https:\\/\\/app\\.scoopfinance\\.co\\.uk\\/api\\/v1\\/(?:.+\\/)?[^/]*"
       ],
       "strategy": "freshness",
       "maxSize": 100,
@@ -121,9 +121,9 @@
     "/assets/styles/_variables.scss": "07d51b3c504b3d5a9e3458668129f6bb39a23165",
     "/assets/styles/themes.scss": "6de89a950d688b5d9d804f553e3564f47e859f66",
     "/favicon.ico": "0742bd44c64ec70af17bb8a229e01723e9a84b40",
-    "/index.html": "b8f2028a47fd5ee860f777d3aab355f2b190c8f7",
-    "/main.a291f7acb1e43606308a.js": "e17c353da91f37c3826f861e2f33df3830a74106",
-    "/manifest.webmanifest": "0818296c063ac9a2913d7a3db9f5eb37d5deb0dc",
+    "/index.html": "408bdaa63ce87b4b012bf0c7ef3814f54df14159",
+    "/main.cda8a17d53dcfc25b475.js": "ab1552c7c8d62e86fb1b36dc2fd88a34897c70bd",
+    "/manifest.webmanifest": "c33d974ffc24c54958f26c7cb42e8e94d5c2f983",
     "/polyfills.35a5ca1855eb057f016a.js": "578360d24ce37383f261c7ef63b1f822d28e8dde",
     "/runtime.afc0a856b79608dab1af.js": "5142ddf0adc3d0d7eebe2b9f1e816e75042d2fa9",
     "/styles.d5a9faeb1e2c223dd763.css": "304c94110fb016d982514c191c965e3f1f804813"
