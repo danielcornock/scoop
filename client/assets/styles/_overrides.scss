@@ -60,6 +60,10 @@ input {
 .toast-container {
   top: $spacing-20 !important;
   right: $spacing-20 !important;
+
+  @include media-phone {
+    top: 78px !important; // To place below header
+  }
 }
 .ngx-toastr {
   width: 400px !important;
