@@ -97,13 +97,17 @@ export class SalaryService {
     return salary[0];
   }
 
-  public extractLatestDeductions(data: Salary): Partial<Salary> {
+  public extractLatestDeductions(data: Salary[]): Partial<Salary> {
+    if (!data[0]) {
+      return {};
+    }
+
     return {
-      incomeTax: data.incomeTax,
-      nationalInsurance: data.nationalInsurance,
-      studentFinance: data.studentFinance,
-      pensionContributions: data.pensionContributions,
-      otherDeductions: data.otherDeductions
+      incomeTax: data[0].incomeTax,
+      nationalInsurance: data[0].nationalInsurance,
+      studentFinance: data[0].studentFinance,
+      pensionContributions: data[0].pensionContributions,
+      otherDeductions: data[0].otherDeductions
     };
   }
 

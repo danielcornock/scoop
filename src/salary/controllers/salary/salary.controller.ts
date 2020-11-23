@@ -78,7 +78,7 @@ export class SalaryController {
       preferredCurrency,
       fields: salaryFields,
       summaryItems,
-      latestDeductions: this._salaryService.extractLatestDeductions(data[0])
+      latestDeductions: this._salaryService.extractLatestDeductions(data)
     };
 
     return { data, meta };
