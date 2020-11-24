@@ -35,6 +35,6 @@ export class MathsService {
   }
 
   public static round10(val: number): number {
-    return Math.round(val / 10) * 100;
+    return Math.round(val / 10) * 10;
   }
 }

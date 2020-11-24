@@ -1,7 +1,13 @@
 import { Logger } from '@nestjs/common';
 import { MongooseModuleOptions } from '@nestjs/mongoose';
 
-import { databaseUriString, devDatabaseUriString, isDevelopment, isProduction, localDatabaseUriString } from '../misc/env';
+import {
+  databaseUriString,
+  devDatabaseUriString,
+  isDevelopment,
+  isProduction,
+  localDatabaseUriString
+} from '../misc/env';
 
 export function databaseUriFactory(): MongooseModuleOptions {
   if (isDevelopment) {
