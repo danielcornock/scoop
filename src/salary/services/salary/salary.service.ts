@@ -27,21 +27,26 @@ export class SalaryService {
   ): Promise<Salary> {
     await this._checkIfEntryForMonthExists(user, data.date);
 
-    const processedRequest = this._processAllValuesToNumber(data);
     const netSalary = this._salaryPredictionService.calculateNetSalary(
-      processedRequest.grossSalary,
+      data.grossSalary,
       [
-        processedRequest.incomeTax,
-        processedRequest.nationalInsurance,
-        processedRequest.studentFinance,
-        processedRequest.pensionContributions,
-        processedRequest.otherDeductions
+        data.incomeTax,
+        data.nationalInsurance,
+        data.studentFinance,
+        data.pensionContributions,
+        data.otherDeductions
       ]
     );
 
     try {
       const salary = await this._salaryRepo.create({
-        ...processedRequest,
+        date: data.date,
+        grossSalary: data.grossSalary,
+        incomeTax: data.incomeTax,
+        nationalInsurance: data.nationalInsurance,
+        studentFinance: data.studentFinance,
+        otherDeductions: data.otherDeductions,
+        pensionContributions: data.pensionContributions,
         netSalary,
         user
       });

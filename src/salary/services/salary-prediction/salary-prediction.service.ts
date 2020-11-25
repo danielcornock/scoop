@@ -21,7 +21,7 @@ export class SalaryPredictionService {
   ): Promise<any> {
     const settings = await this._settingsService.getSettings(userId);
 
-    const grossSalary = parseFloat(data.grossSalary);
+    const grossSalary = data.grossSalary;
 
     const yearlySalary = MathsService.round0(grossSalary * 12);
 

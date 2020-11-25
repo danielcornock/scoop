@@ -1,3 +1,4 @@
 :root {
   --color-form-input-border: rgba(28, 128, 220, 0.3);
+  --color-form-input-border--focus: #{$color-primary-gradient-solid};
 }

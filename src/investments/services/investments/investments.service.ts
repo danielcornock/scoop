@@ -20,20 +20,18 @@ export class InvestmentsService {
   ): Promise<Investment> {
     await this._checkIfEntryForMonthExists(user, data.date);
     const [lastEntry] = await this.getAll(user);
-    const addedSinceLast = parseFloat(data.addedSinceLast);
-    const totalValue = parseFloat(data.totalValue);
     const totalInvested = lastEntry
-      ? lastEntry.totalInvested + addedSinceLast
-      : addedSinceLast;
+      ? lastEntry.totalInvested + data.addedSinceLast
+      : data.addedSinceLast;
 
     return this._investmentsRepo.create({
       date: data.date,
-      addedSinceLast,
-      totalValue,
+      addedSinceLast: data.addedSinceLast,
+      totalValue: data.totalValue,
       user,
-      profit: totalValue - totalInvested,
+      profit: data.totalValue - totalInvested,
       profitPercentage: MathsService.getPercentageDifference(
-        totalValue,
+        data.totalValue,
         totalInvested
       ),
       totalInvested

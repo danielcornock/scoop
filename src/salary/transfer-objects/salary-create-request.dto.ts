@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { emptyValidatorConfig } from 'src/common/constants/empty-validator-config.constant';
 
 export class SalaryCreateRequest {
@@ -6,17 +6,21 @@ export class SalaryCreateRequest {
   date: string;
 
   @IsNotEmpty(emptyValidatorConfig)
-  grossSalary: number | string;
+  @IsNumber()
+  grossSalary: number;
 
-  @IsNotEmpty(emptyValidatorConfig)
-  incomeTax: number | string;
+  @IsNumber()
+  incomeTax: number;
 
-  @IsNotEmpty(emptyValidatorConfig)
-  nationalInsurance: number | string;
+  @IsNumber()
+  nationalInsurance: number;
 
-  studentFinance: number | string;
+  @IsNumber()
+  studentFinance: number;
 
-  pensionContributions: number | string;
+  @IsNumber()
+  pensionContributions: number;
 
-  otherDeductions: number | string;
+  @IsNumber()
+  otherDeductions: number;
 }

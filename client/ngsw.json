@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1606239125606,
+  "timestamp": 1606348083354,
   "index": "/index.html",
   "assetGroups": [
     {
@@ -14,11 +14,11 @@
         "/4.b5f5ca3040a87f90367d.js",
         "/favicon.ico",
         "/index.html",
-        "/main.644409eaf8f365d706fd.js",
+        "/main.d9e5996c261d8fcdec5a.js",
         "/manifest.webmanifest",
         "/polyfills.35a5ca1855eb057f016a.js",
         "/runtime.afc0a856b79608dab1af.js",
-        "/styles.8f83eab4eaa782a18791.css"
+        "/styles.f72f2e8199e577cc253f.css"
       ],
       "patterns": []
     },
@@ -72,7 +72,7 @@
     {
       "name": "api",
       "patterns": [
-        "https:\\/\\/api\\.scoopfinance\\.co\\.uk\\/api\\/v1\\/(?:.+\\/)?[^/]*"
+        "\\/api\\/v1\\/(?:.+\\/)?[^/]*"
       ],
       "strategy": "freshness",
       "maxSize": 100,
@@ -113,7 +113,7 @@
     "/assets/images/scoop-email.png": "bb0ae82b0cf1eb5ea58fc1c906042d937bfcb884",
     "/assets/images/scoop-email.svg": "15c0085c595cf4e02a35fb2ae3be0218192790e8",
     "/assets/styles/_animations.scss": "3e974d8f76f902f01cc64e9ddd6c649b1188d271",
-    "/assets/styles/_form-variables.scss": "1a4d46828144632bd8049789f24bfe275ec36ae2",
+    "/assets/styles/_form-variables.scss": "132cf1a4246d6fc0373cbe6c3a082307eb0418f1",
     "/assets/styles/_globals.scss": "4514b4e7ca7d31c9a407e4f08a003d61dac22859",
     "/assets/styles/_mixins.scss": "1106fb4d3b2f3f50c9ff9c5e54ab3b9b73a17614",
     "/assets/styles/_overrides.scss": "73e83d952b4fe90da785d6dae9d2b0289d010a47",
@@ -121,12 +121,12 @@
     "/assets/styles/_variables.scss": "07d51b3c504b3d5a9e3458668129f6bb39a23165",
     "/assets/styles/themes.scss": "6de89a950d688b5d9d804f553e3564f47e859f66",
     "/favicon.ico": "0742bd44c64ec70af17bb8a229e01723e9a84b40",
-    "/index.html": "113b506ad88d0d8b6927d39160d4a6f4db677cb6",
-    "/main.644409eaf8f365d706fd.js": "112774aff19afa53f2d8d5ddbf2527e144b11ec3",
+    "/index.html": "2dac22faee54308f3b9d774d7dfd6e10937a772a",
+    "/main.d9e5996c261d8fcdec5a.js": "9e23716d893d60e2ce34add3ba25fbff76c0d682",
     "/manifest.webmanifest": "c33d974ffc24c54958f26c7cb42e8e94d5c2f983",
     "/polyfills.35a5ca1855eb057f016a.js": "578360d24ce37383f261c7ef63b1f822d28e8dde",
     "/runtime.afc0a856b79608dab1af.js": "5142ddf0adc3d0d7eebe2b9f1e816e75042d2fa9",
-    "/styles.8f83eab4eaa782a18791.css": "99b6cef0a0dd16287d564a2c5baaac6a0d79fa8d"
+    "/styles.f72f2e8199e577cc253f.css": "9717a930aeaac9e3bb178ccffa235be996151918"
   },
   "navigationUrls": [
     {
