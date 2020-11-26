@@ -1,4 +1,4 @@
-import { IsBoolean, IsString } from 'class-validator';
+import { IsBoolean, IsNumber, IsString, Max, Min } from 'class-validator';
 
 export class UpdateUserSettingsRequest {
   @IsBoolean()
@@ -16,6 +16,8 @@ export class UpdateUserSettingsRequest {
   @IsBoolean()
   enableEmailNotifications: boolean;
 
-  @IsString()
-  reminderDate: string;
+  @IsNumber()
+  @Min(1)
+  @Max(31)
+  reminderDate: number;
 }

@@ -26,8 +26,8 @@ export class UserSettings extends Document {
   @Prop({ type: Boolean, default: true })
   enableEmailNotifications?: boolean;
 
-  @Prop({ type: String, default: '01' })
-  reminderDate?: string;
+  @Prop({ type: Number, default: 1 })
+  reminderDate?: number;
 }
 
 export const UserSettingsSchema = SchemaFactory.createForClass(

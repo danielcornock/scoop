@@ -1,16 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { range } from 'lodash';
 import { Model } from 'mongoose';
-import { UserSettings } from 'src/auth/schemas/user-settings.schema';
-import { User } from 'src/auth/schemas/user.schema';
-import { UpdateUserSettingsRequest } from 'src/auth/transfer-objects/update-user-settings-request.dto';
 
-import { IUserNotificationsList } from './interfaces/user-notifications-list.interface';
+import { UserSettings } from '../../../auth/schemas/user-settings.schema';
+import { User } from '../../../auth/schemas/user.schema';
+import { UpdateUserSettingsRequest } from '../../../auth/transfer-objects/update-user-settings-request.dto';
+import { DateService } from '../../../common/services/date/date.service';
+import { IEmailUserDetails, IUserNotificationsList } from './interfaces/user-notifications-list.interface';
 
 @Injectable()
 export class UserSettingsService {
   @InjectModel(UserSettings.name)
   private readonly _userSettingsRepo: Model<UserSettings>;
+
+  constructor(private readonly _dateService: DateService) {}
 
   public async createSettings(user: string): Promise<UserSettings> {
     const settings = await this._userSettingsRepo.create({
@@ -33,25 +37,15 @@ export class UserSettingsService {
   public async getUsersWithNotificationForToday(): Promise<
     IUserNotificationsList
   > {
-    const currentDate: Date = new Date(Date.now());
-    const currentDay = currentDate.getDate().toString();
-
-    const userSettingsWithReminderToday = await this._userSettingsRepo
-      .find({
-        $or: [{ reminderDate: currentDay }, { reminderDate: '0' + currentDay }]
-      })
-      .populate('user');
+    const userSettingsWithReminderToday = await this._getUsersWithReminderToday();
 
     const userIdsForAppNotification: Array<string> = userSettingsWithReminderToday.map(
       (settings) => (settings.user as User)._id.toHexString()
     );
 
-    const userEmailsForEmailNotification = userSettingsWithReminderToday
-      .filter((settings: UserSettings) => settings.enableEmailNotifications)
-      .map((settings) => ({
-        email: (settings.user as User).email,
-        name: (settings.user as User).name
-      }));
+    const userEmailsForEmailNotification = this._getUserEmailsForEmailNotifications(
+      userSettingsWithReminderToday
+    );
 
     return {
       userIdsForAppNotification,
@@ -90,5 +84,37 @@ export class UserSettingsService {
     );
 
     return updatedSettings;
+  }
+
+  private async _getUsersWithReminderToday(): Promise<UserSettings[]> {
+    const currentDay = this._dateService.getCurrentDay();
+
+    let datesQuery: Array<{ reminderDate: number }>;
+
+    /* If its the last day of the month, fetch all reminder dates that fall after this day on this month */
+    if (this._dateService.isLastDayOfTheMonth()) {
+      datesQuery = range(currentDay, 32).map((day) => ({ reminderDate: day }));
+    } else {
+      datesQuery = [{ reminderDate: currentDay }];
+    }
+
+    const settings = await this._userSettingsRepo
+      .find({
+        $or: datesQuery
+      })
+      .populate('user');
+
+    return settings;
+  }
+
+  private _getUserEmailsForEmailNotifications(
+    userSettingsWithReminderToday: Array<UserSettings>
+  ): Array<IEmailUserDetails> {
+    return userSettingsWithReminderToday
+      .filter((settings: UserSettings) => settings.enableEmailNotifications)
+      .map((settings) => ({
+        email: (settings.user as User).email,
+        name: (settings.user as User).name
+      }));
   }
 }
