@@ -20,7 +20,7 @@ export class TasksService {
     Cron job scheduled to run every day at 9am that sends a monthly log reminder if
     the current date matches the date specified in the user settings
   */
-  @Cron('0 0 9 * * *')
+  @Cron('0 0 8 * * *')
   public async sendLogReminder() {
     Logger.log('Checking for log reminders', AuthService.name);
 
