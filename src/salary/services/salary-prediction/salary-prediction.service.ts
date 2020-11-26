@@ -39,10 +39,20 @@ export class SalaryPredictionService {
       settings.salaryPensionContribution
     );
     // This was 'fromYearlySalary' before - it seems to get it closer to the estimates given online but still around 0.02 off.
-    const incomeTax = this._incomeTaxService.getMonthlyIncomeTaxFromMonthlySalary(
-      MathsService.floor0(grossSalary),
-      data.date
-    );
+
+    let incomeTax: number;
+
+    if (settings.salaryPensionBeforeTax) {
+      incomeTax = this._incomeTaxService.getMonthlyIncomeTaxFromMonthlySalary(
+        MathsService.floor0(grossSalary - pensionContributions),
+        data.date
+      );
+    } else {
+      incomeTax = this._incomeTaxService.getMonthlyIncomeTaxFromMonthlySalary(
+        MathsService.floor0(grossSalary),
+        data.date
+      );
+    }
 
     const netSalary = this.calculateNetSalary(grossSalary, [
       incomeTax,

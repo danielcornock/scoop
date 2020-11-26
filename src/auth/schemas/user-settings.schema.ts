@@ -26,6 +26,9 @@ export class UserSettings extends Document {
   @Prop({ type: Boolean, default: true })
   enableEmailNotifications?: boolean;
 
+  @Prop({ type: Boolean, default: true })
+  enableEmailNewsletters?: boolean;
+
   @Prop({ type: Number, default: 1 })
   reminderDate?: number;
 }

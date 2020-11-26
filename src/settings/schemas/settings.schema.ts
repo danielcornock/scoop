@@ -35,6 +35,9 @@ export class Settings extends Document {
 
   @Prop({ default: 0, type: Number })
   salaryPensionContribution?: number;
+
+  @Prop({ type: Boolean, default: true })
+  salaryPensionBeforeTax?: boolean;
 }
 
 export const SettingsSchema = SchemaFactory.createForClass(Settings).index({
