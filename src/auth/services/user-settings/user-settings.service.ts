@@ -53,9 +53,9 @@ export class UserSettingsService {
     };
   }
 
-  public async getUsersWithEmailNotificationsActive(): Promise<Array<string>> {
+  public async getUsersWithEmailNewslettersActive(): Promise<Array<string>> {
     const users = await this._userSettingsRepo
-      .find({ enableEmailNotifications: true })
+      .find({ enableEmailNewsletters: true })
       .populate('user');
 
     return users

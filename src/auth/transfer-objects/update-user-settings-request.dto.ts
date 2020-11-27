@@ -16,6 +16,9 @@ export class UpdateUserSettingsRequest {
   @IsBoolean()
   enableEmailNotifications: boolean;
 
+  @IsBoolean()
+  enableEmailNewsletters: boolean;
+
   @IsNumber()
   @Min(1)
   @Max(31)

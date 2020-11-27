@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  ForbiddenException,
-  Get,
-  Param,
-  Post,
-  UseGuards
-} from '@nestjs/common';
+import { Body, Controller, Delete, ForbiddenException, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { SendNewsletterRequest } from 'src/admin/transfer-objects/send-newsletter-request.dto';
 import { AdminGuard } from 'src/auth/guards/admin/admin.guard';
 import { AuthGuard } from 'src/auth/guards/auth/auth.guard';
@@ -19,7 +10,9 @@ import { UserId } from 'src/common/decorators/user-id.decorator';
 import { HttpResponse } from 'src/common/interfaces/http-response.interface';
 import { EmailService } from 'src/common/services/email/email.service';
 import { InvestmentsService } from 'src/investments/services/investments/investments.service';
-import { MonthlyDistributionService } from 'src/monthly-distribution/services/monthly-distribution/monthly-distribution.service';
+import {
+  MonthlyDistributionService,
+} from 'src/monthly-distribution/services/monthly-distribution/monthly-distribution.service';
 import { NetWorthService } from 'src/net-worth/services/net-worth/net-worth.service';
 import { Notification } from 'src/notifications/schemas/notifications.schema';
 import { NotificationsService } from 'src/notifications/services/notifications/notifications.service';
@@ -59,7 +52,7 @@ export class AdminController {
   public async sendNewsletter(
     @Body() body: SendNewsletterRequest
   ): Promise<void> {
-    const userEmails = await this._userSettingsService.getUsersWithEmailNotificationsActive();
+    const userEmails = await this._userSettingsService.getUsersWithEmailNewslettersActive();
 
     await this._emailService.sendBatchEmail({
       to: userEmails,
