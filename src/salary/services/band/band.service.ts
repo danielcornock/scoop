@@ -74,12 +74,10 @@ export class BandService {
       return taxBands;
     }
 
-    const taxFreeAllowance = parseInt(taxCode) * 10;
+    const taxFreeAllowance = parseInt(taxCode.slice(0, 4)) * 10;
 
     taxBands[0].max = taxFreeAllowance;
     taxBands[1].min = taxFreeAllowance;
-
-    console.log(taxBands);
 
     return taxBands;
   }
