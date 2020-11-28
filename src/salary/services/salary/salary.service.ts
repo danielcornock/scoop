@@ -6,6 +6,7 @@ import { DatabaseErrorsService } from 'src/common/services/database-errors/datab
 import { MathsService } from 'src/common/services/maths/maths.service';
 import { Salary } from 'src/salary/schemas/salary.schema';
 import { SalaryCreateRequest } from 'src/salary/transfer-objects/salary-create-request.dto';
+import { SettingsService } from 'src/settings/services/settings/settings.service';
 
 import { IncomeTaxService } from '../income-tax/income-tax.service';
 import { SalaryPredictionService } from '../salary-prediction/salary-prediction.service';
@@ -18,7 +19,8 @@ export class SalaryService {
     private readonly _salaryRepo: Model<Salary>,
     private readonly _salaryPredictionService: SalaryPredictionService,
     private readonly _incomeTaxService: IncomeTaxService,
-    private readonly _taxReturnProjectionService: TaxReturnProjectionService
+    private readonly _taxReturnProjectionService: TaxReturnProjectionService,
+    private readonly _settingsService: SettingsService
   ) {}
 
   public async createLogEntry(
@@ -63,7 +65,10 @@ export class SalaryService {
   }
 
   public async getSalarySummaryItems(user: string): Promise<any> {
-    const currentYearEntries = await this._getItemsFromCurrentTaxYear(user);
+    const [currentYearEntries, { salaryTaxCode }] = await Promise.all([
+      this._getItemsFromCurrentTaxYear(user),
+      this._settingsService.getSettings(user)
+    ]);
 
     if (!currentYearEntries.length) {
       return null;
@@ -79,12 +84,13 @@ export class SalaryService {
       currentYearEntries
     );
 
-    const projectedTaxReturn = this._taxReturnProjectionService.getProjectedTaxReturn(
+    const projectedTaxReturn = await this._taxReturnProjectionService.getProjectedTaxReturn(
       {
         latestSalary: currentYearEntries[0].grossSalary,
         latestSalaryDate: currentYearEntries[0].date,
         taxAlreadyPaid,
-        totalEarnedSoFar: grossSalaryThisYear
+        totalEarnedSoFar: grossSalaryThisYear,
+        taxCode: salaryTaxCode
       }
     );
 

@@ -5,14 +5,14 @@ import {
   GetProjectedSalaryConfig,
   GetProjectedTaxReturnConfig,
   GetProjectedYearlyIncomeTaxConfig,
-  GetRemainingTaxToBePaidConfig
+  GetRemainingTaxToBePaidConfig,
 } from './interfaces/tax-return-projection.interface';
 
 @Injectable()
 export class TaxReturnProjectionService {
   constructor(private readonly _incomeTaxService: IncomeTaxService) {}
 
-  public getProjectedTaxReturn(config: GetProjectedTaxReturnConfig) {
+  public async getProjectedTaxReturn(config: GetProjectedTaxReturnConfig) {
     const remainingMonths = this._getRemainingMonthsInTaxYear(
       config.latestSalaryDate
     );
@@ -20,14 +20,16 @@ export class TaxReturnProjectionService {
     const projectedRemainingTaxToPay = this._getRemainingTaxToBePaid({
       latestSalary: config.latestSalary,
       latestSalaryDate: config.latestSalaryDate,
-      remainingMonths
+      remainingMonths,
+      taxCode: config.taxCode
     });
 
     const projectedYearlyIncomeTax = this._getProjectedYearlyIncomeTax({
       remainingMonths,
       latestSalary: config.latestSalary,
       latestSalaryDate: config.latestSalaryDate,
-      totalEarnedSoFar: config.totalEarnedSoFar
+      totalEarnedSoFar: config.totalEarnedSoFar,
+      taxCode: config.taxCode
     });
 
     const totalTaxPaidByEndOfYear =
@@ -60,7 +62,8 @@ export class TaxReturnProjectionService {
 
     return this._incomeTaxService.getYearlyIncomeTaxFromYearlySalary(
       projectedSalary,
-      config.latestSalaryDate
+      config.latestSalaryDate,
+      config.taxCode
     );
   }
 
@@ -70,7 +73,8 @@ export class TaxReturnProjectionService {
     return (
       this._incomeTaxService.getMonthlyIncomeTaxFromMonthlySalary(
         config.latestSalary,
-        config.latestSalaryDate
+        config.latestSalaryDate,
+        config.taxCode
       ) * config.remainingMonths
     );
   }

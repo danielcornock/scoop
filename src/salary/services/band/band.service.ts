@@ -8,9 +8,11 @@ import { TaxBand, TaxBands } from 'src/salary/interfaces/tax-band.interface';
 
 @Injectable()
 export class BandService {
-  public getTaxBands(date: string): TaxBands {
+  public getTaxBands(date: string, taxCode: string): TaxBands {
     const taxYearStart = this._getTaxYearStart(date);
-    const bands: TaxBands = taxBands[taxYearStart];
+
+    let bands: TaxBands = taxBands[taxYearStart];
+    bands = this._processCustomTaxCode(bands, taxCode);
 
     return bands;
   }
@@ -65,5 +67,20 @@ export class BandService {
     }
 
     return year;
+  }
+
+  private _processCustomTaxCode(taxBands: TaxBands, taxCode: string): TaxBands {
+    if (!taxCode) {
+      return taxBands;
+    }
+
+    const taxFreeAllowance = parseInt(taxCode) * 10;
+
+    taxBands[0].max = taxFreeAllowance;
+    taxBands[1].min = taxFreeAllowance;
+
+    console.log(taxBands);
+
+    return taxBands;
   }
 }

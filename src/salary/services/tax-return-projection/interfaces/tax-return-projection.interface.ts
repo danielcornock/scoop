@@ -8,6 +8,7 @@ export interface GetRemainingTaxToBePaidConfig {
   remainingMonths: number;
   latestSalary: number;
   latestSalaryDate: string;
+  taxCode: string;
 }
 
 export interface GetProjectedTaxReturnConfig {
@@ -15,6 +16,7 @@ export interface GetProjectedTaxReturnConfig {
   latestSalary: number;
   latestSalaryDate: string;
   taxAlreadyPaid: number;
+  taxCode: string;
 }
 
 export interface GetProjectedYearlyIncomeTaxConfig {
@@ -22,4 +24,5 @@ export interface GetProjectedYearlyIncomeTaxConfig {
   latestSalary: number;
   totalEarnedSoFar: number;
   latestSalaryDate: string;
+  taxCode: string;
 }

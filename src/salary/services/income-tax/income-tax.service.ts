@@ -10,9 +10,10 @@ export class IncomeTaxService {
 
   public getMonthlyIncomeTaxFromAnnualSalary(
     annualSalary: number,
-    date: string
+    date: string,
+    taxCode: string
   ) {
-    const yearlyTax = this._getRawYearlyTax(annualSalary, date);
+    const yearlyTax = this._getRawYearlyTax(annualSalary, date, taxCode);
 
     const monthlyTax = yearlyTax / 12;
 
@@ -21,13 +22,15 @@ export class IncomeTaxService {
 
   public getMonthlyIncomeTaxFromMonthlySalary(
     monthlySalary: number,
-    date: string
+    date: string,
+    taxCode: string
   ): number {
     const annualSalary = MathsService.round1(monthlySalary * 12);
 
     const updatedMonthlySalary = this.getMonthlyIncomeTaxFromAnnualSalary(
       annualSalary,
-      date
+      date,
+      taxCode
     );
 
     return MathsService.round2(updatedMonthlySalary);
@@ -35,9 +38,10 @@ export class IncomeTaxService {
 
   public getYearlyIncomeTaxFromYearlySalary(
     annualSalary: number,
-    date: string
+    date: string,
+    taxCode: string
   ): number {
-    const rawYearlyTax = this._getRawYearlyTax(annualSalary, date);
+    const rawYearlyTax = this._getRawYearlyTax(annualSalary, date, taxCode);
 
     return rawYearlyTax;
   }
@@ -49,10 +53,14 @@ export class IncomeTaxService {
     );
   }
 
-  private _getRawYearlyTax(annualSalary: number, date: string): number {
+  private _getRawYearlyTax(
+    annualSalary: number,
+    date: string,
+    taxCode
+  ): number {
     return this._bandService.getYearlyPayment(
       annualSalary,
-      this._bandService.getTaxBands(date)
+      this._bandService.getTaxBands(date, taxCode)
     );
   }
 }

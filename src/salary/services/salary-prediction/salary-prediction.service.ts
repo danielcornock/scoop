@@ -45,12 +45,14 @@ export class SalaryPredictionService {
     if (settings.salaryPensionBeforeTax) {
       incomeTax = this._incomeTaxService.getMonthlyIncomeTaxFromMonthlySalary(
         MathsService.floor0(grossSalary - pensionContributions),
-        data.date
+        data.date,
+        settings.salaryTaxCode
       );
     } else {
       incomeTax = this._incomeTaxService.getMonthlyIncomeTaxFromMonthlySalary(
         MathsService.floor0(grossSalary),
-        data.date
+        data.date,
+        settings.salaryTaxCode
       );
     }
 
@@ -84,7 +86,7 @@ export class SalaryPredictionService {
       this._bandService.getNationalInsuranceBands(date)
     );
 
-    return MathsService.floor0(yearlyNationalInsurance / 12);
+    return MathsService.round2(yearlyNationalInsurance / 12);
   }
 
   private _getstudentFinance(
