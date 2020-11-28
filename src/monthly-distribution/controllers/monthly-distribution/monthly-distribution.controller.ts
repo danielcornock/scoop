@@ -56,10 +56,17 @@ export class MonthlyDistributionController {
       data
     );
 
+    const uncommittedSpendingData = this._monthlyDistributionService.getUncommittedSpendingChartData(
+      data
+    );
+
+    console.log(uncommittedSpendingData);
+
     const meta: IMonthlyDistributionMeta = {
       fields: ['date', ...incomeFields, ...outgoingFields, 'remaining'],
       preferredCurrency,
-      allTimeDistribution
+      allTimeDistribution,
+      uncommittedSpendingData
     };
 
     return { data, meta };

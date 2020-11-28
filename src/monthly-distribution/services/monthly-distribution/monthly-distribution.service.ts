@@ -40,6 +40,7 @@ export class MonthlyDistributionService {
   public async deleteOne(user: string, date: string): Promise<void> {
     await this._monthlyDistributionRepo.deleteOne({ user, date });
   }
+
   public async getAll(user: string): Promise<MonthlyDistribution[]> {
     const data = await this._monthlyDistributionRepo
       .find({ user })
@@ -66,6 +67,26 @@ export class MonthlyDistributionService {
 
         return prev;
       }, {});
+  }
+
+  public getUncommittedSpendingChartData(
+    items: MonthlyDistribution[]
+  ): Array<{ date: string; value: number }> {
+    const data = items.map((item, index, arr) => {
+      if (!arr[index - 1]) {
+        return;
+      }
+
+      return {
+        date: arr[index].date,
+        value: item.remaining - arr[index - 1].income['balance carried']
+      };
+    });
+
+    /* First entry is a bogus one */
+    data.shift();
+
+    return data;
   }
 
   private async _processIncomeAndOutGoing(

@@ -37,9 +37,12 @@ export class SettingsService {
 
   public async getSettings(user: string): Promise<Settings> {
     const settings = await this._settingsRepo.findOne({ user });
+    const processedSettings = this._attachDefaultMonthlyDistributionValues(
+      settings
+    );
 
     if (settings) {
-      return settings;
+      return processedSettings;
     } else {
       return this.createSettings(user);
     }
@@ -86,5 +89,25 @@ export class SettingsService {
         'You must have exactly 4 summary options selected for net worth.'
       );
     }
+  }
+
+  private _attachDefaultMonthlyDistributionValues(
+    settings: Settings
+  ): Settings {
+    /* This definitely isn't ideal - these fields were removable before but now they need to be permanent */
+    const defaultMonthlyDistributionFields = {
+      monthlyDistributionIncomeFields: [
+        ...new Set([
+          'salary',
+          'balance carried',
+          ...settings.monthlyDistributionIncomeFields
+        ])
+      ]
+    };
+
+    return {
+      ...settings.toObject(),
+      ...defaultMonthlyDistributionFields
+    };
   }
 }
