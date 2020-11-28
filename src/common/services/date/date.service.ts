@@ -21,7 +21,6 @@ export class DateService {
 
   public getCurrentDay(): number {
     const date = new Date(Date.now());
-
     return date.getDate();
   }
 }

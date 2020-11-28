@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { forEach, isString } from 'lodash';
 import { Model } from 'mongoose';
+import { DateInstance } from 'src/common/instances/date-instance';
 import { DatabaseErrorsService } from 'src/common/services/database-errors/database-errors.service';
 import { MathsService } from 'src/common/services/maths/maths.service';
 import { Salary } from 'src/salary/schemas/salary.schema';
@@ -94,11 +94,17 @@ export class SalaryService {
       }
     );
 
+    const projectedGrossSalary = await this._calculatePredictedSalary(
+      grossSalaryThisYear,
+      currentYearEntries[0].date
+    );
+
     return {
       taxPaid: MathsService.round2(taxAlreadyPaid),
       grossSalary: MathsService.round2(grossSalaryThisYear),
       projectedTaxReturn: MathsService.round10(projectedTaxReturn),
-      netSalary: MathsService.round2(netSalaryThisYear)
+      netSalary: MathsService.round2(netSalaryThisYear),
+      projectedGrossSalary: MathsService.round2(projectedGrossSalary)
     };
   }
 
@@ -157,20 +163,13 @@ export class SalaryService {
     return data;
   }
 
-  private _processAllValuesToNumber(data: SalaryCreateRequest): Salary {
-    const newObj = {} as Salary;
+  private _calculatePredictedSalary(salarySoFar: number, date: string) {
+    const currentMonth = new DateInstance(date).getRealMonth();
 
-    forEach(data, (value: string | number, key: string) => {
-      if (key === 'date') {
-        newObj[key] = value as string;
-      } else if (isString(value)) {
-        newObj[key] = parseFloat(value);
-      } else {
-        newObj[key] = value || 0;
-      }
-    });
+    const monthsPassed =
+      currentMonth >= 4 ? currentMonth - 3 : currentMonth + 9;
 
-    return newObj;
+    return (salarySoFar / monthsPassed) * 12;
   }
 
   private async _checkIfEntryForMonthExists(
