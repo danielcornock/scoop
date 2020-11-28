@@ -60,8 +60,6 @@ export class MonthlyDistributionController {
       data
     );
 
-    console.log(uncommittedSpendingData);
-
     const meta: IMonthlyDistributionMeta = {
       fields: ['date', ...incomeFields, ...outgoingFields, 'remaining'],
       preferredCurrency,

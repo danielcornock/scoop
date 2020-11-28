@@ -56,17 +56,13 @@ export class MonthlyDistributionService {
   public getAllTimeDistribution(
     items: MonthlyDistribution[]
   ): Dictionary<number> {
-    return items
-      .map((item) => ({ ...item.outgoing }))
-      .reduce((prev, current) => {
-        forEach(current, (value, key) => {
-          prev[key] = value + (prev[key] || 0);
-        });
+    return items.reduce((prev, current) => {
+      forEach(current.outgoing, (value, key) => {
+        prev[key] = value + (prev[key] || 0);
+      });
 
-        prev.remaining = current.remaining = prev.remaining || 0;
-
-        return prev;
-      }, {});
+      return prev;
+    }, {});
   }
 
   public getUncommittedSpendingChartData(
