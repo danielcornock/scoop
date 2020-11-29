@@ -1,7 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { first, range } from 'lodash';
 import { Model } from 'mongoose';
 import { defaultIcons } from 'src/common/constants/default-icons.constant';
+import { DateInstance } from 'src/common/instances/date-instance';
+import { ILabelValue } from 'src/common/interfaces/label-value.interface';
+import { MathsService } from 'src/common/services/maths/maths.service';
 import { INetWorthCustomValues } from 'src/net-worth/interfaces/net-worth-log.interface';
 import { NetWorth } from 'src/net-worth/schemas/net-worth.schema';
 import { INetWorthCreate } from 'src/net-worth/transfer-objects/net-worth-create.dto';
@@ -127,7 +131,7 @@ export class NetWorthService {
   public getSortedAndGroupedValues(
     item: INetWorthCustomValues,
     fields: Array<string>
-  ): Array<{ value: number; label: string }> {
+  ): Array<ILabelValue> {
     const arrayOfFields = fields
       .map((fieldName) => {
         return { label: fieldName, value: item[fieldName] };
@@ -148,6 +152,35 @@ export class NetWorthService {
       /* Return the top 5 values alongside 'other' */
       return [...topValues, { label: 'Other', value: reducedValues }];
     }
+  }
+
+  public getProjectedNetWorth(
+    collection: NetWorthResponse[]
+  ): Array<ILabelValue> {
+    if (!collection?.length) {
+      return null;
+    }
+
+    const last3Entries = collection.slice(0, 3);
+
+    const last3MonthsAvgChange =
+      last3Entries.reduce((accum, { change }) => {
+        return accum + change;
+      }, 0) / last3Entries.length;
+
+    const lastEntry = first(collection);
+    const lastEntryDate = new DateInstance(lastEntry.date).toISOString();
+
+    return range(0, 4).map((index) => {
+      const newDate = new DateInstance(lastEntryDate);
+      newDate.addMonths(index);
+      const changeThisMonth = MathsService.round0(last3MonthsAvgChange * index);
+
+      return {
+        value: lastEntry.total + changeThisMonth,
+        label: newDate.getYearMonth()
+      };
+    });
   }
 
   public async getAllFieldsFromCurrentResourceAndActiveFields(

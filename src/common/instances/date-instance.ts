@@ -1,6 +1,6 @@
 export class DateInstance extends Date {
-  constructor(value?: string) {
-    super(value || Date.now());
+  constructor(...args: any) {
+    super(args || Date.now());
   }
 
   public getRealMonth(): number {
@@ -16,5 +16,22 @@ export class DateInstance extends Date {
     const currentDay = this.getDate();
 
     return currentDay === daysInCurrentMonth;
+  }
+
+  public getStringMonth(): string {
+    const month = this.getRealMonth();
+
+    return month < 10 ? `0${month}` : month.toString();
+  }
+
+  public getYearMonth(): string {
+    const year = this.getFullYear();
+    const month = this.getStringMonth();
+
+    return `${year}-${month}`;
+  }
+
+  public addMonths(amount: number): number {
+    return this.setMonth(this.getMonth() + amount);
   }
 }

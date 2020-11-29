@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-  UseGuards
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/guards/auth/auth.guard';
 import { UserSettingsService } from 'src/auth/services/user-settings/user-settings.service';
 import { UserId } from 'src/common/decorators/user-id.decorator';
@@ -98,14 +89,15 @@ export class NetWorthController {
         settings.netWorthFields
       );
 
-    const meta = {
+    const meta: INetWorthMeta = {
       fields: ['date', ...settings.netWorthFields, 'total', 'change'],
       preferredCurrency,
       summaryItems: this._netWorthService.getSummaryItemsMeta(
         data[0],
         settings.netWorthSummaryItems
       ),
-      barChartData
+      barChartData,
+      projectedNetWorth: this._netWorthService.getProjectedNetWorth(data)
     };
 
     return { data, meta };
