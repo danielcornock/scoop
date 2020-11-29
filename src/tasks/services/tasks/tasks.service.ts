@@ -41,7 +41,7 @@ export class TasksService {
     >> = userEmailsForEmailNotification.map((details: IEmailUserDetails) =>
       this._emailService.sendEmail({
         to: details.email,
-        subject: `Your monthly reminder from Scoop`,
+        subject: `It's time for you to update your logs! 🚀`,
         message: getMonthlyReminderTemplate(details.name)
       })
     );
