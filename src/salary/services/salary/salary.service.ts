@@ -99,12 +99,17 @@ export class SalaryService {
       currentYearEntries[0].date
     );
 
+    const netSalaryOverGrossSalary = netSalaryThisYear / grossSalaryThisYear;
+    const taxPercentage = taxAlreadyPaid / grossSalaryThisYear;
+
     return {
       taxPaid: MathsService.round2(taxAlreadyPaid),
       grossSalary: MathsService.round2(grossSalaryThisYear),
       projectedTaxReturn: MathsService.round10(projectedTaxReturn),
       netSalary: MathsService.round2(netSalaryThisYear),
-      projectedGrossSalary: MathsService.round2(projectedGrossSalary)
+      projectedGrossSalary: MathsService.round2(projectedGrossSalary),
+      netSalaryOverGrossSalary: MathsService.round2(netSalaryOverGrossSalary),
+      taxPercentage: MathsService.round2(taxPercentage)
     };
   }
 
