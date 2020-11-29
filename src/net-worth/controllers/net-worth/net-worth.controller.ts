@@ -3,9 +3,9 @@ import { AuthGuard } from 'src/auth/guards/auth/auth.guard';
 import { UserSettingsService } from 'src/auth/services/user-settings/user-settings.service';
 import { UserId } from 'src/common/decorators/user-id.decorator';
 import { HttpResponse } from 'src/common/interfaces/http-response.interface';
+import { INetWorthCustomValues } from 'src/net-worth/interfaces/net-worth-log.interface';
 import { INetWorthMeta } from 'src/net-worth/interfaces/net-worth-meta.interface';
 import { INetWorthSingleMeta } from 'src/net-worth/interfaces/net-worth-single-meta.interface';
-import { INetWorthUpdate } from 'src/net-worth/interfaces/net-worth-update.interface';
 import { NetWorth } from 'src/net-worth/schemas/net-worth.schema';
 import { NetWorthService } from 'src/net-worth/services/net-worth/net-worth.service';
 import { INetWorthCreate } from 'src/net-worth/transfer-objects/net-worth-create.dto';
@@ -52,12 +52,12 @@ export class NetWorthController {
   @Put('/:netWorthDate')
   public async updateLog(
     @UserId() userId: string,
-    @Body() body: INetWorthUpdate,
+    @Body() body: INetWorthCustomValues,
     @Param('netWorthDate') date: string
   ): HttpResponse<NetWorth> {
     const data = await this._netWorthService.updateLogByDate(
       date,
-      body.customValues,
+      body,
       userId
     );
 

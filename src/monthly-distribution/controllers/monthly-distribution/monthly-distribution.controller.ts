@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { Dictionary } from 'lodash';
 import { AuthGuard } from 'src/auth/guards/auth/auth.guard';
 import { UserSettingsService } from 'src/auth/services/user-settings/user-settings.service';
@@ -10,6 +10,7 @@ import {
   MonthlyDistributionService,
 } from 'src/monthly-distribution/services/monthly-distribution/monthly-distribution.service';
 import { MonthlyDistributionCreate } from 'src/monthly-distribution/transfer-objects/monthly-distribution-create.dto';
+import { MonthlyDistributionUpdate } from 'src/monthly-distribution/transfer-objects/monthly-distribution-update.dto';
 import { SettingsService } from 'src/settings/services/settings/settings.service';
 
 @Controller('monthly-distribution')
@@ -68,6 +69,55 @@ export class MonthlyDistributionController {
     };
 
     return { data, meta };
+  }
+
+  @Get('/:monthlyDistributionDate')
+  public async getOne(
+    @UserId() userId: string,
+    @Param('monthlyDistributionDate') date: string
+  ): HttpResponse<
+    MonthlyDistribution,
+    { incomeFields: string[]; outgoingFields: string[] }
+  > {
+    const data = await this._monthlyDistributionService.getSingleResource(
+      date,
+      userId
+    );
+
+    const settings = await this._settingsService.getSettings(userId);
+
+    const incomeFields = await this._monthlyDistributionService.getAllFieldsFromCurrentResourceAndActiveFields(
+      data.income,
+      settings.monthlyDistributionIncomeFields
+    );
+
+    const outgoingFields = await this._monthlyDistributionService.getAllFieldsFromCurrentResourceAndActiveFields(
+      data.outgoing,
+      settings.monthlyDistributionOutgoingFields
+    );
+
+    const meta = {
+      incomeFields,
+      outgoingFields
+    };
+
+    return { data, meta };
+  }
+
+  @Put('/:monthlyDistributionDate')
+  public async updateLog(
+    @UserId() userId: string,
+    @Body() body: MonthlyDistributionUpdate,
+    @Param('monthlyDistributionDate') date: string
+  ): HttpResponse<MonthlyDistribution> {
+    const data = await this._monthlyDistributionService.updateLogByDate(
+      date,
+      body.income,
+      body.outgoing,
+      userId
+    );
+
+    return { data };
   }
 
   @Delete('/:monthlyDistributionDate')

@@ -65,6 +65,58 @@ export class MonthlyDistributionService {
     }, {});
   }
 
+  public async getSingleResource(
+    date: string,
+    user: string
+  ): Promise<MonthlyDistribution> {
+    const entry = await this._monthlyDistributionRepo.findOne({ date, user });
+
+    return entry;
+  }
+
+  public async updateLogByDate(
+    date: string,
+    income: Dictionary<number>,
+    outgoing: Dictionary<number>,
+    user: string
+  ): Promise<MonthlyDistribution> {
+    const incomeValues = this._settingsService.processCustomValues(
+      income,
+      Object.keys(income)
+    );
+    const outgoingValues = this._settingsService.processCustomValues(
+      outgoing,
+      Object.keys(outgoing)
+    );
+
+    const remaining =
+      this._settingsService.getCustomValuesSum(incomeValues) -
+      this._settingsService.getCustomValuesSum(outgoingValues);
+
+    const newMonthlyDistributionLog = {
+      income,
+      outgoing,
+      remaining
+    };
+
+    const newData = await this._monthlyDistributionRepo.findOneAndUpdate(
+      { date, user },
+      newMonthlyDistributionLog,
+      {
+        new: true
+      }
+    );
+
+    return newData;
+  }
+
+  public async getAllFieldsFromCurrentResourceAndActiveFields(
+    existingEntries: Dictionary<number>,
+    settingsFields: string[]
+  ): Promise<Array<string>> {
+    return [...new Set([...settingsFields, ...Object.keys(existingEntries)])];
+  }
+
   public getUncommittedSpendingChartData(
     items: MonthlyDistribution[]
   ): Array<{ date: string; value: number }> {
