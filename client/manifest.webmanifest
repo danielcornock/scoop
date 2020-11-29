@@ -1,7 +1,7 @@
 {
   "name": "Scoop",
   "short_name": "Scoop",
-  "theme_color": "#3657dc",
+  "theme_color": "#ffffff",
   "background_color": "#ffffff",
   "display": "standalone",
   "scope": "./",
