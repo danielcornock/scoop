@@ -32,7 +32,7 @@ export abstract class BaseLogService<T extends DatedUserDocument> {
     return newData;
   }
 
-  public async deleteOne(date: string, user: string): Promise<void> {
+  public async deleteOne(user: string, date: string): Promise<void> {
     const res = await this._repo.deleteOne({ user, date } as any);
 
     if (res.deletedCount === 0) {
