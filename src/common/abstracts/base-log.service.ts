@@ -18,7 +18,11 @@ export abstract class BaseLogService<T extends DatedUserDocument> {
     return data;
   }
 
-  public async update(date: string, data: T, user: string): Promise<T> {
+  public async update(
+    date: string,
+    data: Partial<T>,
+    user: string
+  ): Promise<T> {
     const newData = await this._repo.findOneAndUpdate(
       { date, user } as any,
       data,

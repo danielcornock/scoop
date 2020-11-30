@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards
+} from '@nestjs/common';
 import { AuthGuard } from 'src/auth/guards/auth/auth.guard';
 import { UserSettingsService } from 'src/auth/services/user-settings/user-settings.service';
 import { UserId } from 'src/common/decorators/user-id.decorator';
@@ -8,6 +17,7 @@ import { Investment } from 'src/investments/schemas/investments.schema';
 import { InvestmentsService } from 'src/investments/services/investments/investments.service';
 import { InvestmentCreate } from 'src/investments/transfer-objects/investment-create.dto';
 import { InvestmentResponse } from 'src/investments/transfer-objects/investment-response.dto';
+import { InvestmentUpdate } from 'src/investments/transfer-objects/investment-update.dto';
 
 @Controller('investments')
 @UseGuards(AuthGuard)
@@ -41,6 +51,27 @@ export class InvestmentsController {
     };
 
     return { data, meta };
+  }
+
+  @Put('/:logDate')
+  public async updateLog(
+    @UserId() userId: string,
+    @Body() body: InvestmentUpdate,
+    @Param('logDate') date: string
+  ): HttpResponse<Investment> {
+    const data = await this._investmentsService.update(date, body, userId);
+
+    return { data };
+  }
+
+  @Get('/:logDate')
+  public async getOne(
+    @UserId() userId: string,
+    @Param('logDate') date: string
+  ): HttpResponse<Investment> {
+    const data = await this._investmentsService.getOne(date, userId);
+
+    return { data };
   }
 
   @Delete('/:logDate')
