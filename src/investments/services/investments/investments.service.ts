@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { isUndefined } from 'lodash';
 import { Model } from 'mongoose';
 import { BaseLogService } from 'src/common/abstracts/base-log.service';
 import { MathsService } from 'src/common/services/maths/maths.service';
@@ -22,44 +23,45 @@ export class InvestmentsService extends BaseLogService<Investment> {
     user: string
   ): Promise<Investment> {
     await this._checkIfEntryForMonthExists(user, data.date);
-    const [lastEntry] = await this.getAll(user);
-    const totalInvested = lastEntry
-      ? lastEntry.totalInvested + data.addedSinceLast
-      : data.addedSinceLast;
 
     return this._repo.create({
       date: data.date,
       addedSinceLast: data.addedSinceLast,
       totalValue: data.totalValue,
-      user,
-      profit: data.totalValue - totalInvested,
-      profitPercentage: MathsService.getPercentageDifference(
-        data.totalValue,
-        totalInvested
-      ),
-      totalInvested
+      user
     });
   }
 
   public async getAll(user: string): Promise<InvestmentResponse[]> {
-    const investments = await super.getAllSorted(user);
+    const investments = await this._repo.find({ user }).sort({ date: 'asc' });
 
-    return investments.map(this._mapInvestmentReturn.bind(this));
-  }
+    let totalInvested = 0;
+    let lastItemProfit;
 
-  private _mapInvestmentReturn(
-    item: Investment,
-    index: number,
-    arr: Investment[]
-  ): InvestmentResponse {
-    const previousItem = arr[index + 1];
-    const profitChangeSinceLast = previousItem
-      ? item.profit - previousItem.profit
-      : 0;
+    return investments
+      .map((item) => {
+        totalInvested += item.addedSinceLast;
+        const profit = item.totalValue - totalInvested;
 
-    return {
-      ...item.toObject(),
-      profitChangeSinceLast
-    };
+        const profitChangeSinceLast = !isUndefined(lastItemProfit)
+          ? profit - lastItemProfit
+          : 0;
+
+        const profitPercentage = MathsService.getPercentageDifference(
+          item.totalValue,
+          totalInvested
+        );
+
+        lastItemProfit = profit;
+
+        return {
+          ...item.toObject(),
+          profitChangeSinceLast,
+          totalInvested,
+          profit,
+          profitPercentage
+        };
+      })
+      .reverse();
   }
 }

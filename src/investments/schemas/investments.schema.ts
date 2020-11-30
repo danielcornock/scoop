@@ -10,16 +10,7 @@ export class Investment extends Document {
   date: string;
 
   @Prop({ required: true })
-  totalInvested: number;
-
-  @Prop({ required: true })
   totalValue: number;
-
-  @Prop({ required: true })
-  profit: number;
-
-  @Prop({ required: true })
-  profitPercentage: number;
 
   @Prop({ required: true })
   addedSinceLast: number;
