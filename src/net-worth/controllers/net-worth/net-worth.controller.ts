@@ -74,11 +74,11 @@ export class NetWorthController {
   }
 
   @Delete('/:netWorthDate')
-  public deleteOne(
+  public async deleteOne(
     @UserId() user: string,
     @Param('netWorthDate') date: string
   ): Promise<void> {
-    return this._netWorthService.deleteOne(user, date);
+    await this._netWorthService.deleteOne(user, date);
   }
 
   @Get()

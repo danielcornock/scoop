@@ -151,10 +151,16 @@ export class NetWorthService extends BaseLogService<NetWorth> {
 
     const last3Entries = collection.slice(0, 3);
 
+    let amountToDivideBy = last3Entries.length;
+
+    if (collection.length <= 3 && first(last3Entries).change === 0) {
+      amountToDivideBy = collection.length - 1;
+    }
+
     const last3MonthsAvgChange =
       last3Entries.reduce((accum, { change }) => {
         return accum + change;
-      }, 0) / last3Entries.length;
+      }, 0) / amountToDivideBy;
 
     const lastEntry = first(collection);
     const lastEntryDate = new DateInstance(lastEntry.date).toISOString();
