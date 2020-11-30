@@ -1,18 +1,23 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Dictionary, forEach } from 'lodash';
 import { Model } from 'mongoose';
+import { BaseLogService } from 'src/common/abstracts/base-log.service';
 import { MonthlyDistribution } from 'src/monthly-distribution/schemas/monthly-distribution.schema';
 import { MonthlyDistributionCreate } from 'src/monthly-distribution/transfer-objects/monthly-distribution-create.dto';
 import { SettingsService } from 'src/settings/services/settings/settings.service';
 
 @Injectable()
-export class MonthlyDistributionService {
+export class MonthlyDistributionService extends BaseLogService<
+  MonthlyDistribution
+> {
   constructor(
     @InjectModel(MonthlyDistribution.name)
-    private readonly _monthlyDistributionRepo: Model<MonthlyDistribution>,
+    monthlyDistributionRepo: Model<MonthlyDistribution>,
     private readonly _settingsService: SettingsService
-  ) {}
+  ) {
+    super(monthlyDistributionRepo);
+  }
 
   public async createEntry(entry: MonthlyDistributionCreate, user: string) {
     await this._checkIfEntryForMonthExists(user, entry.date);
@@ -26,7 +31,7 @@ export class MonthlyDistributionService {
       this._settingsService.getCustomValuesSum(income) -
       this._settingsService.getCustomValuesSum(outgoing);
 
-    const data = this._monthlyDistributionRepo.create({
+    const data = this._repo.create({
       date: entry.date,
       outgoing,
       income,
@@ -35,22 +40,6 @@ export class MonthlyDistributionService {
     });
 
     return data;
-  }
-
-  public async deleteOne(user: string, date: string): Promise<void> {
-    await this._monthlyDistributionRepo.deleteOne({ user, date });
-  }
-
-  public async getAll(user: string): Promise<MonthlyDistribution[]> {
-    const data = await this._monthlyDistributionRepo
-      .find({ user })
-      .sort({ date: 'desc' });
-
-    return data;
-  }
-
-  public async removeAllAssociatedEntries(user: string): Promise<void> {
-    await this._monthlyDistributionRepo.deleteMany({ user });
   }
 
   public getAllTimeDistribution(
@@ -69,7 +58,7 @@ export class MonthlyDistributionService {
     date: string,
     user: string
   ): Promise<MonthlyDistribution> {
-    const entry = await this._monthlyDistributionRepo.findOne({ date, user });
+    const entry = await this._repo.findOne({ date, user });
 
     return entry;
   }
@@ -99,7 +88,7 @@ export class MonthlyDistributionService {
       remaining
     };
 
-    const newData = await this._monthlyDistributionRepo.findOneAndUpdate(
+    const newData = await this._repo.findOneAndUpdate(
       { date, user },
       newMonthlyDistributionLog,
       {
@@ -154,21 +143,5 @@ export class MonthlyDistributionService {
     );
 
     return { outgoing, income };
-  }
-
-  private async _checkIfEntryForMonthExists(
-    user: string,
-    date: string
-  ): Promise<void> {
-    const foundEntry = await this._monthlyDistributionRepo.findOne({
-      user,
-      date
-    });
-
-    if (foundEntry) {
-      throw new BadRequestException(
-        'An entry already exists for that month. Please remove your original entry if you wish to overwite it.'
-      );
-    }
   }
 }

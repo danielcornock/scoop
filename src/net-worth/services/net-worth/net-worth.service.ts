@@ -1,7 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { first, range } from 'lodash';
 import { Model } from 'mongoose';
+import { BaseLogService } from 'src/common/abstracts/base-log.service';
 import { defaultIcons } from 'src/common/constants/default-icons.constant';
 import { DateInstance } from 'src/common/instances/date-instance';
 import { ILabelValue } from 'src/common/interfaces/label-value.interface';
@@ -14,12 +15,14 @@ import { INetWorthSummaryItemConfig } from 'src/settings/interfaces/net-worth-su
 import { SettingsService } from 'src/settings/services/settings/settings.service';
 
 @Injectable()
-export class NetWorthService {
+export class NetWorthService extends BaseLogService<NetWorth> {
   constructor(
     @InjectModel(NetWorth.name)
-    private readonly _netWorthRepo: Model<NetWorth>,
+    netWorthRepo: Model<NetWorth>,
     private readonly _settingsService: SettingsService
-  ) {}
+  ) {
+    super(netWorthRepo);
+  }
 
   public async createEntry(
     entry: INetWorthCreate,
@@ -36,7 +39,7 @@ export class NetWorthService {
       customValues
     );
 
-    const data = this._netWorthRepo.create({
+    const data = this._repo.create({
       date: entry.date,
       user,
       customValues,
@@ -63,7 +66,7 @@ export class NetWorthService {
       total: sumOfAllFields
     };
 
-    const newData = await this._netWorthRepo.findOneAndUpdate(
+    const newData = await this._repo.findOneAndUpdate(
       { date, user },
       newNetWorthLog,
       {
@@ -72,15 +75,6 @@ export class NetWorthService {
     );
 
     return newData;
-  }
-
-  public async getNetWorthLogEntry(
-    date: string,
-    user: string
-  ): Promise<NetWorth> {
-    const entry = await this._netWorthRepo.findOne({ date, user });
-
-    return entry;
   }
 
   public getSummaryItemsMeta(
@@ -107,14 +101,8 @@ export class NetWorthService {
     });
   }
 
-  public async deleteOne(user: string, date: string): Promise<void> {
-    await this._netWorthRepo.deleteOne({ user, date });
-  }
-
   public async getAll(user: string): Promise<NetWorthResponse[]> {
-    const allEntries = await this._netWorthRepo
-      .find({ user })
-      .sort({ date: 'desc' });
+    const allEntries = await super.getAllSorted(user);
 
     return allEntries.map(
       (entry: NetWorth, index: number, array: NetWorth[]) => {
@@ -198,22 +186,6 @@ export class NetWorthService {
   }
 
   public async removeAllAssociatedEntries(user: string): Promise<void> {
-    await this._netWorthRepo.deleteMany({ user });
-  }
-
-  private async _checkIfEntryForMonthExists(
-    user: string,
-    date: string
-  ): Promise<void> {
-    const foundEntry = await this._netWorthRepo.findOne({
-      user,
-      date
-    });
-
-    if (foundEntry) {
-      throw new BadRequestException(
-        'An entry already exists for that month. Please remove your original entry if you wish to overwite it.'
-      );
-    }
+    await this._repo.deleteMany({ user });
   }
 }

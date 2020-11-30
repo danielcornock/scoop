@@ -1,6 +1,7 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { BaseLogService } from 'src/common/abstracts/base-log.service';
 import { MathsService } from 'src/common/services/maths/maths.service';
 import { Investment } from 'src/investments/schemas/investments.schema';
 import { InvestmentResponse } from 'src/investments/transfer-objects/investment-response.dto';
@@ -8,11 +9,13 @@ import { InvestmentResponse } from 'src/investments/transfer-objects/investment-
 import { InvestmentCreate } from '../../transfer-objects/investment-create.dto';
 
 @Injectable()
-export class InvestmentsService {
+export class InvestmentsService extends BaseLogService<Investment> {
   constructor(
     @InjectModel(Investment.name)
-    private readonly _investmentsRepo: Model<Investment>
-  ) {}
+    investmentsRepo: Model<Investment>
+  ) {
+    super(investmentsRepo);
+  }
 
   public async createLog(
     data: InvestmentCreate,
@@ -24,7 +27,7 @@ export class InvestmentsService {
       ? lastEntry.totalInvested + data.addedSinceLast
       : data.addedSinceLast;
 
-    return this._investmentsRepo.create({
+    return this._repo.create({
       date: data.date,
       addedSinceLast: data.addedSinceLast,
       totalValue: data.totalValue,
@@ -38,18 +41,8 @@ export class InvestmentsService {
     });
   }
 
-  public async deleteOne(user: string, date: string): Promise<void> {
-    await this._investmentsRepo.deleteOne({ user, date });
-  }
-
-  public async removeAllAssociatedEntries(user: string): Promise<void> {
-    await this._investmentsRepo.deleteMany({ user });
-  }
-
   public async getAll(user: string): Promise<InvestmentResponse[]> {
-    const investments = await this._investmentsRepo
-      .find({ user })
-      .sort({ date: 'desc' });
+    const investments = await super.getAllSorted(user);
 
     return investments.map(this._mapInvestmentReturn.bind(this));
   }
@@ -68,21 +61,5 @@ export class InvestmentsService {
       ...item.toObject(),
       profitChangeSinceLast
     };
-  }
-
-  private async _checkIfEntryForMonthExists(
-    user: string,
-    date: string
-  ): Promise<void> {
-    const foundEntry = await this._investmentsRepo.findOne({
-      user,
-      date
-    });
-
-    if (foundEntry) {
-      throw new BadRequestException(
-        'An entry already exists for that month. Please remove your original entry if you wish to overwite it.'
-      );
-    }
   }
 }

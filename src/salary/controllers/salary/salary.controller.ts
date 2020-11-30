@@ -1,4 +1,13 @@
-import { BadRequestException, Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UseGuards
+} from '@nestjs/common';
 import { AuthGuard } from 'src/auth/guards/auth/auth.guard';
 import { UserSettingsService } from 'src/auth/services/user-settings/user-settings.service';
 import { UserId } from 'src/common/decorators/user-id.decorator';
@@ -69,7 +78,7 @@ export class SalaryController {
     @UserId() userId: string
   ): HttpResponse<Salary[], ISalaryMeta> {
     const [data, preferredCurrency, summaryItems] = await Promise.all([
-      this._salaryService.getAll(userId),
+      this._salaryService.getAllSorted(userId),
       this._userSettingsService.getPreferredCurrency(userId),
       this._salaryService.getSalarySummaryItems(userId)
     ]);

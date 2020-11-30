@@ -5,10 +5,10 @@ import { SettingsModule } from 'src/settings/settings.module';
 
 import { SalaryController } from './controllers/salary/salary.controller';
 import { Salary, SalarySchema } from './schemas/salary.schema';
+import { BandService } from './services/band/band.service';
 import { IncomeTaxService } from './services/income-tax/income-tax.service';
 import { SalaryPredictionService } from './services/salary-prediction/salary-prediction.service';
 import { SalaryService } from './services/salary/salary.service';
-import { BandService } from './services/band/band.service';
 import { TaxReturnProjectionService } from './services/tax-return-projection/tax-return-projection.service';
 
 @Module({
@@ -24,6 +24,7 @@ import { TaxReturnProjectionService } from './services/tax-return-projection/tax
     IncomeTaxService,
     BandService,
     TaxReturnProjectionService
-  ]
+  ],
+  exports: [SalaryService]
 })
 export class SalaryModule {}

@@ -5,6 +5,7 @@ import { InvestmentsModule } from 'src/investments/investments.module';
 import { MonthlyDistributionModule } from 'src/monthly-distribution/monthly-distribution.module';
 import { NetWorthModule } from 'src/net-worth/net-worth.module';
 import { NotificationsModule } from 'src/notifications/notifications.module';
+import { SalaryModule } from 'src/salary/salary.module';
 import { SettingsModule } from 'src/settings/settings.module';
 
 import { AdminController } from './controllers/admin/admin.controller';
@@ -17,7 +18,8 @@ import { AdminController } from './controllers/admin/admin.controller';
     InvestmentsModule,
     MonthlyDistributionModule,
     SettingsModule,
-    CommonModule
+    CommonModule,
+    SalaryModule
   ],
   controllers: [AdminController]
 })

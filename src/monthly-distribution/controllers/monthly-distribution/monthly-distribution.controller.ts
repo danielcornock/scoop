@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards
+} from '@nestjs/common';
 import { Dictionary } from 'lodash';
 import { AuthGuard } from 'src/auth/guards/auth/auth.guard';
 import { UserSettingsService } from 'src/auth/services/user-settings/user-settings.service';
@@ -6,9 +15,7 @@ import { UserId } from 'src/common/decorators/user-id.decorator';
 import { HttpResponse } from 'src/common/interfaces/http-response.interface';
 import { IMonthlyDistributionMeta } from 'src/monthly-distribution/interfaces/monthly-distribution-meta.interface';
 import { MonthlyDistribution } from 'src/monthly-distribution/schemas/monthly-distribution.schema';
-import {
-  MonthlyDistributionService,
-} from 'src/monthly-distribution/services/monthly-distribution/monthly-distribution.service';
+import { MonthlyDistributionService } from 'src/monthly-distribution/services/monthly-distribution/monthly-distribution.service';
 import { MonthlyDistributionCreate } from 'src/monthly-distribution/transfer-objects/monthly-distribution-create.dto';
 import { MonthlyDistributionUpdate } from 'src/monthly-distribution/transfer-objects/monthly-distribution-update.dto';
 import { SettingsService } from 'src/settings/services/settings/settings.service';
@@ -37,7 +44,7 @@ export class MonthlyDistributionController {
     @UserId() user: string
   ): HttpResponse<MonthlyDistribution[], IMonthlyDistributionMeta> {
     const [rawData, settings, preferredCurrency] = await Promise.all([
-      this._monthlyDistributionService.getAll(user),
+      this._monthlyDistributionService.getAllSorted(user),
       this._settingsService.getSettings(user),
       this._userSettingsService.getPreferredCurrency(user)
     ]);

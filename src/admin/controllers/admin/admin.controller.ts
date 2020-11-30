@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, ForbiddenException, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  ForbiddenException,
+  Get,
+  Param,
+  Post,
+  UseGuards
+} from '@nestjs/common';
 import { SendNewsletterRequest } from 'src/admin/transfer-objects/send-newsletter-request.dto';
 import { AdminGuard } from 'src/auth/guards/admin/admin.guard';
 import { AuthGuard } from 'src/auth/guards/auth/auth.guard';
@@ -10,13 +19,12 @@ import { UserId } from 'src/common/decorators/user-id.decorator';
 import { HttpResponse } from 'src/common/interfaces/http-response.interface';
 import { EmailService } from 'src/common/services/email/email.service';
 import { InvestmentsService } from 'src/investments/services/investments/investments.service';
-import {
-  MonthlyDistributionService,
-} from 'src/monthly-distribution/services/monthly-distribution/monthly-distribution.service';
+import { MonthlyDistributionService } from 'src/monthly-distribution/services/monthly-distribution/monthly-distribution.service';
 import { NetWorthService } from 'src/net-worth/services/net-worth/net-worth.service';
 import { Notification } from 'src/notifications/schemas/notifications.schema';
 import { NotificationsService } from 'src/notifications/services/notifications/notifications.service';
 import { CreateCustomNotification } from 'src/notifications/transfer-objects/create-custom-notification.dto';
+import { SalaryService } from 'src/salary/services/salary/salary.service';
 import { SettingsService } from 'src/settings/services/settings/settings.service';
 
 @Controller('admin')
@@ -31,7 +39,8 @@ export class AdminController {
     private readonly _monthlyDistributionService: MonthlyDistributionService,
     private readonly _userSettingsService: UserSettingsService,
     private readonly _settingsService: SettingsService,
-    private readonly _emailService: EmailService
+    private readonly _emailService: EmailService,
+    private readonly _salaryService: SalaryService
   ) {}
 
   @Post('notifications/global')
@@ -86,7 +95,8 @@ export class AdminController {
       this._netWorthService.removeAllAssociatedEntries(userId),
       this._investmentsService.removeAllAssociatedEntries(userId),
       this._monthlyDistributionService.removeAllAssociatedEntries(userId),
-      this._notificationsService.removeAllAssociatedEntries(userId)
+      this._notificationsService.removeAllAssociatedEntries(userId),
+      this._salaryService.removeAllAssociatedEntries(userId)
     ]);
   }
 }

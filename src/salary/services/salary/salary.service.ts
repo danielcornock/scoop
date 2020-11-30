@@ -1,6 +1,7 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { BaseLogService } from 'src/common/abstracts/base-log.service';
 import { DateInstance } from 'src/common/instances/date-instance';
 import { DatabaseErrorsService } from 'src/common/services/database-errors/database-errors.service';
 import { MathsService } from 'src/common/services/maths/maths.service';
@@ -13,15 +14,17 @@ import { SalaryPredictionService } from '../salary-prediction/salary-prediction.
 import { TaxReturnProjectionService } from '../tax-return-projection/tax-return-projection.service';
 
 @Injectable()
-export class SalaryService {
+export class SalaryService extends BaseLogService<Salary> {
   constructor(
     @InjectModel(Salary.name)
-    private readonly _salaryRepo: Model<Salary>,
+    salaryRepo: Model<Salary>,
     private readonly _salaryPredictionService: SalaryPredictionService,
     private readonly _incomeTaxService: IncomeTaxService,
     private readonly _taxReturnProjectionService: TaxReturnProjectionService,
     private readonly _settingsService: SettingsService
-  ) {}
+  ) {
+    super(salaryRepo);
+  }
 
   public async createLogEntry(
     data: SalaryCreateRequest,
@@ -41,7 +44,7 @@ export class SalaryService {
     );
 
     try {
-      const salary = await this._salaryRepo.create({
+      const salary = await this._repo.create({
         date: data.date,
         grossSalary: data.grossSalary,
         incomeTax: data.incomeTax,
@@ -57,11 +60,6 @@ export class SalaryService {
     } catch (e) {
       DatabaseErrorsService.handle(e);
     }
-  }
-
-  public async getAll(user: string): Promise<Salary[]> {
-    const data = await this._salaryRepo.find({ user }).sort({ date: 'desc' });
-    return data;
   }
 
   public async getSalarySummaryItems(user: string): Promise<any> {
@@ -114,7 +112,7 @@ export class SalaryService {
   }
 
   public async getLatestEntry(user: string): Promise<Salary> {
-    const salary = await this._salaryRepo.find({ user }).sort({ date: 'desc' });
+    const salary = await this._repo.find({ user }).sort({ date: 'desc' });
 
     return salary[0];
   }
@@ -131,10 +129,6 @@ export class SalaryService {
       pensionContributions: data[0].pensionContributions,
       otherDeductions: data[0].otherDeductions
     };
-  }
-
-  public async deleteOne(user: string, date: string): Promise<void> {
-    await this._salaryRepo.deleteOne({ user, date });
   }
 
   private _getTotalGrossSalaryFromCollection(collection: Salary[]): number {
@@ -158,7 +152,7 @@ export class SalaryService {
 
     const taxYear = currentMonth >= 4 ? currentYear : currentYear - 1;
 
-    const data = await this._salaryRepo
+    const data = await this._repo
       .find({
         user,
         date: { $gte: `${taxYear}-04`, $lte: `${taxYear + 1}-03` }
@@ -175,21 +169,5 @@ export class SalaryService {
       currentMonth >= 4 ? currentMonth - 3 : currentMonth + 9;
 
     return (salarySoFar / monthsPassed) * 12;
-  }
-
-  private async _checkIfEntryForMonthExists(
-    user: string,
-    date: string
-  ): Promise<void> {
-    const foundEntry = await this._salaryRepo.findOne({
-      user,
-      date
-    });
-
-    if (foundEntry) {
-      throw new BadRequestException(
-        'An entry already exists for that month. Please remove your original entry if you wish to overwite it.'
-      );
-    }
   }
 }

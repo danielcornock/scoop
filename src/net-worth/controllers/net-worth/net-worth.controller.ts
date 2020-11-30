@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards
+} from '@nestjs/common';
 import { AuthGuard } from 'src/auth/guards/auth/auth.guard';
 import { UserSettingsService } from 'src/auth/services/user-settings/user-settings.service';
 import { UserId } from 'src/common/decorators/user-id.decorator';
@@ -36,7 +45,7 @@ export class NetWorthController {
     @UserId() userId: string,
     @Param('netWorthDate') date: string
   ): HttpResponse<NetWorth, INetWorthSingleMeta> {
-    const data = await this._netWorthService.getNetWorthLogEntry(date, userId);
+    const data = await this._netWorthService.getOne(date, userId);
     const fields = await this._netWorthService.getAllFieldsFromCurrentResourceAndActiveFields(
       userId,
       data
