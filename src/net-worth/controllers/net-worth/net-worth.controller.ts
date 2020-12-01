@@ -16,6 +16,7 @@ import { INetWorthCustomValues } from 'src/net-worth/interfaces/net-worth-log.in
 import { INetWorthMeta } from 'src/net-worth/interfaces/net-worth-meta.interface';
 import { INetWorthSingleMeta } from 'src/net-worth/interfaces/net-worth-single-meta.interface';
 import { NetWorth } from 'src/net-worth/schemas/net-worth.schema';
+import { NetWorthProjectionService } from 'src/net-worth/services/net-worth-projection/net-worth-projection.service';
 import { NetWorthService } from 'src/net-worth/services/net-worth/net-worth.service';
 import { INetWorthCreate } from 'src/net-worth/transfer-objects/net-worth-create.dto';
 import { NetWorthResponse } from 'src/net-worth/transfer-objects/net-worth-response.dto';
@@ -27,7 +28,8 @@ export class NetWorthController {
   constructor(
     private readonly _netWorthService: NetWorthService,
     private readonly _settingsService: SettingsService,
-    private readonly _userSettingsService: UserSettingsService
+    private readonly _userSettingsService: UserSettingsService,
+    private readonly _netWorthProjectionService: NetWorthProjectionService
   ) {}
 
   @Post()
@@ -106,7 +108,9 @@ export class NetWorthController {
         settings.netWorthSummaryItems
       ),
       barChartData,
-      projectedNetWorth: this._netWorthService.getProjectedNetWorth(data)
+      projectedNetWorth: this._netWorthProjectionService.getProjectedNetWorth(
+        data
+      )
     };
 
     return { data, meta };

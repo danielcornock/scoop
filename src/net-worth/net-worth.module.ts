@@ -6,6 +6,7 @@ import { SettingsModule } from 'src/settings/settings.module';
 import { NetWorthController } from './controllers/net-worth/net-worth.controller';
 import { NetWorth, NetWorthSchema } from './schemas/net-worth.schema';
 import { NetWorthService } from './services/net-worth/net-worth.service';
+import { NetWorthProjectionService } from './services/net-worth-projection/net-worth-projection.service';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { NetWorthService } from './services/net-worth/net-worth.service';
     AuthModule
   ],
   controllers: [NetWorthController],
-  providers: [NetWorthService],
+  providers: [NetWorthService, NetWorthProjectionService],
   exports: [NetWorthService]
 })
 export class NetWorthModule {}
