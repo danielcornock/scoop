@@ -34,6 +34,13 @@ export class NetWorthProjectionService {
       newDate.addMonths(index);
       const changeThisMonth = MathsService.round0(last3MonthsAvgChange * index);
 
+      if (!amountToDivideBy) {
+        return {
+          value: first(last3Entries).total,
+          label: newDate.getYearMonth()
+        };
+      }
+
       return {
         value: lastEntry.total + changeThisMonth,
         label: newDate.getYearMonth()
