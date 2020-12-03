@@ -1,4 +1,4 @@
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 import { Model } from 'mongoose';
 
 import { DatedUserDocument } from '../interfaces/database-log-model.interface';
@@ -33,13 +33,7 @@ export abstract class BaseLogService<T extends DatedUserDocument> {
   }
 
   public async deleteOne(user: string, date: string): Promise<void> {
-    const res = await this._repo.deleteOne({ user, date } as any);
-
-    if (res.deletedCount === 0) {
-      throw new NotFoundException(
-        'This item cannot be found, and therefore cannot be deleted.'
-      );
-    }
+    await this._repo.deleteOne({ user, date } as any);
   }
 
   public async removeAllAssociatedEntries(user: string): Promise<void> {
