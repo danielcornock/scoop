@@ -97,6 +97,11 @@ export class SalaryService extends BaseLogService<Salary> {
       currentYearEntries[0].date
     );
 
+    const projectedNetSalary = await this._calculatePredictedSalary(
+      netSalaryThisYear,
+      currentYearEntries[0].date
+    );
+
     const netSalaryOverGrossSalary = netSalaryThisYear / grossSalaryThisYear;
     const taxPercentage = taxAlreadyPaid / grossSalaryThisYear;
 
@@ -106,6 +111,7 @@ export class SalaryService extends BaseLogService<Salary> {
       projectedTaxReturn: MathsService.round10(projectedTaxReturn),
       netSalary: MathsService.round2(netSalaryThisYear),
       projectedGrossSalary: MathsService.round2(projectedGrossSalary),
+      projectedNetSalary: MathsService.round2(projectedNetSalary),
       netSalaryOverGrossSalary: MathsService.round2(netSalaryOverGrossSalary),
       taxPercentage: MathsService.round2(taxPercentage)
     };
