@@ -53,17 +53,6 @@
   font-size: 14px;
 }
 
-@mixin form-input-error-styles {
-  &.is-errored {
-    border-color: $color-form-input-error-border;
-    margin-bottom: 0;
-
-    &:focus {
-      outline-color: $color-form-input-error-border;
-    }
-  }
-}
-
 @mixin button-tertiary {
   @include button-reset;
   border: 2px solid $color-primary-gradient;
@@ -89,6 +78,10 @@
   font-weight: 500;
   padding: $spacing-10 $spacing-15;
   border-radius: $br-sm;
+
+  &:hover {
+    background-color: darken($color-primary, 10%);
+  }
 }
 
 @mixin page-subheading {
@@ -107,19 +100,6 @@
   margin-bottom: $spacing-20;
   max-width: 700px;
   line-height: 160%;
-}
-
-@mixin form-input {
-  display: block;
-  background-color: $color-form-input-background;
-  padding: 12px;
-  border: 1px solid $color-primary-gradient;
-  border-radius: $br-sm;
-  font-size: 18px;
-  width: 100%;
-  margin-bottom: 23px;
-
-  @include form-input-error-styles;
 }
 
 @mixin form-input-label {
@@ -298,5 +278,21 @@
 
   &:hover {
     background-color: darken($color-primary, 10%);
+  }
+}
+
+@mixin settings-save-button {
+  @include button-default;
+  position: fixed;
+  bottom: $spacing-30;
+  right: $spacing-30;
+  z-index: 100;
+  border-radius: $br-max;
+
+  @include media-phone {
+    /* To account for menu at botton */
+    bottom: 64px + $spacing-15;
+    right: $spacing-15;
+    padding: $spacing-15 $spacing-20;
   }
 }

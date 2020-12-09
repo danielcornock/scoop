@@ -52,14 +52,21 @@ export class EmailService {
       html: html(options.message)
     };
 
-    const email: nodemailer.SentMessageInfo = await this._transporter.sendMail(
-      mailOptions
-    );
+    try {
+      const email: nodemailer.SentMessageInfo = await this._transporter.sendMail(
+        mailOptions
+      );
 
-    Logger.log(
-      `Email successfully sent to ${email.accepted[0]}`,
-      'AppOperation'
-    );
+      Logger.log(
+        `Email successfully sent to ${email.accepted[0]}`,
+        EmailService.name
+      );
+    } catch {
+      Logger.error(
+        'There was an issue when sending the email.',
+        EmailService.name
+      );
+    }
   }
 
   public async sendBatchEmail(options: IEmailMultiOptions): Promise<void> {

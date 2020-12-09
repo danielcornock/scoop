@@ -11,7 +11,7 @@ export class BandService {
   public getTaxBands(date: string, taxCode: string): TaxBands {
     const taxYearStart = this._getTaxYearStart(date);
 
-    let bands: TaxBands = taxBands[taxYearStart];
+    let bands: TaxBands = taxBands[taxYearStart] || taxBands[2020];
     bands = this._processCustomTaxCode(bands, taxCode);
 
     return bands;

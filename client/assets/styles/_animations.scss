@@ -1,22 +1,27 @@
-.animate-list-item {
-  animation: enter-list 500ms forwards;
-  opacity: 0;
-  transform-origin: middle;
+.animate-page-in {
+  animation: enter-page 800ms forwards;
+
+  @media (prefers-reduced-motion) {
+    animation: initial;
+  }
+
+  .animate-list-item {
+    animation: enter-list 500ms forwards;
+    transform-origin: middle;
+
+    @media (prefers-reduced-motion) {
+      animation: initial;
+    }
+  }
 }
 
 @keyframes enter-list {
   from {
-    opacity: 0;
+    transform: scale(0.9);
   }
   to {
-    opacity: 1;
+    transform: scale(1);
   }
-}
-
-.animate-page-in {
-  animation: enter-page 500ms forwards;
-  opacity: 0;
-  transform-origin: top;
 }
 
 @keyframes enter-page {

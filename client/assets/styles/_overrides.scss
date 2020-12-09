@@ -33,6 +33,8 @@
 }
 
 .cdk-global-overlay-wrapper {
+  overflow-y: auto !important;
+
   @include media-phone {
     padding: $spacing-30;
   }
