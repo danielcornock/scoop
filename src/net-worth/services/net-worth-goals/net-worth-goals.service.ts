@@ -82,7 +82,7 @@ export class NetWorthGoalsService {
     fields: Array<string>
   ): number {
     return fields.reduce((accum, field) => {
-      return accum + netWorth[field] || netWorth.customValues[field] || 0;
+      return accum + (netWorth[field] || netWorth.customValues[field] || 0);
     }, 0);
   }
 }

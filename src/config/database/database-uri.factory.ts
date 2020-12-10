@@ -5,6 +5,7 @@ import {
   databaseUriString,
   devDatabaseUriString,
   isDevelopment,
+  isLocal,
   isProduction,
   localDatabaseUriString
 } from '../misc/env';
@@ -20,11 +21,13 @@ export function databaseUriFactory(): MongooseModuleOptions {
     return {
       uri: databaseUriString
     };
-  } else {
+  } else if (isLocal) {
     Logger.log('Connecting to LOCAL databasse', 'DatabaseFactory');
 
     return {
       uri: localDatabaseUriString
     };
+  } else {
+    throw new Error('Invalid environment set. Unable to connect to database.');
   }
 }
