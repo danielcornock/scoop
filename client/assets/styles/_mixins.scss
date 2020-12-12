@@ -288,11 +288,21 @@
   right: $spacing-30;
   z-index: 100;
   border-radius: $br-max;
+  animation: zoom-in 250ms forwards;
+  padding: $spacing-15 $spacing-20;
 
   @include media-phone {
     /* To account for menu at botton */
     bottom: 64px + $spacing-15;
     right: $spacing-15;
-    padding: $spacing-15 $spacing-20;
+  }
+}
+
+@keyframes zoom-in {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
   }
 }
