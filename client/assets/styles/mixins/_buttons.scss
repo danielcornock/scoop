@@ -1,0 +1,77 @@
+@mixin button-reset {
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+  font-size: inherit;
+}
+
+@mixin button-tertiary {
+  @include button-reset;
+  border: 2px solid $color-primary-gradient;
+  color: $color-primary-gradient;
+  background-color: $color-white;
+  font-weight: 500;
+  font-size: 16px;
+  padding: $spacing-10 $spacing-15;
+  border-radius: $br-sm;
+}
+
+@mixin button-default {
+  @include button-reset;
+  color: $color-white;
+  background-color: $color-primary;
+  font-size: 16px;
+  font-weight: 500;
+  padding: $spacing-10 $spacing-15;
+  border-radius: $br-sm;
+
+  &:hover {
+    background-color: darken($color-primary, 10%);
+  }
+}
+
+@mixin form-button {
+  // To make submit button match input height
+  padding: $spacing-10 + 3px;
+  text-align: center;
+  font-weight: 500;
+  color: $color-white;
+  background-color: $color-primary;
+  border: none;
+  font-size: 18px;
+  border-radius: $br-sm;
+  cursor: pointer;
+  transition: 100ms;
+  width: 100%;
+  text-decoration: none;
+
+  &:hover {
+    background-color: darken($color-primary, 10%);
+  }
+}
+
+@mixin settings-save-button {
+  @include button-default;
+  position: fixed;
+  bottom: $spacing-30;
+  right: $spacing-30;
+  z-index: 100;
+  border-radius: $br-max;
+  animation: zoom-in 250ms forwards;
+  padding: $spacing-15 $spacing-20;
+
+  @include media-phone {
+    /* To account for menu at botton */
+    bottom: 64px + $spacing-15;
+    right: $spacing-15;
+  }
+}
+
+@keyframes zoom-in {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

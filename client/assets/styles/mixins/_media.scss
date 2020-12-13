@@ -1,0 +1,41 @@
+@mixin media-phone {
+  @media only screen and (max-width: 540px) {
+    @content;
+  }
+}
+
+@mixin media-tablet {
+  @media only screen and (max-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin media($max-width) {
+  @media (max-width: $max-width) {
+    @content;
+  }
+}
+
+@mixin media-ld {
+  @media only screen and (max-width: 1250px) {
+    @content;
+  }
+}
+
+@mixin media-sd {
+  @media only screen and (max-width: 1450px) {
+    @content;
+  }
+}
+
+@mixin media-phone-sm {
+  @media only screen and(max-width: 450px) {
+    @content;
+  }
+}
+
+@mixin media-min-hd {
+  @media only screen and (min-width: 1750px) {
+    @content;
+  }
+}

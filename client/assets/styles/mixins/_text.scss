@@ -1,0 +1,112 @@
+@mixin modal-title {
+  @include page-subheading;
+  margin-bottom: $spacing-20;
+}
+
+@mixin form-subheading {
+  padding-top: $spacing-30;
+  margin-bottom: $spacing-20;
+  @include page-subheading;
+
+  @include media-phone {
+    padding-top: $spacing-10;
+  }
+}
+
+@mixin subheading-sm {
+  font-size: 18px;
+  font-weight: 400;
+  color: $color-subheading;
+  margin-bottom: $spacing-10;
+  margin-top: $spacing-30;
+}
+
+@mixin default-text {
+  font-weight: 500;
+  color: $color-subheading;
+  line-height: 160%;
+}
+
+@mixin status-indicator($color) {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    height: 8px;
+    width: 8px;
+    border-radius: $br-max;
+    left: -$spacing-15;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: $color;
+  }
+
+  @include media-tablet {
+    color: $color !important;
+
+    &::after {
+      content: initial;
+    }
+  }
+}
+
+@mixin settings-heading {
+  @include page-subheading;
+  margin-bottom: $spacing-10;
+  padding-bottom: $spacing-10;
+  border-bottom: 1px solid $color-table-divider;
+
+  @include media-phone {
+    display: flex;
+    justify-content: space-between;
+    font-size: 18px;
+    padding: $spacing-20 $spacing-5;
+    border-bottom: 0;
+    margin-bottom: 0;
+  }
+}
+
+@mixin link {
+  color: $color-primary;
+  font-weight: 500;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+@mixin form-error-text {
+  color: $color-form-input-error-text;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+@mixin page-subheading {
+  font-weight: 500;
+  color: $color-subheading;
+  font-size: 22px;
+  margin-bottom: $spacing-20;
+
+  @include media-phone {
+    font-size: 20px;
+  }
+}
+
+@mixin settings-description {
+  color: $color-table-content;
+  margin-bottom: $spacing-20;
+  max-width: 700px;
+  line-height: 160%;
+}
+
+@mixin form-input-label {
+  display: block;
+  text-align: left;
+  font-size: 14px;
+  margin-bottom: $spacing-5;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  color: $color-form-label;
+}

@@ -1,0 +1,63 @@
+@mixin page-container {
+  padding: var(--spacing-page-top) var(--spacing-page-side);
+  height: 100%;
+
+  @include media-phone {
+    padding-top: calc(58px + var(--spacing-page-top));
+  }
+}
+
+@mixin center-contents {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin center-self {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@mixin table-row {
+  padding: $spacing-15 0;
+
+  &:hover {
+    background-color: $color-primary-light-solid;
+    cursor: pointer;
+  }
+
+  &:focus {
+    outline: 0;
+  }
+
+  &:focus-visible {
+    outline: 2px dashed orange;
+  }
+}
+
+@mixin table-row-item {
+  padding: $spacing-15 0;
+  color: $color-table-content;
+  border-top: 1px solid $color-table-divider;
+  white-space: nowrap;
+  padding-right: $spacing-15;
+}
+
+@mixin settings-moveable-item {
+  cursor: pointer;
+  border: 0;
+  font-weight: 400;
+  color: $color-form-label;
+  background-color: $color-primary-light;
+  border-radius: $br-med;
+
+  @include media-phone {
+    font-size: 14px;
+  }
+
+  &:hover {
+    background-color: darken($color-primary-light-solid, 10%);
+  }
+}
