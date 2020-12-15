@@ -23,6 +23,15 @@ export class NetWorthGoal {
 
   @Prop({ required: true, type: Number })
   startingAmount: number;
+
+  @Prop({ type: Boolean })
+  isHidden?: boolean;
+
+  @Prop({ type: Boolean })
+  hasReceivedCongratulations?: boolean;
+
+  @Prop({ type: Number })
+  completedOn?: number;
 }
 
 export const NetWorthGoalsSchema = SchemaFactory.createForClass(

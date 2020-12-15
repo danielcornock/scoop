@@ -47,6 +47,24 @@ export class NetWorthGoalsService {
     return data;
   }
 
+  public async setReceivedCongratulations(
+    _id: string,
+    user: string
+  ): Promise<void> {
+    await this._netWorthGoalsRepo.findOneAndUpdate(
+      { _id, user },
+      { hasReceivedCongratulations: true, completedOn: Date.now() }
+    );
+  }
+
+  public async setHidden(
+    _id: string,
+    { isHidden },
+    user: string
+  ): Promise<void> {
+    await this._netWorthGoalsRepo.findOneAndUpdate({ _id, user }, { isHidden });
+  }
+
   public async getGoals(
     user: string,
     latestNetWorth: NetWorthResponse
@@ -68,7 +86,8 @@ export class NetWorthGoalsService {
         ...goal.toObject(),
         current,
         percentage: Math.min(percentage, 1),
-        completed: current >= goal.target
+        completed: current >= goal.target,
+        createdOn: goal._id.getTimestamp()
       };
     });
   }

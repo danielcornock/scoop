@@ -1,4 +1,13 @@
-import { BadRequestException, Body, Controller, Delete, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Param,
+  Patch,
+  Post,
+  UseGuards
+} from '@nestjs/common';
 import { AuthGuard } from 'src/auth/guards/auth/auth.guard';
 import { UserId } from 'src/common/decorators/user-id.decorator';
 import { HttpResponse } from 'src/common/interfaces/http-response.interface';
@@ -35,6 +44,23 @@ export class NetWorthGoalsController {
     );
 
     return { data };
+  }
+
+  @Patch('hidden/:id')
+  public async setHidden(
+    @Param('id') id: string,
+    @Body() goal: { isHidden: boolean },
+    @UserId() userId: string
+  ): Promise<void> {
+    await this._netWorthGoalsService.setHidden(id, goal, userId);
+  }
+
+  @Patch('acknowledged-congraulations/:id')
+  public async acknowledgedCongratulations(
+    @Param('id') id: string,
+    @UserId() userId: string
+  ): Promise<void> {
+    await this._netWorthGoalsService.setReceivedCongratulations(id, userId);
   }
 
   @Delete('/:id')

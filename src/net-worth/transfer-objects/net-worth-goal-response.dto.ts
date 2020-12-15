@@ -8,4 +8,6 @@ export class NetWorthGoalResponse {
   title: string;
   startDate: number;
   completed: boolean;
+  hasReceivedCongratulations: boolean;
+  completedOn: number;
 }
