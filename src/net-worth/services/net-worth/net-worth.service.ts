@@ -121,7 +121,8 @@ export class NetWorthService extends BaseLogService<NetWorth> {
       .map((fieldName) => {
         return { label: fieldName, value: item[fieldName] };
       })
-      .sort((a, b) => b.value - a.value);
+      .sort((a, b) => b.value - a.value)
+      .filter((item) => item.value >= 0);
 
     if (arrayOfFields.length <= 6) {
       return arrayOfFields;

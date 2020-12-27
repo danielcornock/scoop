@@ -35,7 +35,7 @@
 }
 
 @mixin media-min-hd {
-  @media only screen and (min-width: 1750px) {
+  @media only screen and (min-width: 2000px) {
     @content;
   }
 }

@@ -128,13 +128,18 @@ export class SalaryService extends BaseLogService<Salary> {
       return {};
     }
 
-    return {
+    const deductions: Partial<Salary> = {
       incomeTax: data[0].incomeTax,
       nationalInsurance: data[0].nationalInsurance,
       studentFinance: data[0].studentFinance,
-      pensionContributions: data[0].pensionContributions,
-      otherDeductions: data[0].otherDeductions
+      pensionContributions: data[0].pensionContributions
     };
+
+    if (data[0].otherDeductions > 0) {
+      deductions.otherDeductions = data[0].otherDeductions;
+    }
+
+    return deductions;
   }
 
   private _getTotalGrossSalaryFromCollection(collection: Salary[]): number {
