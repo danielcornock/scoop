@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-  UseGuards
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/guards/auth/auth.guard';
 import { UserSettingsService } from 'src/auth/services/user-settings/user-settings.service';
 import { UserId } from 'src/common/decorators/user-id.decorator';
@@ -105,7 +96,13 @@ export class NetWorthController {
     const goals = await this._netWorthGoalsService.getGoals(user, data[0]);
 
     const meta: INetWorthMeta = {
-      fields: ['date', ...settings.netWorthFields, 'total', 'change'],
+      fields: [
+        'date',
+        ...settings.netWorthFields,
+        'total',
+        'change',
+        '% Change'
+      ],
       preferredCurrency,
       summaryItems: this._netWorthService.getSummaryItemsMeta(
         data[0],

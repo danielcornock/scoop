@@ -104,10 +104,11 @@ export class NetWorthService extends BaseLogService<NetWorth> {
     return allEntries.map(
       (entry: NetWorth, index: number, array: NetWorth[]) => {
         const lastMonthTotal = array[index + 1]?.total;
-
+        const change = lastMonthTotal ? entry.total - lastMonthTotal : 0;
         return {
           ...entry.toObject(),
-          change: lastMonthTotal ? entry.total - lastMonthTotal : 0
+          change,
+          '% Change': change / lastMonthTotal
         };
       }
     );
