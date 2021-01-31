@@ -6,7 +6,6 @@ export function getMonthlyReminderTemplate(name: string): string {
   return `<p>Hi, ${name.split(' ')[0]}! 👋</p>
 <p>It's your personal Scoop day 💎</p>
 <p>Just a friendly reminder that a month has passed, and now would be the perfect time for you to hop on and update your logs!</p>
-<p>This month, we've been working on some cool new stuff for you. You can now create your own net worth goals! We've also made an assortment of small changes that will make your experience using the app just that little bit more pleasant.</p>
 <p style="text-align: center"><a href="${appUrl(
     ''
   )}" ${buttonStyles()}>Go to application</a></p>
