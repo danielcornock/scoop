@@ -10,16 +10,18 @@ import {
   localDatabaseUriString
 } from '../misc/env';
 
-export function databaseUriFactory(): MongooseModuleOptions {
-  if (isDevelopment) {
-    Logger.log('Connecting to DEVELOPMENT database', 'DatabaseFactory');
-    return {
-      uri: devDatabaseUriString
-    };
-  } else if (isProduction) {
+export function databaseUriFactory(
+  productionOverride?: boolean
+): MongooseModuleOptions {
+  if (isProduction || productionOverride) {
     Logger.log('Connecting to PRODUCTION database', 'DatabaseFactory');
     return {
       uri: databaseUriString
+    };
+  } else if (isDevelopment) {
+    Logger.log('Connecting to DEVELOPMENT database', 'DatabaseFactory');
+    return {
+      uri: devDatabaseUriString
     };
   } else if (isLocal) {
     Logger.log('Connecting to LOCAL databasse', 'DatabaseFactory');

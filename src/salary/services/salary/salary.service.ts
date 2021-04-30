@@ -62,6 +62,44 @@ export class SalaryService extends BaseLogService<Salary> {
     }
   }
 
+  // Not used yet
+  public async updateLogEntry(
+    date: string,
+    data: SalaryCreateRequest,
+    user: string
+  ): Promise<Salary> {
+    const netSalary = this._salaryPredictionService.calculateNetSalary(
+      data.grossSalary,
+      [
+        data.incomeTax,
+        data.nationalInsurance,
+        data.studentFinance,
+        data.pensionContributions,
+        data.otherDeductions
+      ]
+    );
+
+    try {
+      const salary = await this._repo.updateOne(
+        { user, date },
+        {
+          grossSalary: data.grossSalary,
+          incomeTax: data.incomeTax,
+          nationalInsurance: data.nationalInsurance,
+          studentFinance: data.studentFinance,
+          otherDeductions: data.otherDeductions,
+          pensionContributions: data.pensionContributions,
+          netSalary
+        },
+        { new: true }
+      );
+
+      return salary;
+    } catch (e) {
+      DatabaseErrorsService.handle(e);
+    }
+  }
+
   public async getSalarySummaryItems(user: string): Promise<any> {
     const [currentYearEntries, { salaryTaxCode }] = await Promise.all([
       this._getItemsFromCurrentTaxYear(user),
@@ -69,7 +107,16 @@ export class SalaryService extends BaseLogService<Salary> {
     ]);
 
     if (!currentYearEntries.length) {
-      return null;
+      return {
+        taxPaid: 0,
+        grossSalary: 0,
+        projectedTaxReturn: 0,
+        netSalary: 0,
+        projectedGrossSalary: 0,
+        projectedNetSalary: 0,
+        netSalaryOverGrossSalary: 0,
+        taxPercentage: 0
+      };
     }
 
     const taxAlreadyPaid = this._incomeTaxService.getTotalTaxPaidInCollection(
